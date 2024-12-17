@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Linter.Modelos\Linter.Modelos.csproj" />
-    <ProjectReference Include="..\Linter.Repositorio\Linter.Repositorio.csproj" />
+    <ProjectReference Include="..\Linter.Repositorio\Linter.Dados.csproj" />
   </ItemGroup>
 
   <ItemGroup>

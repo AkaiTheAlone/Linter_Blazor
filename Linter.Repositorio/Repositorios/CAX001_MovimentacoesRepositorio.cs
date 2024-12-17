@@ -1,5 +1,5 @@
-﻿using Linter.Modelos.Modelos;
-using Linter.Repositorio.Contexto;
+﻿using Linter.Dados.Contexto;
+using Linter.Modelos.Modelos;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,17 +8,20 @@ using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Linter.Repositorio.Repositorios
+namespace Linter.Dados.Repositorios
 {
-    public class CAX001_FluxoCaixaRepositorio
+    public class CAX001_MovimentacoesRepositorio
     {
-        #region CRUD
-
+        #region Construtores 
         private readonly ApplicationDbContext contexto;
-        public CAX001_FluxoCaixaRepositorio(ApplicationDbContext _context)
+        public CAX001_MovimentacoesRepositorio(ApplicationDbContext _context)
         {
             contexto = _context;
         }
+
+        #endregion
+
+        #region CRUD
         public async Task<CAX001_MovimentacaoCaixa> InserirMovimentacao(CAX001_MovimentacaoCaixa caixa)
         {
             if (contexto != null || caixa != null || contexto.CAX001_Movimentacao != null)
@@ -52,7 +55,7 @@ namespace Linter.Repositorio.Repositorios
 
         public async Task<List<CAX001_MovimentacaoCaixa>> RetornaMovimentacoes()
         {
-            if (contexto == null || contexto.CAX001_Movimentacao == null) 
+            if (contexto == null || contexto.CAX001_Movimentacao == null)
                 throw new ApplicationException("Erro ao retornar todos as movimentações.");
 
             return await contexto.CAX001_Movimentacao.ToListAsync();
@@ -60,11 +63,12 @@ namespace Linter.Repositorio.Repositorios
 
         public async Task<CAX001_MovimentacaoCaixa> RetornaMovimentacao(int id)
         {
-            var movimentacao = await contexto.CAX001_Movimentacao.FirstOrDefaultAsync(m=> m.idMovimentacao == id);
+            if (contexto == null || contexto.CAX001_Movimentacao == null)
+                throw new ApplicationException("Erro ao retornar esta movimentação.");
 
-            if (movimentacao == null) throw new ApplicationException($"Movimentação de ID {id} não existe no banco de dados.");
+            var movimentacao = await contexto.CAX001_Movimentacao.FirstOrDefaultAsync(m => m.idMovimentacao == id);
 
-            return movimentacao;
+            return movimentacao == null ? throw new ApplicationException($"Movimentação de Nº{id} não existe no banco de dados.") : movimentacao;
         }
 
         #endregion

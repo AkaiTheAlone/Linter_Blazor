@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using System.Runtime.CompilerServices;
 
-namespace Linter.Repositorio.Contexto
+namespace Linter.Dados.Contexto
 {
     public class ApplicationDbContext : IdentityDbContext<TAB001_Usuarios, IdentityRole<int>, int>
     {

@@ -1,7 +1,7 @@
 using Linter.Components;
 using Linter.Components.Account;
+using Linter.Dados.Contexto;
 using Linter.Modelos.Modelos;
-using Linter.Repositorio.Contexto;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
