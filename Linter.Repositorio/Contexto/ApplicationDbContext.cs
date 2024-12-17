@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using System.Runtime.CompilerServices;
 
-namespace Linter.Repositorio.Contexto
+namespace Linter.Dados.Contexto
 {
     public class ApplicationDbContext : IdentityDbContext<TAB001_Usuarios, IdentityRole<int>, int>
     {
@@ -17,7 +17,7 @@ namespace Linter.Repositorio.Contexto
         #endregion
 
         #region Propriedades
-        //public DbSet<TAB001_Usuarios> TAB001_Usuarios { get; set; }
+        public DbSet<TAB001_Usuarios> TAB001_Usuarios { get; set; }
         public DbSet<CAX001_MovimentacaoCaixa> CAX001_Movimentacao { get; set; }
         public DbSet<TAB002_ContasGerenciais> TAB002_ContasGerenciais { get; set; }
         #endregion

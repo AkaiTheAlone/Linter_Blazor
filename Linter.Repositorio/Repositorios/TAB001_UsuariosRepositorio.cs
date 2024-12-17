@@ -1,32 +1,29 @@
-﻿using Linter.Modelos.Modelos;
-using Linter.Repositorio.Contexto;
+﻿using Linter.Dados.Contexto;
+using Linter.Modelos.Modelos;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Linter.Repositorio.Repositorios
+namespace Linter.Dados.Repositorios
 {
-    public class TAB001_UsuariosRepositorio
+    public class TAB001_UsuariosRepositorio 
     {
-        public ApplicationDbContext contexto { get; set; }
-
-        public TAB001_UsuariosRepositorio(ApplicationDbContext _context)
+        private readonly ApplicationDbContext contexto;
+        public TAB001_UsuariosRepositorio(ApplicationDbContext _contexto)
         {
-            contexto = _context;
+            contexto = _contexto;
         }
-
-        //public async Task<TAB001_Usuarios> AdicionarUsuario(TAB001_Usuarios usuario)
-        //{
-        //    //if( usuario != null && contexto != null || contexto.){
-
-        //    //}
-        //    //contexto.AddAsync(usuario);
-        //    //await contexto.SaveChangesAsync();
-        //    //return usuario;
-        //}
+        public async Task<List<TAB001_Usuarios>> RetornaTodos()
+        {
+            if (contexto != null)
+            {
+                return await contexto.TAB001_Usuarios.ToListAsync();
+            }
+            throw new ApplicationException("Contexto nulo");
+        }
 
     }
 }

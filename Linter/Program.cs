@@ -1,7 +1,7 @@
 using Linter.Components;
 using Linter.Components.Account;
+using Linter.Dados.Contexto;
 using Linter.Modelos.Modelos;
-using Linter.Repositorio.Contexto;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
 builder.Services.AddFluentUIComponents();
 
 builder.Services.AddCascadingAuthenticationState();
@@ -33,6 +34,11 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 // essa string serve pra usar o sql server
 //builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //    options.UseSqlServer(connectionString));
+
+builder.Services.AddServerSideBlazor(option =>
+{
+    option.DetailedErrors = true; //serve pra exibir erros no console do site
+});
 
 builder.Services.AddDbContext<ApplicationDbContext>(opt => opt.UseNpgsql(connectionString));
 

@@ -1,0 +1,48 @@
+﻿@page "/admin/usuarios"
+@using Linter.Dados.Repositorios
+@using Linter.Modelos.Modelos
+
+@rendermode InteractiveAuto
+
+
+<h3>Usuários registrados</h3>
+
+@if (lstUsuarios == null)
+{
+
+    <div>
+        <h2> Esta página está vazia</h2>
+    </div>
+}
+else
+{
+    @foreach (var usuario in lstUsuarios)
+    {
+        <tr>
+            <td>@usuario.UserName </td>
+            <td>@usuario.Email </td>
+            <td>@usuario.PhoneNumberConfirmed</td>
+            <td>@usuario.SecurityStamp</td>
+        </tr>
+
+        <a href="">Novo perfil</a>
+        <a href="">Deletar </a>
+    }
+}
+
+
+
+@code {
+    private List<TAB001_Usuarios> lstUsuarios;
+
+    protected override async Task OnInitializedAsync()
+    {
+        //Vendedores = await Contexto.Vendedores.AsNoTracking().Include(x => x.IdRegiao).ToListAsync();
+
+        //var rep = new TAB001_UsuariosRepositorio();
+
+        //as no tracking serve pra retornar dados do servidor quando não é preciso alterar nada no banco
+        //teoricamente isso melhora a performance
+        //lstUsuarios = await contexto.Vendedores.AsNoTracking().ToListAsync();
+    }
+}
