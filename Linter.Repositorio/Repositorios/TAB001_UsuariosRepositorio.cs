@@ -12,6 +12,10 @@ namespace Linter.Dados.Repositorios
     public class TAB001_UsuariosRepositorio 
     {
         private readonly ApplicationDbContext contexto;
+        public TAB001_UsuariosRepositorio()
+        {
+            contexto = new ApplicationDbContext();
+        }
         public TAB001_UsuariosRepositorio(ApplicationDbContext _contexto)
         {
             contexto = _contexto;

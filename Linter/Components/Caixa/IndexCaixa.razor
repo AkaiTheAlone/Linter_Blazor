@@ -1,7 +1,102 @@
 ﻿@page "/caixa/index"
+@rendermode InteractiveServer
+@inject Linter.Dados.Repositorios.CAX001_MovimentacoesRepositorio repositorio
+@inject NavigationManager navigate
 
-<h3> Movimentações </h3>
+<style>
+    .label-top .fluent-textfield__label {
+        display: block;
+        margin-bottom: 4px;
+    }
+
+    .fluent-textfield {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .fluent-textfield__input {
+        margin-top: 4px;
+    }
+
+</style>
+
+@* essa implementação não deu nada certo, preciso entender como fazer isso com uma observable list ou fazer em outra tela *@
+<FluentAccordion>
+    <FluentAccordionItem Heading="Adicionar nova movimentação">
+        <FluentGrid>
+            <FluentGridItem xs="3">
+                <FluentTextField Label="Descrição" Id="descritivo" Class="label-top" @bind-Value="Caixa.Descritivo" />
+            </FluentGridItem>
+            <FluentGridItem xs="3">
+                <FluentNumberField TValue="decimal" Label="Valor" @bind-Value="Caixa.Valor" />
+            </FluentGridItem>
+            <FluentGridItem xs="3">
+                <FluentSelect Label="Tipo de Movimentação" TOption="Enumeradores.TipoMovimentacao">
+                    <FluentOption Value="0">Entrada</FluentOption>
+                    <FluentOption Value="1">Saída</FluentOption>
+                </FluentSelect>
+            </FluentGridItem>
+            <FluentGridItem xs="3">
+                <FluentDatePicker Label="Data da movimentação" @bind-Value="Caixa.DataMovimentacao" />
+            </FluentGridItem>
+        </FluentGrid>
+        <FluentButton OnClick="AdicionarMovimentacao"> Adicionar Movimentação </FluentButton>
+
+    </FluentAccordionItem>
+</FluentAccordion>
+
+@if (queryMov == null)
+{
+    <div> Carregando...</div>
+}
+else if (queryMov.Count() == 0)
+{
+    <div> Nenhuma movimentação a ser mostrada</div>
+}
+else
+{
+    //descobrir pq esse id ta vindo com o nome espremido
+    <FluentDataGrid Items="queryMov">
+        <PropertyColumn Width="70px" Property="@(p=> p.idMovimentacao)" Sortable="true" Title="ID"/>
+        <PropertyColumn Width="100px" Property="@(p=> Linter.Utilidades.Uteis.PegaNomeDeExibicao((Enumeradores.TipoMovimentacao)p.Tipo))" Title="Tipo Movi." />
+        <PropertyColumn Width="150px" Property="@(p=> p.DataMovimentacao)" Format="dd/MM/yyyy" Sortable="true" Title="Data" />
+        <PropertyColumn Width="100px" Property="@(p=> p.Valor.ToString("C2"))" Title="Valor" />
+        <PropertyColumn Width="300px" Property="@(p=> p.Descritivo)" Title="Descrição"/>
+        <TemplateColumn Title="Actions" Align="@Align.End">
+            <FluentButton aria-label="Editar" IconEnd="@(new Icons.Regular.Size16.Edit())"/> @* OnClick="EditarMovimentacao(1)" *@
+            <FluentButton aria-label="D" IconEnd="@(new Icons.Regular.Size16.Delete())"/> @* OnClick="ExcluirMovimentacao(1)" *@
+        </TemplateColumn>
+    </FluentDataGrid>
+}
 
 @code {
+    [SupplyParameterFromForm]
+    public CAX001_MovimentacaoCaixa Caixa { get; set; } = new CAX001_MovimentacaoCaixa();
+    //List<CAX001_MovimentacaoCaixa> lstMov = new List<CAX001_MovimentacaoCaixa>();
+    public IQueryable<CAX001_MovimentacaoCaixa> queryMov;
+    protected override async Task<IQueryable> OnInitializedAsync()
+    {
+        queryMov = repositorio.RetornaMovimentacoes();
+        return queryMov;
+    }
+
+    public async void AdicionarMovimentacao()
+    {
+        Caixa.idMovimentacao = queryMov.Max(x => x.idMovimentacao) + 1;
+        repositorio.InserirMovimentacao(Caixa);
+        queryMov = repositorio.RetornaMovimentacoes();
+
+        navigate.NavigateTo("/caixa/index");
+    }
+
+    public async void EditarMovimentacao(int id)
+    {
+
+    }
+    public async void ExcluirMovimentacao(int id)
+    {
+
+
+    }
 
 }

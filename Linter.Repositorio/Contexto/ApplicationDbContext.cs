@@ -3,13 +3,19 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Runtime.CompilerServices;
+using System.Xml;
 
 namespace Linter.Dados.Contexto
 {
     public class ApplicationDbContext : IdentityDbContext<TAB001_Usuarios, IdentityRole<int>, int>
     {
         #region Construtor
+        public ApplicationDbContext()
+        {
+            
+        }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
 
@@ -245,6 +251,19 @@ namespace Linter.Dados.Contexto
             modelBuilder.Entity<IdentityUserClaim<int>>()
                         .Property(u => u.UserId)
                         .HasColumnName("idusuario");
+            #endregion
+
+            #region CAX001
+
+            //var dateTimeConverter = new ValueConverter<DateTime, DateTime>(
+            //                        v => v.ToUniversalTime(), // Converte para UTC antes de salvar
+            //                        v => DateTime.SpecifyKind(v, DateTimeKind.Utc) // Garante que o Kind seja UTC ao ler
+            //);
+
+            //modelBuilder.Entity<CAX001_MovimentacaoCaixa>()
+            //            .Property(e => e.DataMovimentacao)
+            //            .HasConversion(v => DateTime.SpecifyKind(dateTimeConverter., DateTimeKind.Utc)  // Quando ler, garante que o Kind seja UTC
+            //            );
             #endregion
 
             #endregion

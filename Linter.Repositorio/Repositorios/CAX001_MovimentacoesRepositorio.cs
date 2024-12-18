@@ -14,22 +14,24 @@ namespace Linter.Dados.Repositorios
     {
         #region Construtores 
         private readonly ApplicationDbContext contexto;
+        public CAX001_MovimentacoesRepositorio()
+        {
+            contexto = new ApplicationDbContext();
+        }
         public CAX001_MovimentacoesRepositorio(ApplicationDbContext _context)
         {
             contexto = _context;
         }
-
         #endregion
 
         #region CRUD
-        public async Task<CAX001_MovimentacaoCaixa> InserirMovimentacao(CAX001_MovimentacaoCaixa caixa)
-        {
+        public void InserirMovimentacao(CAX001_MovimentacaoCaixa caixa)
+        {//essa função n pode ser async
             if (contexto != null || caixa != null || contexto.CAX001_Movimentacao != null)
             {
                 contexto.Add(caixa);
-                await contexto.SaveChangesAsync();
+                contexto.SaveChanges();
             }
-            return caixa;
         }
         public async Task<CAX001_MovimentacaoCaixa> ExcluirMovimentacao(CAX001_MovimentacaoCaixa caixa)
         {
@@ -53,12 +55,12 @@ namespace Linter.Dados.Repositorios
 
         #region Retornos 
 
-        public async Task<List<CAX001_MovimentacaoCaixa>> RetornaMovimentacoes()
+        public IQueryable<CAX001_MovimentacaoCaixa> RetornaMovimentacoes()
         {
             if (contexto == null || contexto.CAX001_Movimentacao == null)
-                throw new ApplicationException("Erro ao retornar todos as movimentações.");
+                throw new ApplicationException("Erro ao retornar todas as movimentações.");
 
-            return await contexto.CAX001_Movimentacao.ToListAsync();
+            return contexto.CAX001_Movimentacao.AsQueryable();
         }
 
         public async Task<CAX001_MovimentacaoCaixa> RetornaMovimentacao(int id)

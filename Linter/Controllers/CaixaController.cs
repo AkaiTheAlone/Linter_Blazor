@@ -13,14 +13,13 @@ namespace Linter.Controllers
         {
             contexto = _contexto;
         }
-
         #endregion
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
             var caixa = new CAX001_MovimentacoesRepositorio(contexto);
-            await caixa.RetornaMovimentacoes();
+            caixa.RetornaMovimentacoes();
             return View("");
         }
     }

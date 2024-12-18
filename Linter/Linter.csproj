@@ -22,12 +22,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components" Version="4.*-*" />
+    <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components" Version="4.11.0-beta.1" />
     <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components.Icons" Version="4.10.4" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Linter.Modelos\Linter.Modelos.csproj" />
+    <ProjectReference Include="..\Linter.Repositorio\Linter.Dados.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ComponentesLDN\Cadastros\" />
+    <Folder Include="wwwroot\recursos\Icones\" />
     <ProjectReference Include="..\Linter.Repositorio\Linter.Dados.csproj" />
   </ItemGroup>
 </Project>

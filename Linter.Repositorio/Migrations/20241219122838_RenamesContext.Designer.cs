@@ -9,11 +9,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Linter.Repositorio.Migrations
+namespace Linter.Dados.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241217192935_RenamesIdentity")]
-    partial class RenamesIdentity
+    [Migration("20241219122838_RenamesContext")]
+    partial class RenamesContext
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace Linter.Repositorio.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Linter.Modelos.Modelos.CAX001_FluxoCaixa", b =>
+            modelBuilder.Entity("Linter.Modelos.Modelos.CAX001_MovimentacaoCaixa", b =>
                 {
                     b.Property<int>("idMovimentacao")
                         .ValueGeneratedOnAdd()
@@ -56,9 +56,9 @@ namespace Linter.Repositorio.Migrations
                         .HasColumnName("idcontagerencial");
 
                     b.HasKey("idMovimentacao")
-                        .HasName("pk_cax001_fluxocaixa");
+                        .HasName("pk_cax001_movimentacao");
 
-                    b.ToTable("cax001_fluxocaixa");
+                    b.ToTable("cax001_movimentacao");
                 });
 
             modelBuilder.Entity("Linter.Modelos.Modelos.TAB001_Usuarios", b =>
@@ -122,8 +122,8 @@ namespace Linter.Repositorio.Migrations
                         .HasColumnType("text")
                         .HasColumnName("marcadeseguranca");
 
-                    b.Property<int>("TipoUsuario")
-                        .HasColumnType("integer")
+                    b.Property<byte>("TipoUsuario")
+                        .HasColumnType("smallint")
                         .HasColumnName("tipousuario");
 
                     b.Property<bool>("TwoFactorEnabled")

@@ -1,6 +1,7 @@
 using Linter.Components;
 using Linter.Components.Account;
 using Linter.Dados.Contexto;
+using Linter.Dados.Repositorios;
 using Linter.Modelos.Modelos;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -19,6 +20,8 @@ builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
+
+
 
 
 builder.Services.AddAuthentication(options =>
@@ -40,7 +43,9 @@ builder.Services.AddServerSideBlazor(option =>
     option.DetailedErrors = true; //serve pra exibir erros no console do site
 });
 
-builder.Services.AddDbContext<ApplicationDbContext>(opt => opt.UseNpgsql(connectionString));
+
+builder.Services.AddDbContext<ApplicationDbContext>(opt => opt.UseNpgsql(connectionString)
+                                                              .EnableDetailedErrors());
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -49,11 +54,21 @@ builder.Services.AddIdentityCore<TAB001_Usuarios>(options => options.SignIn.Requ
                 .AddSignInManager()
                 .AddDefaultTokenProviders();
 
+#region Injeções de dependência
+
 builder.Services.AddSingleton<IEmailSender<TAB001_Usuarios>, IdentityNoOpEmailSender>();
+
+builder.Services.AddTransient<CAX001_MovimentacoesRepositorio>();
+
+#endregion
+
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
