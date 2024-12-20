@@ -20,8 +20,12 @@
 
 </style>
 
-@* essa implementação não deu nada certo, preciso entender como fazer isso com uma observable list ou fazer em outra tela *@
-<FluentAccordion>
+@* essa implementação não deu nada certo, preciso entender como fazer isso com uma observable list ou fazer em outra tela
+    tive vários erros ao cadastrar um item e passar ele pra tela 
+    1. contexto ja esta sendo usado
+    2. lista demora dms pra carregar
+    3. restrições não nulas, que seriam melhor tratados em outra tela
+    <FluentAccordion>
     <FluentAccordionItem Heading="Adicionar nova movimentação">
         <FluentGrid>
             <FluentGridItem xs="3">
@@ -43,7 +47,8 @@
         <FluentButton OnClick="AdicionarMovimentacao"> Adicionar Movimentação </FluentButton>
 
     </FluentAccordionItem>
-</FluentAccordion>
+</FluentAccordion> *@
+
 
 @if (queryMov == null)
 {
@@ -55,18 +60,49 @@ else if (queryMov.Count() == 0)
 }
 else
 {
-    //descobrir pq esse id ta vindo com o nome espremido
-    <FluentDataGrid Items="queryMov">
-        <PropertyColumn Width="70px" Property="@(p=> p.idMovimentacao)" Sortable="true" Title="ID"/>
-        <PropertyColumn Width="100px" Property="@(p=> Linter.Utilidades.Uteis.PegaNomeDeExibicao((Enumeradores.TipoMovimentacao)p.Tipo))" Title="Tipo Movi." />
-        <PropertyColumn Width="150px" Property="@(p=> p.DataMovimentacao)" Format="dd/MM/yyyy" Sortable="true" Title="Data" />
-        <PropertyColumn Width="100px" Property="@(p=> p.Valor.ToString("C2"))" Title="Valor" />
-        <PropertyColumn Width="300px" Property="@(p=> p.Descritivo)" Title="Descrição"/>
-        <TemplateColumn Title="Actions" Align="@Align.End">
-            <FluentButton aria-label="Editar" IconEnd="@(new Icons.Regular.Size16.Edit())"/> @* OnClick="EditarMovimentacao(1)" *@
-            <FluentButton aria-label="D" IconEnd="@(new Icons.Regular.Size16.Delete())"/> @* OnClick="ExcluirMovimentacao(1)" *@
-        </TemplateColumn>
+        <FluentMenuProvider>
+        </FluentMenuProvider>
+    <FluentDataGrid Items="queryMov"
+                    ResizableColumns=true
+                    ResizeType="DataGridResizeType.Discrete"
+                    HeaderCellAsButtonWithMenu="true"
+                    ShowHover="true"
+    AutoFit="true">
+        <ChildContent>
+            <PropertyColumn Width="70px" InitialSortDirection="SortDirection.Descending" Property="@(p=> p.idMovimentacao)" Sortable="true" Title="ID">
+                <ColumnOptions>
+                    <div class="search-box">
+                        <FluentSearch type="search" Autofocus=true Placeholder="Country name..." />
+                    </div>
+                </ColumnOptions>
+            </PropertyColumn>
+            <PropertyColumn Width="100px" Property="@(p=> Linter.Utilidades.Uteis.PegaNomeDeExibicao((Enumeradores.TipoMovimentacao)p.Tipo))" Title="Tipo Movi.">
+            </PropertyColumn>
+            <PropertyColumn Width="150px" Property="@(p=> p.DataMovimentacao)" Format="dd/MM/yyyy" Sortable="true" Title="Data" />
+            <PropertyColumn Width="100px" Property="@(p=> p.Valor.ToString("C2"))" Title="Valor" Sortable="false" /> @* sortable não funciona nesse tipo de dado, descobrir pq *@
+            <PropertyColumn Width="250px" Property="@(p=> p.Descritivo)" Title="Descrição" Sortable="true">
+                <ColumnOptions>
+                    <div class="search-box">
+                        <FluentSearch type="search" Autofocus=true Placeholder="Descrição..." />
+                    </div>
+                    @* gostaria de remover aba de resize columns mas essa porra vem por padrão e n sei qual é o comando pra ajustar isso  *@
+                </ColumnOptions>
+            </PropertyColumn>
+            <TemplateColumn Title="Actions" Align="@Align.End">
+                <FluentButton aria-label="Editar" IconEnd="@(new Icons.Regular.Size16.Edit())" /> @* OnClick="EditarMovimentacao(1)" *@
+                <FluentButton aria-label="Deletar" IconEnd="@(new Icons.Regular.Size16.Delete())" /> @* OnClick="ExcluirMovimentacao(1)" *@
+            </TemplateColumn>
+
+        </ChildContent>
+
+        <LoadingContent>
+            <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center">
+                Loading...<br />
+                <FluentProgress Width="240px" />
+            </FluentStack>
+        </LoadingContent>
     </FluentDataGrid>
+
 }
 
 @code {
@@ -100,3 +136,26 @@ else
     }
 
 }
+@*ESSE ERRO ESTA APARECENDO AO TENTAR DAR UM SORT NA COLUNA DE VALORES (DECIMAL) 
+    
+[2024-12-20T12:30:06.891Z] Error: System.InvalidOperationException: The LINQ expression 'DbSet<CAX001_MovimentacaoCaixa>()
+    .OrderBy(c => c.Valor.ToString("C2"))' could not be translated. Additional information: Translation of method 'decimal.ToString' failed. If this method can be mapped to your custom function, see https://go.microsoft.com/fwlink/?linkid=2132413 for more information. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'. See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+   at Microsoft.EntityFrameworkCore.Query.QueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.RelationalQueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Storage.Database.CompileQuery[TResult](Expression query, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.CompileQueryCore[TResult](IDatabase database, Expression query, IModel model, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass9_0`1.<Execute>b__0()
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryable`1.GetEnumerator()
+   at System.Collections.Generic.List`1.AddRange(IEnumerable`1 collection)
+   at Microsoft.FluentUI.AspNetCore.Components.FluentDataGrid`1.ResolveItemsRequestAsync(GridItemsProviderRequest`1 request) in /_/src/Core/Components/DataGrid/FluentDataGrid.razor.cs:line 775
+   at Microsoft.FluentUI.AspNetCore.Components.FluentDataGrid`1.RefreshDataCoreAsync() in /_/src/Core/Components/DataGrid/FluentDataGrid.razor.cs:line 684
+   at Microsoft.FluentUI.AspNetCore.Components.FluentDataGrid`1.RefreshDataAsync() in /_/src/Core/Components/DataGrid/FluentDataGrid.razor.cs:line 658
+   at Microsoft.FluentUI.AspNetCore.Components.ColumnBase`1.<RenderDefaultHeaderContent>b__99_5() in /_/src/Core/Components/DataGrid/Columns/ColumnBase.razor:line 53
+   at Microsoft.AspNetCore.Components.ComponentBase.CallStateHasChangedOnAsyncCompletion(Task task)
+   at Microsoft.FluentUI.AspNetCore.Components.FluentMenuItem.OnClickHandlerAsync(MouseEventArgs ev) in /_/src/Core/Components/Menu/FluentMenuItem.razor.cs:line 92
+   at Microsoft.AspNetCore.Components.ComponentBase.CallStateHasChangedOnAsyncCompletion(Task task)
+   at Microsoft.AspNetCore.Components.RenderTree.Renderer.GetErrorHandledTask(Task taskToHandle, ComponentState owningComponentState) *@
