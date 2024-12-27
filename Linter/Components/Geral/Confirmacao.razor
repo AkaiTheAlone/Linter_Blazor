@@ -1,0 +1,45 @@
+﻿@inject CAX001_MovimentacoesRepositorio repositorio
+
+@if(ExibirConfirmacao)
+{
+    <div class="modal" tabindex="-1" role="dialog" aria-hidden="true" style="display:block;">
+        <div class="modal" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"> @titulo </h5>
+                    <FluentButton OnClick="Cancelar" Type="ButtonType.Submit"
+                                  Class="close" data-dismiss="modal" 
+                                                    aria-label="Fechar">
+                                                    <span aria-hidden="true"> &times; </span>                                               
+                                                </FluentButton>
+                </div>
+            </div>
+        </div>
+        <div class="modal-body">
+            @ChildContent
+        </div>
+        <div class="modal-footer">
+            <FluentButton OnClick="Cancelar" class="btn btn-secondary" data-dismiss="modal">
+                Cancelar
+            </FluentButton>
+
+            <FluentButton OnClick="Confirmar">
+
+            </FluentButton>
+        </div>
+    </div>
+
+}
+
+@code {
+
+    Confirmacao confirmacao;
+    [Parameter] public string titulo { get; set; } = "Deseja realmente excluir?";
+    [Parameter] public bool ExibirConfirmacao { get; set; } = false;
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public EventCallback Confirmar { get; set; }   
+    [Parameter] public EventCallback Cancelar { get; set; }
+    public void Exibir() => ExibirConfirmacao = true;
+    public void Ocultar() => ExibirConfirmacao = false;
+
+}

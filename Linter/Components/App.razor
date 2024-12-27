@@ -1,4 +1,20 @@
-﻿<!DOCTYPE html>
+﻿@* 
+<Router AppAssembly="@typeof(Program).Assembly">
+    <Found>
+        <RouteView RouteData="@RouteData" DefaultLayout="@typeof(FluentMainLayout)">  </RouteView>
+    </Found>
+
+    <NotFound>
+        <LayoutView Layout="@typeof(FluentMainLayout)">
+            <p> Desculpe, este endereço não existe.</p>
+        </LayoutView>
+    </NotFound>
+
+
+</Router>
+ *@
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>

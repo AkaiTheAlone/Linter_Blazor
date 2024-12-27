@@ -1,12 +1,5 @@
 ﻿using Linter.Dados.Contexto;
 using Linter.Modelos.Modelos;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Linter.Dados.Repositorios
 {
@@ -24,29 +17,29 @@ namespace Linter.Dados.Repositorios
         }
         #endregion
 
-        #region CRUD
-        public void InserirMovimentacao(CAX001_MovimentacaoCaixa caixa)
-        {//essa função n pode ser async
-            if (contexto != null || caixa != null || contexto.CAX001_Movimentacao != null)
-            {
-                contexto.Add(caixa);
-                contexto.SaveChanges();
-            }
-        }
-        public async Task<CAX001_MovimentacaoCaixa> ExcluirMovimentacao(CAX001_MovimentacaoCaixa caixa)
+        #region Manutencao
+        public async void InserirMovimentacao(CAX001_MovimentacoesCaixa caixa)
         {
-            if (contexto != null || caixa != null || contexto.CAX001_Movimentacao != null)
+            if (contexto != null || caixa != null || contexto.CAX001_MovimentacoesCaixa != null)
             {
-                contexto.Remove(caixa);
+                contexto.CAX001_MovimentacoesCaixa.Add(caixa);
                 await contexto.SaveChangesAsync();
             }
-            return caixa;
         }
-        public async Task<CAX001_MovimentacaoCaixa> EditarMovimentacao(CAX001_MovimentacaoCaixa caixa)
+        public async void ExcluirMovimentacao(int id)
         {
-            if (contexto != null || caixa != null || contexto.CAX001_Movimentacao != null)
+            if (contexto != null || id != 0 || contexto.CAX001_MovimentacoesCaixa != null)
             {
-                contexto.Update(caixa);
+                var movimentacao = contexto.CAX001_MovimentacoesCaixa.FirstOrDefault(m => m.idMovimentacao == id);
+                contexto.CAX001_MovimentacoesCaixa.Remove(movimentacao);
+                contexto.SaveChangesAsync();
+            }
+        }
+        public async Task<CAX001_MovimentacoesCaixa> EditarMovimentacao(CAX001_MovimentacoesCaixa caixa)
+        {
+            if (contexto != null || caixa != null)
+            {
+                contexto.CAX001_MovimentacoesCaixa.Update(caixa);
                 await contexto.SaveChangesAsync();
             }
             return caixa;
@@ -55,20 +48,20 @@ namespace Linter.Dados.Repositorios
 
         #region Retornos 
 
-        public IQueryable<CAX001_MovimentacaoCaixa> RetornaMovimentacoes()
+        public IQueryable<CAX001_MovimentacoesCaixa> RetornaMovimentacoes()
         {
-            if (contexto == null || contexto.CAX001_Movimentacao == null)
+            if (contexto == null || contexto.CAX001_MovimentacoesCaixa == null)
                 throw new ApplicationException("Erro ao retornar todas as movimentações.");
 
-            return contexto.CAX001_Movimentacao.AsQueryable();
+            return contexto.CAX001_MovimentacoesCaixa.AsQueryable();
         }
 
-        public async Task<CAX001_MovimentacaoCaixa> RetornaMovimentacao(int id)
+        public CAX001_MovimentacoesCaixa RetornaMovimentacao(int id)
         {
-            if (contexto == null || contexto.CAX001_Movimentacao == null)
+            if (contexto == null || contexto.CAX001_MovimentacoesCaixa == null)
                 throw new ApplicationException("Erro ao retornar esta movimentação.");
 
-            var movimentacao = await contexto.CAX001_Movimentacao.FirstOrDefaultAsync(m => m.idMovimentacao == id);
+            var movimentacao = contexto.CAX001_MovimentacoesCaixa.FirstOrDefault(m => m.idMovimentacao == id);
 
             return movimentacao == null ? throw new ApplicationException($"Movimentação de Nº{id} não existe no banco de dados.") : movimentacao;
         }

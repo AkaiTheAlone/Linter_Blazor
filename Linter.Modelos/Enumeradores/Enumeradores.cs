@@ -18,7 +18,7 @@ namespace Linter.Modelos
             Sim = 0,
             Não = 1
         }
-        public enum TipoMovimentacao : byte
+        public enum TipoMovimentacao
         {
             [Display(Name = "Entrada")]
             Entrada = 0,

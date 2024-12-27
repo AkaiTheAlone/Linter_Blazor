@@ -8,14 +8,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ComponentesLDN\**" />
     <Compile Remove="Controllers\**" />
     <Compile Remove="wwwroot\recursos\**" />
+    <Content Remove="ComponentesLDN\**" />
     <Content Remove="Controllers\**" />
     <Content Remove="wwwroot\recursos\**" />
+    <EmbeddedResource Remove="ComponentesLDN\**" />
     <EmbeddedResource Remove="Controllers\**" />
     <EmbeddedResource Remove="wwwroot\recursos\**" />
+    <None Remove="ComponentesLDN\**" />
     <None Remove="Controllers\**" />
     <None Remove="wwwroot\recursos\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="wwwroot\recursos\Icones\sair.png" />
+    <Content Include="wwwroot\recursos\Icones\semregistros.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,8 +45,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ComponentesLDN\Cadastros\" />
-    <Folder Include="wwwroot\recursos\Icones\" />
     <ProjectReference Include="..\Linter.Repositorio\Linter.Dados.csproj" />
   </ItemGroup>
 </Project>

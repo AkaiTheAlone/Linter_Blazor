@@ -22,8 +22,6 @@ builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
 
 
-
-
 builder.Services.AddAuthentication(options =>
     {
         options.DefaultScheme = IdentityConstants.ApplicationScheme;
@@ -60,6 +58,8 @@ builder.Services.AddSingleton<IEmailSender<TAB001_Usuarios>, IdentityNoOpEmailSe
 
 builder.Services.AddTransient<CAX001_MovimentacoesRepositorio>();
 
+builder.Services.AddScoped<TAB001_UsuariosRepositorio>();
+builder.Services.AddSingleton<ToastService>();
 #endregion
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -67,8 +67,6 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
-
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

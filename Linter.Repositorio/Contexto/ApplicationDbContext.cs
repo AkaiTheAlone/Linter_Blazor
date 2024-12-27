@@ -24,8 +24,9 @@ namespace Linter.Dados.Contexto
 
         #region Propriedades
         public DbSet<TAB001_Usuarios> TAB001_Usuarios { get; set; }
-        public DbSet<CAX001_MovimentacaoCaixa> CAX001_Movimentacao { get; set; }
+        public DbSet<CAX001_MovimentacoesCaixa> CAX001_MovimentacoesCaixa { get; set; }
         public DbSet<TAB002_ContasGerenciais> TAB002_ContasGerenciais { get; set; }
+        public DbSet<CAX002_MovimentaocesCanceladas> CAX002_MovimentaocesCanceladas { get; set; }
         #endregion
 
         #region OnModelCreating
@@ -253,17 +254,10 @@ namespace Linter.Dados.Contexto
                         .HasColumnName("idusuario");
             #endregion
 
-            #region CAX001
+            #region CAX002_MovimentacoesCanceladas
 
-            //var dateTimeConverter = new ValueConverter<DateTime, DateTime>(
-            //                        v => v.ToUniversalTime(), // Converte para UTC antes de salvar
-            //                        v => DateTime.SpecifyKind(v, DateTimeKind.Utc) // Garante que o Kind seja UTC ao ler
-            //);
+            modelBuilder.Entity<CAX002_MovimentaocesCanceladas>().HasNoKey();
 
-            //modelBuilder.Entity<CAX001_MovimentacaoCaixa>()
-            //            .Property(e => e.DataMovimentacao)
-            //            .HasConversion(v => DateTime.SpecifyKind(dateTimeConverter., DateTimeKind.Utc)  // Quando ler, garante que o Kind seja UTC
-            //            );
             #endregion
 
             #endregion

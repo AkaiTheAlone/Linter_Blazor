@@ -7,18 +7,18 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Linter.Dados.Migrations
 {
     /// <inheritdoc />
-    public partial class RenamesContext : Migration
+    public partial class Renames : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "cax001_movimentacao",
+                name: "cax001_movimentacoescaixa",
                 columns: table => new
                 {
                     idmovimentacao = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    datamovimentacao = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    datamovimentacao = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     descritivo = table.Column<string>(type: "text", nullable: false),
                     idcontagerencial = table.Column<int>(type: "integer", nullable: false),
                     valor = table.Column<decimal>(type: "numeric", nullable: false),
@@ -26,7 +26,16 @@ namespace Linter.Dados.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_cax001_movimentacao", x => x.idmovimentacao);
+                    table.PrimaryKey("pk_cax001_movimentacoescaixa", x => x.idmovimentacao);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "cax002_movimentaocescanceladas",
+                columns: table => new
+                {
+                },
+                constraints: table =>
+                {
                 });
 
             migrationBuilder.CreateTable(
@@ -232,7 +241,10 @@ namespace Linter.Dados.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "cax001_movimentacao");
+                name: "cax001_movimentacoescaixa");
+
+            migrationBuilder.DropTable(
+                name: "cax002_movimentaocescanceladas");
 
             migrationBuilder.DropTable(
                 name: "tab002_contasgerenciais");

@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace Linter.Modelos.Modelos
 {
-    public class CAX001_MovimentacaoCaixa
+    public class CAX001_MovimentacoesCaixa
     {
         [Key]
         public int idMovimentacao { get; set; }
         [Required(ErrorMessage ="Informe a data da movimentação")]
         public DateTime? DataMovimentacao { get; set; }
         public string Descritivo { get; set; } = string.Empty;
-        [Required(ErrorMessage = "Informe a conta utilizada para esta movimentação")]
+        [Required(ErrorMessage = "Informe a conta utilizada para esta movimentação.")]
         public int idContaGerencial { get; set; }
         [Required(ErrorMessage = "Informe o valor da movimentação")]
         public decimal Valor { get; set; }

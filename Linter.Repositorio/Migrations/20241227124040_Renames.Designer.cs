@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Linter.Dados.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241219122838_RenamesContext")]
-    partial class RenamesContext
+    [Migration("20241227124040_Renames")]
+    partial class Renames
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace Linter.Dados.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Linter.Modelos.Modelos.CAX001_MovimentacaoCaixa", b =>
+            modelBuilder.Entity("Linter.Modelos.Modelos.CAX001_MovimentacoesCaixa", b =>
                 {
                     b.Property<int>("idMovimentacao")
                         .ValueGeneratedOnAdd()
@@ -34,8 +34,9 @@ namespace Linter.Dados.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("idMovimentacao"));
 
-                    b.Property<DateTime>("DataMovimentacao")
-                        .HasColumnType("timestamp with time zone")
+                    b.Property<DateTime?>("DataMovimentacao")
+                        .IsRequired()
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("datamovimentacao");
 
                     b.Property<string>("Descritivo")
@@ -56,9 +57,14 @@ namespace Linter.Dados.Migrations
                         .HasColumnName("idcontagerencial");
 
                     b.HasKey("idMovimentacao")
-                        .HasName("pk_cax001_movimentacao");
+                        .HasName("pk_cax001_movimentacoescaixa");
 
-                    b.ToTable("cax001_movimentacao");
+                    b.ToTable("cax001_movimentacoescaixa");
+                });
+
+            modelBuilder.Entity("Linter.Modelos.Modelos.CAX002_MovimentaocesCanceladas", b =>
+                {
+                    b.ToTable("cax002_movimentaocescanceladas");
                 });
 
             modelBuilder.Entity("Linter.Modelos.Modelos.TAB001_Usuarios", b =>
