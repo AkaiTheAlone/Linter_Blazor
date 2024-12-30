@@ -1,11 +1,15 @@
 ﻿@page "/caixa/{acao:int}/{id:int}"
+@using Linter.Components.ComponentesLDN
 @using Linter.Components.Geral
 @rendermode InteractiveServer
 @inject CAX001_MovimentacoesRepositorio repositorio
 @inject NavigationManager navigation
 @inject IToastService Toast
 @inject IDialogService dialogservice
+
+
 <h3> @txtBotao </h3>
+
 <FluentMenuProvider />
 <FluentDialogProvider />
 <FluentEditForm Model="@objMovi" FormName="submit" OnValidSubmit="@AcionarBotao">

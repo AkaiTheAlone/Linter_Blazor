@@ -47,7 +47,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        queryUser = await repositorio.RetornaTodos();
+        queryUser = repositorio.RetornaTodos();
     }
     public void VerBloqueados()
     {

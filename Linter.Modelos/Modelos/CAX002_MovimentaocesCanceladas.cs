@@ -10,23 +10,21 @@ namespace Linter.Modelos.Modelos
 {
     public class CAX002_MovimentaocesCanceladas
     {
-        public class CAX001_MovimentacaoCaixa
-        {
-            [Key]
-            public int idMovimentacao { get; set; }
-            public DateTime? DataMovimentacao { get; set; }
-            public string Descritivo { get; set; } = string.Empty;
-            public int idContaGerencial { get; set; }
-            public decimal Valor { get; set; }
-            public byte Tipo { get; set; } //pensando em fazer isso como um enumerador
-            public string MotivoCancelamento { get; set; }
-            public int idUsuarioCancelamento { get; set; }
-            public DateTime DataCancelamento{ get; set; }
-
-
-            [EnumDataType(typeof(Enumeradores.TipoMovimentacao))]
-            [NotMapped]
-            public Enumeradores.TipoMovimentacao Tipo_nrt { get; set; } //pensando em fazer isso como um enumerador
-        }
+        [ForeignKey("pk_cax001_movimentacoescaixa")]
+        public int idMovimentacao { get; set; }
+        [Required(ErrorMessage = "Informe a data da movimentação")]
+        public DateTime? DataMovimentacao { get; set; }
+        public string Descritivo { get; set; } = string.Empty;
+        [Required(ErrorMessage = "Informe a conta utilizada para esta movimentação.")]
+        public int idContaGerencial { get; set; }
+        [Required(ErrorMessage = "Informe o valor da movimentação")]
+        public decimal Valor { get; set; }
+        [Required(ErrorMessage = "Informe a razão da movimentação")]
+        [EnumDataType(typeof(Enumeradores.TipoMovimentacao))]
+        [NotMapped]
+        public Enumeradores.TipoMovimentacao Tipo_nrt { get; set; } //pensando em fazer isso como um enumerador
+        public byte Tipo { get; set; } //pensando em fazer isso como um enumerador
+        public int idUsuarioCancelamento { get; set; }
+        public DateTime DataCancelamento { get; set; }
     }
 }

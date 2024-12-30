@@ -33,6 +33,14 @@ namespace Linter.Dados.Migrations
                 name: "cax002_movimentaocescanceladas",
                 columns: table => new
                 {
+                    idmovimentacao = table.Column<int>(type: "integer", nullable: false),
+                    datamovimentacao = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    descritivo = table.Column<string>(type: "text", nullable: false),
+                    idcontagerencial = table.Column<int>(type: "integer", nullable: false),
+                    valor = table.Column<decimal>(type: "numeric", nullable: false),
+                    tipo = table.Column<byte>(type: "smallint", nullable: false),
+                    idusuariocancelamento = table.Column<int>(type: "integer", nullable: false),
+                    datacancelamento = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {

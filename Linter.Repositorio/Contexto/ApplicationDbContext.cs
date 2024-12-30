@@ -93,7 +93,7 @@ namespace Linter.Dados.Contexto
                         .ToTable("tab007_solicitacoescargo"); //esse nome n faz sentido
             #endregion
 
-            #region Renomear colunas das tabelas
+            #region Renomear colunas das tabelas + Propriedades do Entity
 
             #region TAB001 + IdentityUser
             modelBuilder.Entity<TAB001_Usuarios>()
@@ -255,14 +255,11 @@ namespace Linter.Dados.Contexto
             #endregion
 
             #region CAX002_MovimentacoesCanceladas
-
             modelBuilder.Entity<CAX002_MovimentaocesCanceladas>().HasNoKey();
-
             #endregion
 
             #endregion
         }
-
 
         #endregion
     }

@@ -27,15 +27,15 @@ namespace Linter.Dados.Repositorios
 
         #region Retornos
 
-        public async Task<IQueryable<TAB001_Usuarios>> RetornaTodos()
+        public IQueryable<TAB001_Usuarios> RetornaTodos()
         {
             if (contexto == null || contexto.TAB001_Usuarios == null)
                 throw new ApplicationException("Erro ao retornar todas as movimentações.");
 
             return contexto.TAB001_Usuarios.AsQueryable();
-
         }
         #endregion
+
         #region Manutencao
 
         public async Task InserirUsuario(TAB001_Usuarios usuario)

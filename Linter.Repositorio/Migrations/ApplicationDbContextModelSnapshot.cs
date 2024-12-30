@@ -61,6 +61,40 @@ namespace Linter.Dados.Migrations
 
             modelBuilder.Entity("Linter.Modelos.Modelos.CAX002_MovimentaocesCanceladas", b =>
                 {
+                    b.Property<DateTime>("DataCancelamento")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("datacancelamento");
+
+                    b.Property<DateTime?>("DataMovimentacao")
+                        .IsRequired()
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("datamovimentacao");
+
+                    b.Property<string>("Descritivo")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("descritivo");
+
+                    b.Property<byte>("Tipo")
+                        .HasColumnType("smallint")
+                        .HasColumnName("tipo");
+
+                    b.Property<decimal>("Valor")
+                        .HasColumnType("numeric")
+                        .HasColumnName("valor");
+
+                    b.Property<int>("idContaGerencial")
+                        .HasColumnType("integer")
+                        .HasColumnName("idcontagerencial");
+
+                    b.Property<int>("idMovimentacao")
+                        .HasColumnType("integer")
+                        .HasColumnName("idmovimentacao");
+
+                    b.Property<int>("idUsuarioCancelamento")
+                        .HasColumnType("integer")
+                        .HasColumnName("idusuariocancelamento");
+
                     b.ToTable("cax002_movimentaocescanceladas");
                 });
 
