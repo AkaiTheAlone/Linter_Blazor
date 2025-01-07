@@ -1,7 +1,7 @@
 ﻿@page "/admin/perfis"
 
 
-<h3 class="centralizado"> Perfis de Usuário </h3>
+@* <h3 class="centralizado"> Perfis de Usuário </h3>
 
 <AuthorizeView Context="outronome">
     <Authorized>
@@ -27,7 +27,7 @@
                     <PropertyColumn Width="100px" InitialSortDirection="SortDirection.Descending" Property="@(p=> p.idMovimentacao)" Sortable="true" Title="ID" />
                     <PropertyColumn Width="200" Property="@(p=> Linter.Utilidades.Uteis.PegaNomeDeExibicao((Enumeradores.TipoMovimentacao)p.Tipo))" Title="Tipo Movi." />
                     <PropertyColumn Width="300px" Property="@(p=> p.DataMovimentacao)" Format="dd/MM/yyyy" Sortable="true" Title="Data" />
-                    <PropertyColumn Width="400px" Property="@(p=> p.Valor.ToString("C2"))" Title="Valor" Sortable="false" /> @* sortable não funciona com conversoes, descobrir solucao*@
+                    <PropertyColumn Width="400px" Property="@(p=> p.Valor.ToString("C2"))" Title="Valor" Sortable="false" /> @* sortable não funciona com conversoes, descobrir solucao
                     <PropertyColumn Width="600px" Property="@(p=> p.Descritivo)" Title="Descrição" Sortable="true" />
                     <TemplateColumn Title="Ações" Align="@Align.End" Width="200px">
                         <FluentButton aria-label="Editar" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() =>  navigation.NavigateTo($"/caixa/{(int)Enumeradores.TipoView.Editar}/{context.idMovimentacao}"))" />
@@ -59,8 +59,8 @@
 
 
 
-
+ *@
 
 @code {
-var pagination = new PaginationState{ ItemsPerPage = 10}
+
 }
