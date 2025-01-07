@@ -1,0 +1,57 @@
+﻿@inject CNT001_ContasGerenciaisRepositorio rep
+@inject NavigationManager navigation
+<h3> @txtBotao </h3>
+
+<FluentMenuProvider />
+<FluentDialogProvider />
+
+<FluentEditForm Model="@Conta" FormName="submit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <FluentGrid>
+        @if (tipoView != Enumeradores.TipoView.Criar)
+        {
+            <FluentGridItem xs="3">
+                <FluentNumberField Label="Descrição" Id="descritivo" Class="label-top" @bind-Value="Conta.idUsuarioCriador" ReadOnly="@Disabled" />
+            </FluentGridItem>
+        }
+
+        <FluentGridItem xs="3"> 
+            <FluentTextField Label="Descrição" Id="descritivo" Class="label-top" @bind-Value="Conta.Descricao" ReadOnly="@Disabled"/>
+        </FluentGridItem>
+
+        <FluentGridItem xs="3">
+            <FluentDatePicker Label="Descrição" Id="descritivo" Class="label-top" /> @* @bind-Value="@(() => Conta.DataCadastro)" *@
+        </FluentGridItem>
+
+        <FluentGridItem>
+            <FluentButton OnClick="@(()=> AcionarBotao())" Type="ButtonType.Submit" FormId="submit"> @txtBotao </FluentButton>
+            <FluentButton Disabled="false" OnClick="@(()=> navigation.NavigateTo("/caixa/"))"> Retornar </FluentButton>
+        </FluentGridItem>
+    </FluentGrid>
+
+</FluentEditForm>
+
+@code {
+    [SupplyParameterFromForm]
+    public CNT001_ContasGerenciais Conta { get; set; } = new CNT001_ContasGerenciais();
+    public string txtBotao { get; set; } = "Adicionar movimentação";
+    public bool Disabled { get; set; } = true;
+    public Enumeradores.TipoView tipoView;
+    public void AcionarBotao()
+    {
+        switch (tipoView)
+        {
+            case Enumeradores.TipoView.Criar:
+                rep.Inserir(Conta);
+                break;
+            case Enumeradores.TipoView.Apagar:
+                rep.Remover(Conta);
+                break;
+            case Enumeradores.TipoView.Editar:
+                rep.Atualizar(Conta);
+                break;
+        }
+    }
+}

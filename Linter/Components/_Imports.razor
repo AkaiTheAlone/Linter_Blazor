@@ -1,5 +1,8 @@
-﻿@using System.Net.Http
+﻿@* sistema *@
+@using System.Net.Http
 @using System.Net.Http.Json
+
+@* microsoft *@
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Routing
@@ -8,6 +11,9 @@
 @using Microsoft.AspNetCore.Components.Web.Virtualization
 @using Microsoft.FluentUI.AspNetCore.Components
 @using Microsoft.JSInterop
+@using Microsoft.AspNetCore.Authorization
+
+@* projeto *@
 @using Linter
 @using Linter.Components
 @using Linter.Components.Account
@@ -16,3 +22,7 @@
 @using Linter.Dados.Repositorios
 @using Linter.Utilidades
 @using Linter.Components.ComponentesLDN
+
+@* injecoes de dependencia *@
+@inject IToastService Toast
+@inject IDialogService dialogservice

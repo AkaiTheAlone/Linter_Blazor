@@ -17,10 +17,6 @@ builder.Services.AddRazorComponents()
 builder.Services.AddFluentUIComponents();
 
 builder.Services.AddCascadingAuthenticationState();
-builder.Services.AddScoped<IdentityUserAccessor>();
-builder.Services.AddScoped<IdentityRedirectManager>();
-builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
-
 
 builder.Services.AddAuthentication(options =>
     {
@@ -41,11 +37,13 @@ builder.Services.AddServerSideBlazor(option =>
     option.DetailedErrors = true; //serve pra exibir erros no console do site
 });
 
-
 builder.Services.AddDbContext<ApplicationDbContext>(opt => opt.UseNpgsql(connectionString)
                                                               .EnableDetailedErrors());
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+builder.Services.AddAuthorizationCore();
+builder.Services.AddAuthentication();
 
 builder.Services.AddIdentityCore<TAB001_Usuarios>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -54,17 +52,31 @@ builder.Services.AddIdentityCore<TAB001_Usuarios>(options => options.SignIn.Requ
 
 #region Injeções de dependência
 
-builder.Services.AddSingleton<IEmailSender<TAB001_Usuarios>, IdentityNoOpEmailSender>();
-
-builder.Services.AddTransient<CAX001_MovimentacoesRepositorio>();
-
-builder.Services.AddScoped<TAB001_UsuariosRepositorio>();
+#region Singletons
 builder.Services.AddSingleton<ToastService>();
+builder.Services.AddSingleton<IEmailSender<TAB001_Usuarios>, IdentityNoOpEmailSender>();
+#endregion
+
+#region Transients
+builder.Services.AddTransient<CAX001_MovimentacoesRepositorio>();
+builder.Services.AddTransient<CAX002_MovimentacoesCanceladasRepositorio>();
+builder.Services.AddTransient<CNT001_ContasGerenciaisRepositorio>();
+#endregion
+
+#region Scopeds
+builder.Services.AddScoped<TAB001_UsuariosRepositorio>();
+builder.Services.AddScoped<IdentityUserAccessor>();
+builder.Services.AddScoped<IdentityRedirectManager>();
+builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
+#endregion
+
 #endregion
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 builder.Services.AddControllersWithViews();
+
+
 
 var app = builder.Build();
 

@@ -32,7 +32,7 @@ namespace Linter.Dados.Repositorios
             {
                 var movimentacao = contexto.CAX001_MovimentacoesCaixa.FirstOrDefault(m => m.idMovimentacao == id);
                 contexto.CAX001_MovimentacoesCaixa.Remove(movimentacao);
-                contexto.SaveChangesAsync();
+                await contexto.SaveChangesAsync();
             }
         }
         public async Task<CAX001_MovimentacoesCaixa> EditarMovimentacao(CAX001_MovimentacoesCaixa caixa)

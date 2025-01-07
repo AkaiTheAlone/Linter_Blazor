@@ -1,7 +1,23 @@
 ﻿@page "/"
+@rendermode InteractiveServer
+
+@inject IToastService Toast
 
 <PageTitle> Institucional </PageTitle>
 
-<h1> Bem vindo.</h1>
 
-Welcome to your new Fluent Blazor app.
+    <h1 class="centralizado">
+        Bem vindo.
+    </h1>
+    <div class="centralizado">
+    Welcome to your new Fluent Blazor app.
+    </div>
+    <FluentButton OnClick="exibetoast"></FluentButton>
+
+
+@code{
+    public void exibetoast()
+    {
+        Toast.ShowCustom("Exclusão confirmada com sucesso!", 100, "100", null, (new Icons.Regular.Size24.Delete(), Color.Accent));
+    }
+    }

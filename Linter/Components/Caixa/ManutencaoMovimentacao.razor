@@ -1,17 +1,16 @@
 ﻿@page "/caixa/{acao:int}/{id:int}"
 @using Linter.Components.ComponentesLDN
-@using Linter.Components.Geral
 @rendermode InteractiveServer
 @inject CAX001_MovimentacoesRepositorio repositorio
 @inject NavigationManager navigation
-@inject IToastService Toast
-@inject IDialogService dialogservice
-
 
 <h3> @txtBotao </h3>
 
-<FluentMenuProvider />
+<FluentToastProvider RemoveToastsOnNavigation="false"/>
 <FluentDialogProvider />
+<FluentMenuProvider />
+
+
 <FluentEditForm Model="@objMovi" FormName="submit" OnValidSubmit="@AcionarBotao">
     <DataAnnotationsValidator />
     <ValidationSummary />
@@ -23,13 +22,14 @@
             <FluentNumberField TValue="decimal" Label="Valor" Name="objMovi.Valor" @bind-Value="objMovi.Valor" ReadOnly="@Disabled" />
         </FluentGridItem>
         <FluentGridItem xs="3">
-            <FluentDatePicker Label="Data da movimentação" Name="objMovi.DataMovimentacao" @bind-Value="objMovi.DataMovimentacao" ReadOnly="@Disabled" />
+            <FluentDatePicker Label="Data da movimentação" Name="datepicker" @bind-Value="objMovi.DataMovimentacao" ReadOnly="@Disabled" />
         </FluentGridItem>
     </FluentGrid>
 
-    <FluentGridItem sm="8" xs="8">
-        <FluentSelectEnum TEnum="Enumeradores.TipoMovimentacao" Label="Tipo de Movimentação" @bind-EnumSelectedValue="tipomov" readonly="true" />
-    </FluentGridItem>
+    <FluentRadioGroup Name="tipo" @bind-Value="Numero" Label="Tipo de Movimentação" >
+        <FluentRadio Value="0"> Entrada </FluentRadio>
+        <FluentRadio Value="1"> Saída </FluentRadio>
+    </FluentRadioGroup>
     <br />
     <FluentButton OnClick="@(()=> AcionarBotao())" Type="ButtonType.Submit" FormId="submit" Disabled="BotoesDisabled"> @txtBotao </FluentButton>
     <FluentButton Disabled="false" OnClick="@(()=> navigation.NavigateTo("/caixa/"))"> Retornar </FluentButton>
@@ -41,10 +41,11 @@
     public bool Disabled { get; set; } = false;
     public string txtBotao { get; set; } = "Adicionar movimentação";
     public Enumeradores.TipoMovimentacao? tipomov { get; set; }
-    //quando não existe um modelo sendo passado pra essa tela nem carregado no initialized, a gnt precisa inicializar ele manualmente
+    //quando não existe um modelo sendo passado pra essa tela nem carregado no initialized, precisa inicializar ele manualmente
     [SupplyParameterFromForm]
     public CAX001_MovimentacoesCaixa objMovi { get; set; } = new CAX001_MovimentacoesCaixa();
 
+    public int Numero { get; set; }
     [Parameter] public int acao { get; set; }
 
     [Parameter] public int id { get; set; }
@@ -91,7 +92,7 @@
                 Toast.ShowCustom("Registro cadastrado com sucesso!", null, null, null, (new Icons.Regular.Size24.AddCircle(), Color.Accent));
                 break;
             case (int)Enumeradores.TipoView.Editar:
-                repositorio.EditarMovimentacao(objMovi);
+                await repositorio.EditarMovimentacao(objMovi);
                 Toast.ShowCustom("Registro cadastrado com sucesso!", null, null, null, (new Icons.Regular.Size24.AddCircle(), Color.Accent));
                 break;
             case (int)Enumeradores.TipoView.Apagar:
@@ -103,9 +104,9 @@
                 if (!result.Cancelled)
                 {
                     repositorio.ExcluirMovimentacao(id);
-                    dialogservice.ShowInfoAsync("Retornando à página principal...",
-                                                             "Sucesso");
-                    Toast.ShowCustom("Exclusão confirmada com sucesso!", null, null, null, (new Icons.Regular.Size24.Delete(), Color.Accent));
+                    await dialogservice.ShowInfoAsync("Retornando à página principal...",
+                                                      "Sucesso");
+                    Toast.ShowCustom("Exclusão confirmada com sucesso!", 10000, "100", null, (new Icons.Regular.Size24.Delete(), Color.Accent));
                 }
                 break;
         }

@@ -1,0 +1,84 @@
+﻿@page "/contasgerenciais"
+@inject NavigationManager navigation
+@rendermode InteractiveServer
+@inject CNT001_ContasGerenciaisRepositorio repositorio
+
+<PageTitle> Contas Gerenciais </PageTitle>
+
+<style>
+    /* aquele botao do grid n aceita cores e n consigo fazer nada sobre */
+
+    .control {
+        color: #E5D0AC !important;
+        background-color: crimson !important;
+    }
+</style>
+
+
+<AuthorizeView Context="contexto">
+    <Authorized>
+            <h2 class="centralizado">Contas Gerenciais</h2>
+        <FluentMenuProvider />
+      
+        <FluentCard Height="100" Class="colorido">
+
+            <FluentAppBar Orientation="Orientation.Horizontal" Class="centralizado">
+                <FluentAppBarItem Text="Adicionar" IconRest="@(new Icons.Regular.Size24.AddCircle())" OnClick="@(() => navigation.NavigateTo($"/conta/{(int)Enumeradores.TipoView.Criar}/{0}"))" />
+                <FluentAppBarItem Text="Excluídas" IconRest="@(new Icons.Light.Size32.Delete())" OnClick="@(()=> navigation.NavigateTo($"/contas/excluidas"))" />
+            </FluentAppBar>
+
+            <FluentDataGrid Items="queryConta"
+                            ResizableColumns=false
+                            ResizeType="DataGridResizeType.Exact"
+                            HeaderCellAsButtonWithMenu="true"
+                            ShowHover="true"
+                            AutoFit="false"
+                            Pagination="pagination">
+                <ChildContent>
+                    <PropertyColumn Width="200px" Property="@(p=> p.idContaGerencial)" Sortable="true" Title="ID Conta" />
+                    <PropertyColumn Width="1000px" Property="@(p=> p.Descricao)" Title="Descricao" Sortable="false" />
+                    <TemplateColumn Title="Ações" Align="@Align.End" Width="200px">
+                        <FluentButton aria-label="Editar" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => navigation.NavigateTo($"/conta/{(int)Enumeradores.TipoView.Editar}/{context.idContaGerencial}"))" />
+                        <FluentButton aria-label="Deletar" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => navigation.NavigateTo($"/conta/{(int)Enumeradores.TipoView.Apagar}/{context.idContaGerencial}"))" />
+                    </TemplateColumn>
+                </ChildContent>
+
+                <LoadingContent>
+                    <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center">
+                        Carregando...<br />
+                        <FluentProgress Width="240px" />
+                    </FluentStack>
+                </LoadingContent>
+            </FluentDataGrid>
+        </FluentCard>
+        <FluentPaginator State="@pagination">
+            <SummaryTemplate>
+                <strong>@(pagination.TotalItemCount ?? 0)</strong> contas
+            </SummaryTemplate>
+            <PaginationTextTemplate>
+                Página <strong>@(pagination.CurrentPageIndex + 1)</strong> de <strong>@(pagination.LastPageIndex + 1)</strong> página(s)
+            </PaginationTextTemplate>
+        </FluentPaginator>
+
+    </Authorized>
+    <NotAuthorized>
+        <NaoAutorizado> </NaoAutorizado>
+
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    [Parameter]
+    public Enumeradores.TipoView tipoView { get; set; }
+    [Parameter] public int idMovimentacao { get; set; } = 0;
+    public Enumeradores.TipoMovimentacao? tipomov { get; set; }
+    [SupplyParameterFromForm] public CNT001_ContasGerenciais contasGerenciais { get; set; } = new CNT001_ContasGerenciais();
+    public IQueryable<CNT001_ContasGerenciais> queryConta;
+    PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
+
+    protected override async Task<IQueryable> OnInitializedAsync()
+    {
+        queryConta = repositorio.RetornaContasGerenciais();
+        return queryConta;
+    }
+}

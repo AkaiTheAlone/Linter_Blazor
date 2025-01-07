@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Linter.Dados.Migrations
 {
     /// <inheritdoc />
-    public partial class Renames : Migration
+    public partial class Inicial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -53,6 +53,10 @@ namespace Linter.Dados.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     tipousuario = table.Column<byte>(type: "smallint", nullable: false),
+                    rua = table.Column<string>(type: "text", nullable: true),
+                    cidade = table.Column<string>(type: "text", nullable: true),
+                    bairro = table.Column<string>(type: "text", nullable: true),
+                    cep = table.Column<string>(type: "text", nullable: true),
                     nomeusuario = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     nomenormalizado = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),

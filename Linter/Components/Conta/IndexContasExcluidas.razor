@@ -1,0 +1,40 @@
+﻿<link href="css/app.css" rel="stylesheet">
+
+@page "/contas/excluidas"
+
+<h3 class="centralizado">Contas excluídas</h3>
+
+<FluentMenuProvider />
+<FluentDialogProvider />
+
+<FluentCard Height="100">
+    <FluentDataGrid Items="queryConta"
+                    ResizableColumns=false
+                    ResizeType="DataGridResizeType.Exact"
+                    HeaderCellAsButtonWithMenu="true"
+                    ShowHover="true"
+                    AutoFit="false">
+        <ChildContent>
+            <PropertyColumn Width="120px" Property="@(p=> p.idContaGerencial)" Sortable="true" Title="ID Conta" />
+            <PropertyColumn Width="600px" Property="@(p=> p.Descricao)" Title="Descricao" Sortable="false" />
+            <PropertyColumn Width="600px" Property="@(p=> p.Descricao)" Title="Descricao" Sortable="false" />
+            <TemplateColumn Title="Ações" Align="@Align.End" Width="200px">
+                <FluentButton aria-label="Editar" IconEnd="@(new Icons.Light.Size32.Edit())" />
+                <FluentButton aria-label="Deletar" IconEnd="@(new Icons.Light.Size32.Delete())" />
+            </TemplateColumn>
+        </ChildContent>
+
+        <LoadingContent>
+            <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center">
+                Carregando...<br />
+                <FluentProgress Width="240px" />
+            </FluentStack>
+        </LoadingContent>
+    </FluentDataGrid>
+</FluentCard>
+
+
+@code {
+    public IQueryable<CNT001_ContasGerenciais> queryConta;
+
+}

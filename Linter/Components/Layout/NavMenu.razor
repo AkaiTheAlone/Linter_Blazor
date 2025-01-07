@@ -8,14 +8,18 @@
     <nav class="sitenav" aria-labelledby="main-menu">
         <FluentNavMenu Id="main-menu" Collapsible="true" Width="250" Title="Navigation menu" @bind-Expanded="expanded" CustomToggle="true">
             <FluentNavLink Href="/" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.Home())" IconColor="Color.Accent">Início</FluentNavLink>
-            <FluentNavLink Href="/admin/usuarios" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.Person())" IconColor="Color.Accent">Usuários</FluentNavLink>
             <AuthorizeView>
                 <Authorized>
-                    <FluentNavLink Href="caixa" Icon="@(new Icons.Regular.Size20.Money())"> Movimentações </FluentNavLink>
+                    <FluentNavLink Href="/admin/usuarios" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.Person())" IconColor="Color.Accent">Usuários</FluentNavLink>
+                    <FluentNavLink Href="/contasgerenciais" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.BuildingBank())" IconColor="Color.Accent">Contas</FluentNavLink>
+                    <FluentNavLink Href="/caixa" Icon="@(new Icons.Regular.Size20.Money())"> Movimentações </FluentNavLink>
+                    <FluentNavLink Href="/relatorios" Icon="@(new Icons.Regular.Size20.BookCoins())"> Relatórios </FluentNavLink>
                     <form action="Account/Logout" method="post">
                         <AntiforgeryToken />
                         <input type="hidden" name="ReturnUrl" value="@currentUrl" />
-                        <FluentButton Type="ButtonType.Submit" IconStart="@(new Icons.Regular.Size20.ArrowCircleLeft())" Style="width: 100%;">Logout</FluentButton>
+                        <div class="content" style="align-content:center">
+                            <FluentButton Type="ButtonType.Submit" IconStart="@(new Icons.Regular.Size20.ArrowCircleLeft())" Style="width:100%;">Logout</FluentButton>
+                        </div>
                     </form>
                     <br />
                 </Authorized>

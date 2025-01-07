@@ -3,6 +3,7 @@ using System;
 using Linter.Dados.Contexto;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Linter.Dados.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241230131913_Inicial")]
+    partial class Inicial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -96,44 +99,6 @@ namespace Linter.Dados.Migrations
                         .HasColumnName("idusuariocancelamento");
 
                     b.ToTable("cax002_movimentaocescanceladas");
-                });
-
-            modelBuilder.Entity("Linter.Modelos.Modelos.CNT001_ContasGerenciais", b =>
-                {
-                    b.Property<int>("idContaGerencial")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("idcontagerencial");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("idContaGerencial"));
-
-                    b.Property<DateTime>("DataCadastro")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("datacadastro");
-
-                    b.Property<string>("Descricao")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("descricao");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(34)
-                        .HasColumnType("character varying(34)")
-                        .HasColumnName("discriminator");
-
-                    b.Property<int>("idUsuarioCriador")
-                        .HasColumnType("integer")
-                        .HasColumnName("idusuariocriador");
-
-                    b.HasKey("idContaGerencial")
-                        .HasName("pk_cnt001_contasgerenciais");
-
-                    b.ToTable("cnt001_contasgerenciais");
-
-                    b.HasDiscriminator().HasValue("CNT001_ContasGerenciais");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Linter.Modelos.Modelos.TAB001_Usuarios", b =>
@@ -237,6 +202,27 @@ namespace Linter.Dados.Migrations
                         .HasDatabaseName("usernameindex");
 
                     b.ToTable("tab001_usuarios", (string)null);
+                });
+
+            modelBuilder.Entity("Linter.Modelos.Modelos.TAB002_ContasGerenciais", b =>
+                {
+                    b.Property<int>("idConta")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("idconta");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("idConta"));
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)")
+                        .HasColumnName("descricao");
+
+                    b.HasKey("idConta")
+                        .HasName("pk_tab002_contasgerenciais");
+
+                    b.ToTable("tab002_contasgerenciais");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
@@ -401,28 +387,6 @@ namespace Linter.Dados.Migrations
                         .HasName("pk_aspnetusertokens");
 
                     b.ToTable("tab005_usuariostokens", (string)null);
-                });
-
-            modelBuilder.Entity("Linter.Modelos.Modelos.CNT002_ContasExcluidas", b =>
-                {
-                    b.HasBaseType("Linter.Modelos.Modelos.CNT001_ContasGerenciais");
-
-                    b.Property<DateTime>("DataExclusao")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("dataexclusao");
-
-                    b.Property<string>("MotivoCancelamento")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("motivocancelamento");
-
-                    b.Property<int>("idUsuarioExclusao")
-                        .HasColumnType("integer")
-                        .HasColumnName("idusuarioexclusao");
-
-                    b.ToTable("cnt001_contasgerenciais");
-
-                    b.HasDiscriminator().HasValue("CNT002_ContasExcluidas");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

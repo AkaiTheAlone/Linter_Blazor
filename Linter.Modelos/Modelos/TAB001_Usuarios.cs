@@ -10,7 +10,10 @@ namespace Linter.Modelos.Modelos
         [Required(ErrorMessage = "É necessário definir um tipo de usuário.")]
         [PersonalData]
         public byte TipoUsuario { get; set; }//talvez isso esteja mais relacionado a tabelas de roles doq a de usuarios, pensar sobre
-
+        public string Rua { get; set; }
+        public string Cidade { get; set; }
+        public string Bairro { get; set; }
+        public string CEP { get; set; }
     }
 
 }

@@ -14,7 +14,7 @@ namespace Linter.Dados.Contexto
         #region Construtor
         public ApplicationDbContext()
         {
-            
+
         }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -25,8 +25,9 @@ namespace Linter.Dados.Contexto
         #region Propriedades
         public DbSet<TAB001_Usuarios> TAB001_Usuarios { get; set; }
         public DbSet<CAX001_MovimentacoesCaixa> CAX001_MovimentacoesCaixa { get; set; }
-        public DbSet<TAB002_ContasGerenciais> TAB002_ContasGerenciais { get; set; }
         public DbSet<CAX002_MovimentaocesCanceladas> CAX002_MovimentaocesCanceladas { get; set; }
+        public DbSet<CNT001_ContasGerenciais> CNT001_ContasGerenciais { get; set; }
+        public DbSet<CNT002_ContasExcluidas> CNT002_ContasExcluidas { get; set; }
         #endregion
 
         #region OnModelCreating
@@ -93,7 +94,7 @@ namespace Linter.Dados.Contexto
                         .ToTable("tab007_solicitacoescargo"); //esse nome n faz sentido
             #endregion
 
-            #region Renomear colunas das tabelas + Propriedades do Entity
+            #region Renomear colunas das tabelas + Propriedades de colunas
 
             #region TAB001 + IdentityUser
             modelBuilder.Entity<TAB001_Usuarios>()
@@ -155,6 +156,22 @@ namespace Linter.Dados.Contexto
             modelBuilder.Entity<TAB001_Usuarios>() //isso aq serve pra marcar o atual estado de um dado
                       .Property(u => u.ConcurrencyStamp) //ex: se um admin alterar um valor e outro admin estiver alterando ele ao mesmo tempo, algum dos dois deverá 
                       .HasColumnName("marcadeconcorrencia"); //receber um codigo de erro dizendo q a marca de concorrencia do servidor e local sao incompativeis
+
+            modelBuilder.Entity<TAB001_Usuarios>()
+                      .Property(u => u.CEP)
+                      .IsRequired(false);
+
+            modelBuilder.Entity<TAB001_Usuarios>()
+                     .Property(u => u.Rua)
+                     .IsRequired(false);
+
+            modelBuilder.Entity<TAB001_Usuarios>()
+                     .Property(u => u.Bairro)
+                     .IsRequired(false);
+
+            modelBuilder.Entity<TAB001_Usuarios>()
+                     .Property(u => u.Cidade)
+                     .IsRequired(false);
             #endregion
 
             #region TAB003 // IdentityRole
@@ -260,7 +277,6 @@ namespace Linter.Dados.Contexto
 
             #endregion
         }
-
         #endregion
     }
 

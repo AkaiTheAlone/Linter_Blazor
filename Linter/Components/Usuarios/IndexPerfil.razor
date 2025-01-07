@@ -1,0 +1,66 @@
+﻿@page "/admin/perfis"
+
+
+<h3 class="centralizado"> Perfis de Usuário </h3>
+
+<AuthorizeView Context="outronome">
+    <Authorized>
+        <FluentMenuProvider />
+        <FluentDialogProvider />
+        <div>
+            <h2 class="centralizado"> Controle de Movimentações </h2>
+        </div>
+
+        <FluentCard Height="100" MinimalStyle="true">
+            <FluentAppBar Orientation="Orientation.Horizontal" Class="centralizado">
+                <FluentAppBarItem Text="Adicionar" IconRest="@(new Icons.Regular.Size24.AddCircle())" OnClick="@(()=> navigation.NavigateTo($"/caixa/{(int)Enumeradores.TipoView.Criar}/{0}"))" />
+                <FluentAppBarItem Text="Cancelamentos" IconRest="@(new Icons.Light.Size32.Delete())" OnClick="@(()=> navigation.NavigateTo("/caixa/cancelamentos"))" />
+            </FluentAppBar>
+            <FluentDataGrid Items="queryMov"
+                            ResizableColumns=false
+                            ResizeType="DataGridResizeType.Exact"
+                            HeaderCellAsButtonWithMenu="true"
+                            ShowHover="true"
+                            AutoFit="true"
+                            Pagination="pagination">
+                <ChildContent>
+                    <PropertyColumn Width="100px" InitialSortDirection="SortDirection.Descending" Property="@(p=> p.idMovimentacao)" Sortable="true" Title="ID" />
+                    <PropertyColumn Width="200" Property="@(p=> Linter.Utilidades.Uteis.PegaNomeDeExibicao((Enumeradores.TipoMovimentacao)p.Tipo))" Title="Tipo Movi." />
+                    <PropertyColumn Width="300px" Property="@(p=> p.DataMovimentacao)" Format="dd/MM/yyyy" Sortable="true" Title="Data" />
+                    <PropertyColumn Width="400px" Property="@(p=> p.Valor.ToString("C2"))" Title="Valor" Sortable="false" /> @* sortable não funciona com conversoes, descobrir solucao*@
+                    <PropertyColumn Width="600px" Property="@(p=> p.Descritivo)" Title="Descrição" Sortable="true" />
+                    <TemplateColumn Title="Ações" Align="@Align.End" Width="200px">
+                        <FluentButton aria-label="Editar" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() =>  navigation.NavigateTo($"/caixa/{(int)Enumeradores.TipoView.Editar}/{context.idMovimentacao}"))" />
+                        <FluentButton aria-label="Deletar" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => navigation.NavigateTo($"/caixa/{(int)Enumeradores.TipoView.Apagar}/{context.idMovimentacao}"))" />
+                    </TemplateColumn>
+                </ChildContent>
+
+                <LoadingContent>
+                    <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center">
+                        Carregando...<br />
+                        <FluentProgress Width="240px" />
+                    </FluentStack>
+                </LoadingContent>
+            </FluentDataGrid>
+        </FluentCard>
+        <FluentPaginator State="@pagination">
+            <SummaryTemplate>
+                <strong>@(pagination.TotalItemCount ?? 0)</strong> movimentações
+            </SummaryTemplate>
+            <PaginationTextTemplate>
+                Página <strong>@(pagination.CurrentPageIndex + 1)</strong> de <strong>@(pagination.LastPageIndex + 1)</strong> página(s)
+            </PaginationTextTemplate>
+        </FluentPaginator>
+    </Authorized>
+    <NotAuthorized>
+        <NaoAutorizado />
+    </NotAuthorized>
+</AuthorizeView>
+
+
+
+
+
+@code {
+var pagination = new PaginationState{ ItemsPerPage = 10}
+}

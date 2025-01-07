@@ -1,73 +1,82 @@
 ﻿@page "/admin/usuarios"
 @using Linter.Components.Layout
+
 @inject TAB001_UsuariosRepositorio repositorio
 @inject NavigationManager navigations
 @layout MainLayout
+@* @attribute [Authorize(Roles = "Admin")] implementar depois*@
 @rendermode InteractiveServer
 
 
-<FluentMenuProvider/>
+<style>
+    .centralizado {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 50px;
+    }
+</style>
 
-<h1>Usuários registrados</h1>
-@* //pensando em transformar essa tela em vários componentes e chamar elas pra manter o appmenu posicionado *@
-<FluentAppBar Orientation="Orientation.Horizontal">
-    <FluentAppBarItem Text="Bloqueados" IconRest="@(new Icons.Light.Size32.LockClosed())" OnClick="VerBloqueados" />
-    <FluentAppBarItem Text="Administradores" IconRest="@(new Icons.Regular.Size20.AppsShield())" OnClick="VerAdmins" />
-    <FluentAppBarItem Text="Auditoria" IconRest="@(new Icons.Light.Size32.Print())" OnClick="Auditoria" />
-</FluentAppBar>
-<FluentCard Height="100">
-    <FluentDataGrid Items="queryUser"
-                    ResizableColumns=false
-                    ResizeType="DataGridResizeType.Exact"
-                    HeaderCellAsButtonWithMenu="true"
-                    ShowHover="true"
-                    AutoFit="false">
-        <ChildContent>
-            <PropertyColumn Width="70px" InitialSortDirection="SortDirection.Descending" Property="@(p=> p.Id)" Sortable="true" Title="ID" />
-            <PropertyColumn Width="120px" Property="@(p=> Linter.Utilidades.Uteis.PegaNomeDeExibicao((Enumeradores.TipoUsuario)p.TipoUsuario))" Title="Tipo Usuário." />
-            <PropertyColumn Width="250px" Property="@(p=> p.UserName)" Sortable="true" Title="Nome de Usuário" />
-            <PropertyColumn Width="250px" Property="@(p=> p.Email)" Title="Email" Sortable="true" />
-            <TemplateColumn Title="Ações" Align="@Align.End" Width="200px">
-                <FluentButton aria-label="Editar" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => EditarUsuario(context.Id))" />
-                <FluentButton aria-label="Deletar" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => ExcluirUsuario(context.Id))" />
-            </TemplateColumn>
-        </ChildContent>
+<FluentMenuProvider />
+<AuthorizeView Context="contexto">
+    <Authorized>
+        <div class="titulo">
+            <h2 class="centralizado">Usuários registrados</h2>
+        </div>
+            <FluentCard Height="100">
+                <FluentAppBar Orientation="Orientation.Horizontal" Class="centralizado">
+                    <FluentAppBarItem Text="Bloqueados" IconRest="@(new Icons.Light.Size32.LockClosed())" OnClick="@(()=> navigations.NavigateTo("/admin/bloqueados"))" />
+                    <FluentAppBarItem Text="Admin." IconRest="@(new Icons.Regular.Size20.AppsShield())" OnClick="@(() => navigations.NavigateTo("/admin"))" />
+                    <FluentAppBarItem Text="Auditoria" IconRest="@(new Icons.Light.Size32.Print())" OnClick="@(() => navigations.NavigateTo("/admin/auditoria"))" />
+                    @* fazer isso aq depois pra adicionar roles e etc *@
+                    <FluentAppBarItem Text="Perfis" IconRest="@(new Icons.Light.Size32.Print())" OnClick="@(() => navigations.NavigateTo("/admin/perfis"))" />
+                </FluentAppBar>
+                <FluentDataGrid Items="queryUser"
+                                ResizableColumns=false
+                                ResizeType="DataGridResizeType.Exact"
+                                HeaderCellAsButtonWithMenu="true"
+                                ShowHover="false"
+                                AutoFit="true"
+                                Pagination="pagination" >
+                    <ChildContent>
+                        <PropertyColumn Width="100px" InitialSortDirection="SortDirection.Descending" Property="@(p=> p.Id)" Sortable="true" Title="ID" Align="Align.Center"/>
+                        <PropertyColumn Width="300px" Property="@(p=> Linter.Utilidades.Uteis.PegaNomeDeExibicao((Enumeradores.TipoUsuario)p.TipoUsuario))" Title="Tipo Usuário." />
+                        <PropertyColumn Width="500px" Property="@(p=> p.UserName)" Sortable="true" Title="Nome de Usuário" />
+                        <PropertyColumn Width="400px" Property="@(p=> p.Email)" Title="Email" Sortable="true" />
+                        <TemplateColumn Title="Ações" Align="@Align.End" Width="200px">
+                            <FluentButton aria-label="Editar" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => navigations.NavigateTo($"/editarusuario/{context.Id}"))" />
+                            <FluentButton aria-label="Deletar" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => navigations.NavigateTo($"/manutencaousuario/{context.Id}"))" />
+                        </TemplateColumn>
+                    </ChildContent>
 
-        @*talvez isso só sirva pra um rendermode específico *@
-        <LoadingContent>
-            <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center">
-                Carregando...<br />
-                <FluentProgress Width="240px" />
-            </FluentStack>
-        </LoadingContent>
-    </FluentDataGrid>
-</FluentCard>
+                    <LoadingContent>
+                        <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center">
+                            Carregando...<br />
+                            <FluentProgress Width="240px" />
+                        </FluentStack>
+                    </LoadingContent>
+                </FluentDataGrid>
+            </FluentCard>
+        <FluentPaginator State="@pagination">
+            <SummaryTemplate>
+                <strong>@(pagination.TotalItemCount ?? 0)</strong> usuários
+            </SummaryTemplate>
+            <PaginationTextTemplate>
+                Página <strong>@(pagination.CurrentPageIndex + 1) </strong> de <strong>@(pagination.LastPageIndex + 1)</strong> página(s)
+            </PaginationTextTemplate>
+        </FluentPaginator>
+    </Authorized>
+    <NotAuthorized>
+        <NaoAutorizado />
+    </NotAuthorized>
+
+
+</AuthorizeView>
 @code {
     IQueryable<TAB001_Usuarios> queryUser { get; set; }
-
+    PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
     protected override async Task OnInitializedAsync()
     {
         queryUser = repositorio.RetornaTodos();
-    }
-    public void VerBloqueados()
-    {
-        navigations.NavigateTo("/admin/bloqueados");
-    }
-    public void VerAdmins()
-    {
-        navigations.NavigateTo("/admin");
-    }
-    public void Auditoria()
-    {
-        navigations.NavigateTo("/admin/auditoria");
-    }
-    public void EditarUsuario(int id)
-    {
-        navigations.NavigateTo($"/editarusuario/{id}");
-    }
-    public void ExcluirUsuario(int id)
-    {
-        navigations.NavigateTo($"/manutencaousuario/{id}");
-
     }
 }

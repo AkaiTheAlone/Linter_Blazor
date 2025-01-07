@@ -1,6 +1,4 @@
 ﻿@page "/caixa"
-
-@using Linter.Components.Geral
 @rendermode InteractiveServer
 @inject CAX001_MovimentacoesRepositorio repositorio
 @inject NavigationManager navigation
@@ -25,74 +23,72 @@
 
 <PageTitle> Controle de movimentações </PageTitle>
 
-<h1> Controle de Movimentações </h1>
+<AuthorizeView Context="outronome">
+    <Authorized>
+        <FluentMenuProvider />
+        <FluentDialogProvider />
+        <div>
+            <h2 class="centralizado"> Controle de Movimentações </h2>
+        </div>
 
-@if (queryMov == null)
-{
-    <h1> Carregando...</h1>
-}
-else if (queryMov.Count() == 0)
-{
-    <div class="content" style="align-content:flex-start">
-        <h3> Nenhuma movimentação a ser mostrada </h3>
-        <FluentDivider />
-        <h6> Continue adicionando valores na sua conta para liberar gráficos, estatísticas e muito mais! </h6>
+        <FluentCard Height="100" MinimalStyle="true">
+            <FluentAppBar Orientation="Orientation.Horizontal" Class="centralizado">
+                <FluentAppBarItem Text="Adicionar" IconRest="@(new Icons.Regular.Size24.AddCircle())" OnClick="@(()=> navigation.NavigateTo($"/caixa/{(int)Enumeradores.TipoView.Criar}/{0}"))" />
+                <FluentAppBarItem Text="Cancelamentos" IconRest="@(new Icons.Light.Size32.Delete())" OnClick="@(()=> navigation.NavigateTo("/caixa/cancelamentos"))" />
+            </FluentAppBar>
+            <FluentDataGrid Items="queryMov"
+                            ResizableColumns=false
+                            ResizeType="DataGridResizeType.Exact"
+                            HeaderCellAsButtonWithMenu="true"
+                            ShowHover="true"
+                            AutoFit="true"
+                            Pagination="pagination">
+                <ChildContent>
+                    <PropertyColumn Width="100px" InitialSortDirection="SortDirection.Descending" Property="@(p=> p.idMovimentacao)" Sortable="true" Title="ID" />
+                    <PropertyColumn Width="200" Property="@(p=> Linter.Utilidades.Uteis.PegaNomeDeExibicao((Enumeradores.TipoMovimentacao)p.Tipo))" Title="Tipo Movi." />
+                    <PropertyColumn Width="300px" Property="@(p=> p.DataMovimentacao)" Format="dd/MM/yyyy" Sortable="true" Title="Data" />
+                    <PropertyColumn Width="400px" Property="@(p=> p.Valor.ToString("C2"))" Title="Valor" Sortable="false" /> @* sortable não funciona com conversoes, descobrir solucao*@
+                    <PropertyColumn Width="600px" Property="@(p=> p.Descritivo)" Title="Descrição" Sortable="true" />
+                    <TemplateColumn Title="Ações" Align="@Align.End" Width="200px">
+                        <FluentButton aria-label="Editar" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() =>  navigation.NavigateTo($"/caixa/{(int)Enumeradores.TipoView.Editar}/{context.idMovimentacao}"))" />
+                        <FluentButton aria-label="Deletar" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => navigation.NavigateTo($"/caixa/{(int)Enumeradores.TipoView.Apagar}/{context.idMovimentacao}"))" />
+                    </TemplateColumn>
+                </ChildContent>
 
-        <FluentButton Style="align-content:center" OnClick="AdicionarMovimentacao"> Adicionar Movimentação </FluentButton>
-        <br />
-        <img src="/recursos/icones/semregistros.jpg" width="500" height="350" style="align-content:center" />
-    </div>
-}
-else
-{
-    <FluentMenuProvider />
-    <FluentDialogProvider />
-
-    <FluentAppBar Orientation="Orientation.Horizontal">
-        <FluentAppBarItem Text="Adicionar" IconRest="@(new Icons.Regular.Size24.AddCircle())" OnClick="AdicionarMovimentacao" />
-        <FluentAppBarItem Text="Cancelamentos" IconRest="@(new Icons.Light.Size32.Delete())" OnClick="VerCancelamentos" />
-    </FluentAppBar>
-
-    <FluentCard Height="100">
-        <FluentDataGrid Items="queryMov"
-                        ResizableColumns=false
-                        ResizeType="DataGridResizeType.Exact"
-                        HeaderCellAsButtonWithMenu="true"
-                        ShowHover="true"
-                        AutoFit="false">
-            <ChildContent>
-                <PropertyColumn Width="70px" InitialSortDirection="SortDirection.Descending" Property="@(p=> p.idMovimentacao)" Sortable="true" Title="ID" />
-                <PropertyColumn Width="100px" Property="@(p=> Linter.Utilidades.Uteis.PegaNomeDeExibicao((Enumeradores.TipoMovimentacao)p.Tipo))" Title="Tipo Movi." />
-                <PropertyColumn Width="100px" Property="@(p=> p.DataMovimentacao)" Format="dd/MM/yyyy" Sortable="true" Title="Data" />
-                <PropertyColumn Width="150px" Property="@(p=> p.Valor.ToString("C2"))" Title="Valor" Sortable="false" /> @* sortable não funciona com conversoes, descobrir solucao*@
-                <PropertyColumn Width="300px" Property="@(p=> p.Descritivo)" Title="Descrição" Sortable="true" />
-                <TemplateColumn Title="Ações" Align="@Align.End" Width="200px">
-                    <FluentButton aria-label="Editar" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => EditarMovimentacao(context.idMovimentacao))" />
-                    <FluentButton aria-label="Deletar" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => ExcluirMovimentacao(context.idMovimentacao))" />
-                </TemplateColumn>
-            </ChildContent>
-
-            <LoadingContent>
-                <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center">
-                    Carregando...<br />
-                    <FluentProgress Width="240px" />
-                </FluentStack>
-            </LoadingContent>
-        </FluentDataGrid>
-    </FluentCard>
-}
-
+                <LoadingContent>
+                    <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center">
+                        Carregando...<br />
+                        <FluentProgress Width="240px" />
+                    </FluentStack>
+                </LoadingContent>
+            </FluentDataGrid>
+        </FluentCard>
+        <FluentPaginator State="@pagination">
+            <SummaryTemplate>
+                <strong>@(pagination.TotalItemCount ?? 0)</strong> movimentações
+            </SummaryTemplate>
+            <PaginationTextTemplate>
+                Página <strong>@(pagination.CurrentPageIndex + 1)</strong> de <strong>@(pagination.LastPageIndex + 1)</strong> página(s)
+            </PaginationTextTemplate>
+        </FluentPaginator>
+    </Authorized>
+    <NotAuthorized>
+        <NaoAutorizado />
+    </NotAuthorized>
+</AuthorizeView>
 
 @code {
 
     #region Propriedades
     [Parameter]
     public Enumeradores.TipoView tipoView { get; set; }
-    Confirmacao confirmacao = new Confirmacao();
     [Parameter] public int idMovimentacao { get; set; } = 0;
     public Enumeradores.TipoMovimentacao? tipomov { get; set; }
     [SupplyParameterFromForm] public CAX001_MovimentacoesCaixa Caixa { get; set; } = new CAX001_MovimentacoesCaixa();
     public IQueryable<CAX001_MovimentacoesCaixa> queryMov;
+
+
+    PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
     #endregion
 
 
@@ -101,26 +97,7 @@ else
         queryMov = repositorio.RetornaMovimentacoes();
         return queryMov;
     }
-    public async void AdicionarMovimentacao()
-    {
-        await Task.Delay(100);
-        navigation.NavigateTo($"/caixa/{(int)Enumeradores.TipoView.Criar}/{0}");
-    }
-    public async Task EditarMovimentacao(int id)
-    {
-        await Task.Delay(100);
-        navigation.NavigateTo($"/caixa/{(int)Enumeradores.TipoView.Editar}/{id}");
-    }
-    private async Task ExcluirMovimentacao(int id)
-    {
-        await Task.Delay(100);
-        navigation.NavigateTo($"/caixa/{(int)Enumeradores.TipoView.Apagar}/{id}");
-    }
 
-    public void VerCancelamentos()
-    {
-        navigation.NavigateTo("/caixa/cancelamentos");
-    }
 
 }
 @*ESSE ERRO ESTA APARECENDO AO TENTAR DAR UM SORT NA COLUNA DE VALORES (DECIMAL)
