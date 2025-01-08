@@ -1,13 +1,13 @@
-﻿<link href="css/app.css" rel="stylesheet">
+﻿@inject CNT002_ContasExcluidasRepositorio rep
 
-@page "/contas/excluidas"
+@page "/contasgerenciais/excluidas"
 
 <h3 class="centralizado">Contas excluídas</h3>
 
 <FluentMenuProvider />
 <FluentDialogProvider />
 
-<FluentCard Height="100">
+<FluentCard Height="100" MinimalStyle="true">
     <FluentDataGrid Items="queryConta"
                     ResizableColumns=false
                     ResizeType="DataGridResizeType.Exact"
@@ -17,10 +17,13 @@
         <ChildContent>
             <PropertyColumn Width="120px" Property="@(p=> p.idContaGerencial)" Sortable="true" Title="ID Conta" />
             <PropertyColumn Width="600px" Property="@(p=> p.Descricao)" Title="Descricao" Sortable="false" />
-            <PropertyColumn Width="600px" Property="@(p=> p.Descricao)" Title="Descricao" Sortable="false" />
+
+            <PropertyColumn Width="600px" Property="@(p=> p.DataExclusao)" Title="Descricao" Sortable="false" />
+            <PropertyColumn Width="600px" Property="@(p=> p.MotivoCancelamento)" Title="Descricao" Sortable="false" />
+            <PropertyColumn Width="600px" Property="@(p=> p.idUsuarioExclusao)" Title="Descricao" Sortable="false" />
             <TemplateColumn Title="Ações" Align="@Align.End" Width="200px">
-                <FluentButton aria-label="Editar" IconEnd="@(new Icons.Light.Size32.Edit())" />
-                <FluentButton aria-label="Deletar" IconEnd="@(new Icons.Light.Size32.Delete())" />
+                <FluentButton aria-label="Restaurar" IconEnd="@(new Icons.Light.Size32.Options())" />
+                <FluentButton aria-label="Consultar" IconEnd="@(new Icons.Light.Size32.ZoomIn())" />
             </TemplateColumn>
         </ChildContent>
 
@@ -35,6 +38,10 @@
 
 
 @code {
-    public IQueryable<CNT001_ContasGerenciais> queryConta;
+    public IQueryable<CNT002_ContasExcluidas> queryConta;
 
+    protected override async Task OnInitializedAsync()
+    {
+        queryConta = rep.RetornaTodasExcluidas();
+    }
 }

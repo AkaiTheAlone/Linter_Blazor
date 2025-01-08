@@ -19,6 +19,14 @@
     .fluent-textfield__input {
         margin-top: 4px;
     }
+
+    .vermelho {
+        color: red
+    }
+
+    .verde {
+        color: green;
+    }
 </style>
 
 <PageTitle> Controle de movimentações </PageTitle>
@@ -62,6 +70,12 @@
                     </FluentStack>
                 </LoadingContent>
             </FluentDataGrid>
+            <FluentDivider />
+            <br />
+
+            Saldo Total = <strong class="@Cor">
+                @Saldo.ToString("C2")
+            </strong>
         </FluentCard>
         <FluentPaginator State="@pagination">
             <SummaryTemplate>
@@ -71,6 +85,7 @@
                 Página <strong>@(pagination.CurrentPageIndex + 1)</strong> de <strong>@(pagination.LastPageIndex + 1)</strong> página(s)
             </PaginationTextTemplate>
         </FluentPaginator>
+
     </Authorized>
     <NotAuthorized>
         <NaoAutorizado />
@@ -78,15 +93,15 @@
 </AuthorizeView>
 
 @code {
-
     #region Propriedades
+    public string Cor { get; set; } = "verde";
+    public decimal Saldo { get; set; }
     [Parameter]
     public Enumeradores.TipoView tipoView { get; set; }
     [Parameter] public int idMovimentacao { get; set; } = 0;
     public Enumeradores.TipoMovimentacao? tipomov { get; set; }
     [SupplyParameterFromForm] public CAX001_MovimentacoesCaixa Caixa { get; set; } = new CAX001_MovimentacoesCaixa();
     public IQueryable<CAX001_MovimentacoesCaixa> queryMov;
-
 
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
     #endregion
@@ -95,6 +110,16 @@
     protected override async Task<IQueryable> OnInitializedAsync()
     {
         queryMov = repositorio.RetornaMovimentacoes();
+
+        foreach (var mov in queryMov)
+        {
+            if (mov.Tipo == (int)Enumeradores.TipoMovimentacao.Entrada)
+                Saldo += mov.Valor;
+            else
+                Saldo -= mov.Valor;
+        }
+        if (Saldo < 0) Cor = "vermelho";
+
         return queryMov;
     }
 

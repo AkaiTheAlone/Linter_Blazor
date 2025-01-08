@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Linter.Dados.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250106133420_Contas")]
-    partial class Contas
+    [Migration("20250107214155_TentandoHerdar")]
+    partial class TentandoHerdar
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -119,12 +119,6 @@ namespace Linter.Dados.Migrations
                         .HasColumnType("text")
                         .HasColumnName("descricao");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(34)
-                        .HasColumnType("character varying(34)")
-                        .HasColumnName("discriminator");
-
                     b.Property<int>("idUsuarioCriador")
                         .HasColumnType("integer")
                         .HasColumnName("idusuariocriador");
@@ -133,10 +127,47 @@ namespace Linter.Dados.Migrations
                         .HasName("pk_cnt001_contasgerenciais");
 
                     b.ToTable("cnt001_contasgerenciais");
+                });
 
-                    b.HasDiscriminator().HasValue("CNT001_ContasGerenciais");
+            modelBuilder.Entity("Linter.Modelos.Modelos.CNT002_ContasExcluidas", b =>
+                {
+                    b.Property<int>("idContaGerencial")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("idcontagerencial");
 
-                    b.UseTphMappingStrategy();
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("idContaGerencial"));
+
+                    b.Property<DateTime>("DataCadastro")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("datacadastro");
+
+                    b.Property<DateTime>("DataExclusao")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("dataexclusao");
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("descricao");
+
+                    b.Property<string>("MotivoCancelamento")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("motivocancelamento");
+
+                    b.Property<int>("idUsuarioCriador")
+                        .HasColumnType("integer")
+                        .HasColumnName("idusuariocriador");
+
+                    b.Property<int>("idUsuarioExclusao")
+                        .HasColumnType("integer")
+                        .HasColumnName("idusuarioexclusao");
+
+                    b.HasKey("idContaGerencial")
+                        .HasName("pk_cnt002_contasexcluidas");
+
+                    b.ToTable("cnt002_contasexcluidas");
                 });
 
             modelBuilder.Entity("Linter.Modelos.Modelos.TAB001_Usuarios", b =>
@@ -404,28 +435,6 @@ namespace Linter.Dados.Migrations
                         .HasName("pk_aspnetusertokens");
 
                     b.ToTable("tab005_usuariostokens", (string)null);
-                });
-
-            modelBuilder.Entity("Linter.Modelos.Modelos.CNT002_ContasExcluidas", b =>
-                {
-                    b.HasBaseType("Linter.Modelos.Modelos.CNT001_ContasGerenciais");
-
-                    b.Property<DateTime>("DataExclusao")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("dataexclusao");
-
-                    b.Property<string>("MotivoCancelamento")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("motivocancelamento");
-
-                    b.Property<int>("idUsuarioExclusao")
-                        .HasColumnType("integer")
-                        .HasColumnName("idusuarioexclusao");
-
-                    b.ToTable("cnt001_contasgerenciais");
-
-                    b.HasDiscriminator().HasValue("CNT002_ContasExcluidas");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

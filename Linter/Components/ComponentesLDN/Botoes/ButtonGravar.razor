@@ -1,0 +1,77 @@
+﻿@using Microsoft.FluentUI.AspNetCore.Components
+@using Microsoft.FluentUI.AspNetCore.Components.Extensions
+
+
+<style>
+    .btnGravar {
+        outline: 10px;
+        outline-color: limegreen !important;
+        border: 2px solid #4CAF50 !important;
+        padding: 10px 20px !important;
+        font-size: 16px !important;
+        cursor: pointer !important;
+        border-radius: 5px !important;
+        transition: all 0.3s ease !important;
+    }
+
+        .btnGravar:hover {
+            background-color: #4CAF50 !important;
+            color: white !important;
+            outline: 2px solid #388E3C !important; /* Contorno quando o botão é focado */
+    }
+
+    .btnExcluir {
+        outline-color: crimson !important;
+        outline: 1px !important;
+    }
+
+    .btnEditar {
+        outline-color: crimson !important;
+        outline: 1px !important;
+    }
+
+</style>
+<FluentButton IconStart="@Icone"
+              Id="@Estilo">
+
+    <strong> @Label </strong>
+</FluentButton>
+
+@code {
+
+    
+    [Parameter] public string? Label { get; set; }
+    [Parameter] public Enumeradores.TipoView tipoView { get; set; }
+
+    public string Estilo { get; set; } = "btnGravar";
+    public bool Disabled { get; set; } = true;
+    public string Cor { get; set; } = "";
+    public Icon Icone { get; set; } = new Icons.Regular.Size20.Save();
+
+    protected override Task OnInitializedAsync()
+    {
+        base.OnInitialized();
+        switch (tipoView)
+        {
+            case Enumeradores.TipoView.Criar:
+
+                Estilo = "btnGravar";
+                Icone = new Icons.Regular.Size20.Save();
+                break;
+
+            case Enumeradores.TipoView.Editar:
+                Estilo = "btnEditar";
+                Icone = new Icons.Regular.Size20.Edit();
+                break;
+
+            case Enumeradores.TipoView.Apagar:
+
+                Estilo = "btnExcluir";
+                Icone = new Icons.Regular.Size20.Delete();
+                break;
+        }
+
+        return Task.CompletedTask;
+    }
+
+}

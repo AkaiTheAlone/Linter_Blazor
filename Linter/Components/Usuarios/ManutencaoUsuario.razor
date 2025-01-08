@@ -1,0 +1,99 @@
+﻿@page "/usuarios/{tipoView:int}/{id:int}"
+
+@using Microsoft.AspNetCore.Identity
+@inject TAB001_UsuariosRepositorio rep
+@rendermode InteractiveServer
+
+<h3>@btnString</h3>
+<FluentEditForm Model="Usuario">
+    <FluentCard Height="400" Width="600" style="padding: 1.5rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); border-radius: 8px;" MinimalStyle="true">
+        <FluentTabs>
+            <!-- Aba: Informações do Usuário -->
+            <FluentTab Label="Usuário">
+                <FluentGrid>
+                    <FluentGridItem>
+                        <FluentTextField Placeholder="Nome do Usuário..." Label="Nome do Usuário" @bind-Value="Usuario.UserName" style="width: 100%;" />
+                        <FluentValidationMessage For="@(() => Usuario.UserName)" />
+                    </FluentGridItem>
+                    <FluentGridItem>
+                        <FluentTextField Placeholder="Senha..." Label="Senha" @bind-Value="Usuario.PasswordHash" style="width: 100%;" />
+                        <FluentValidationMessage For="@(() => Usuario.UserName)" />
+                    </FluentGridItem>
+                    <FluentGridItem>
+                        <FluentTextField Placeholder="Email..." Label="Email" @bind-Value="Usuario.Email" style="width: 100%;" />
+                        <FluentValidationMessage For="@(() => Usuario.Email)" />
+                    </FluentGridItem>
+                    <FluentGridItem>
+                        <FluentTextField Placeholder="Telefone..." Label="Número de Telefone" @bind-Value="Usuario.PhoneNumber" style="width: 100%;" />
+                        <FluentValidationMessage For="@(() => Usuario.PhoneNumber)"> </FluentValidationMessage>
+                    </FluentGridItem>
+
+
+
+                    @* <FluentCombobox TOption="Enumeradores.TipoUsuario" @bind-Value="Role" Label="Tipo de Usuário" style="width: 100%;">
+
+                    </FluentCombobox> *@
+                </FluentGrid>
+            </FluentTab>
+
+            <!-- aba de endereço -->
+            <FluentTab Label="Endereço">
+                <FluentGrid>
+                    <FluentGridItem>
+                        <FluentTextField Label="Rua" @bind-Value="Usuario.Rua" style="width: 100%;" />
+                    </FluentGridItem>
+                    <FluentGridItem>
+                        <FluentCombobox Items="Uteis.PegaNomeDeExibicao(Cidades)" @bind-Value="Usuario.Cidade" Label="Selecione a Cidade" style="width: 100%;">
+                        </FluentCombobox>
+                    </FluentGridItem>
+                </FluentGrid>
+            </FluentTab>
+        </FluentTabs>
+    </FluentCard>
+    <br />
+    <FluentButton OnClick="@(() => AcionarBotao(context))" > Adicionar Usuário </FluentButton>
+</FluentEditForm>
+<br />
+
+
+
+
+@code {
+    [Parameter]
+    public Enumeradores.TipoView tipoView { get; set; }
+    public Enumeradores.Cidades Cidades { get; set; }
+    public List<Claim> Claims { get; set; }
+    public List<string> RolesParticipantes { get; set; }
+    [Parameter]
+    public int id { get; set; } = 0;
+    public string btnString { get; set; } = "";
+    [SupplyParameterFromForm]
+    public TAB001_Usuarios Usuario { get; set; } = new TAB001_Usuarios();
+    public async Task RegistrarNovoUsuario()
+    {
+        await rep.InserirUsuario(Usuario, RolesParticipantes, Claims);
+    }
+
+    public async Task AcionarBotao(EditContext editContext)
+    {
+        if (editContext.Validate())
+        {
+            switch (tipoView)
+            {
+                case Enumeradores.TipoView.Criar:
+                    await rep.InserirUsuario(Usuario, RolesParticipantes, Claims);
+                    break;
+
+                case Enumeradores.TipoView.Editar:
+                    await rep.AtualizarUsuario(Usuario, RolesParticipantes);
+                    break;
+
+                case Enumeradores.TipoView.Apagar:
+                    await rep.RemoverUsuario(Usuario, RolesParticipantes, Claims);
+                    break;
+            }
+        }
+
+    }
+
+}

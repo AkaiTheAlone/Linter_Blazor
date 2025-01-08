@@ -40,5 +40,15 @@ namespace Linter.Dados.Repositorios
             context.SaveChanges();
         }
         #endregion
+
+        #region Retornos
+         
+        public IQueryable<CNT002_ContasExcluidas> RetornaTodasExcluidas()
+        {
+            return context.CNT002_ContasExcluidas.AsNoTracking().AsQueryable();
+        }
+
+
+        #endregion
     }
 }

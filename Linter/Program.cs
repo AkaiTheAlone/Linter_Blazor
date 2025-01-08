@@ -45,6 +45,19 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddAuthorizationCore();
 builder.Services.AddAuthentication();
 
+//builder.Services.AddIdentity<TAB001_Usuarios, IdentityRole>(opt => 
+//{ 
+//    //depois de terminar eu ativo td dnv
+//    opt.Password.RequireDigit = false;
+//    opt.Password.RequiredLength = 1;
+//    opt.Password.RequireLowercase= false;
+//    opt.Password.RequireUppercase = false;
+//    opt.Password.RequireNonAlphanumeric= false;
+//    opt.SignIn.RequireConfirmedEmail = false;
+//    opt.SignIn.RequireConfirmedPhoneNumber = false;
+//    opt.SignIn.RequireConfirmedAccount = false;
+//});
+
 builder.Services.AddIdentityCore<TAB001_Usuarios>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddSignInManager()

@@ -1,4 +1,6 @@
-﻿@inject CNT001_ContasGerenciaisRepositorio rep
+﻿@page "/contasgerenciais/{tipoView:int}/{id:int}"
+
+@inject CNT001_ContasGerenciaisRepositorio rep
 @inject NavigationManager navigation
 <h3> @txtBotao </h3>
 
@@ -13,7 +15,7 @@
         @if (tipoView != Enumeradores.TipoView.Criar)
         {
             <FluentGridItem xs="3">
-                <FluentNumberField Label="Descrição" Id="descritivo" Class="label-top" @bind-Value="Conta.idUsuarioCriador" ReadOnly="@Disabled" />
+                <FluentNumberField Label="IdUsuario" Id="descritivo" Class="label-top" @bind-Value="Conta.idUsuarioCriador" ReadOnly="@Disabled" />
             </FluentGridItem>
         }
 
@@ -25,20 +27,27 @@
             <FluentDatePicker Label="Descrição" Id="descritivo" Class="label-top" /> @* @bind-Value="@(() => Conta.DataCadastro)" *@
         </FluentGridItem>
 
-        <FluentGridItem>
-            <FluentButton OnClick="@(()=> AcionarBotao())" Type="ButtonType.Submit" FormId="submit"> @txtBotao </FluentButton>
-            <FluentButton Disabled="false" OnClick="@(()=> navigation.NavigateTo("/caixa/"))"> Retornar </FluentButton>
-        </FluentGridItem>
     </FluentGrid>
+
+    <FluentButton OnClick="@(()=> AcionarBotao())" Type="ButtonType.Submit" FormId="submit"> @txtBotao </FluentButton>
+    <FluentButton Disabled="false" OnClick="@(()=> navigation.NavigateTo("/caixa/"))"> Retornar </FluentButton>
 
 </FluentEditForm>
 
 @code {
+    #region Propriedades
+    [Parameter]
+    public int TipoView { get; set; }
+    [Parameter]
+    public int id { get; set; }
     [SupplyParameterFromForm]
     public CNT001_ContasGerenciais Conta { get; set; } = new CNT001_ContasGerenciais();
     public string txtBotao { get; set; } = "Adicionar movimentação";
     public bool Disabled { get; set; } = true;
     public Enumeradores.TipoView tipoView;
+
+    #endregion
+
     public void AcionarBotao()
     {
         switch (tipoView)

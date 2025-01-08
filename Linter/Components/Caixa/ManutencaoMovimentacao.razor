@@ -4,39 +4,43 @@
 @inject CAX001_MovimentacoesRepositorio repositorio
 @inject NavigationManager navigation
 
+
 <h3> @txtBotao </h3>
 
-<FluentToastProvider RemoveToastsOnNavigation="false"/>
+<FluentToastProvider RemoveToastsOnNavigation="false" />
 <FluentDialogProvider />
 <FluentMenuProvider />
 
 
 <FluentEditForm Model="@objMovi" FormName="submit" OnValidSubmit="@AcionarBotao">
     <DataAnnotationsValidator />
-    <ValidationSummary />
     <FluentGrid>
         <FluentGridItem xs="3">
             <FluentTextField Label="Descrição" Id="descritivo" Class="label-top" Name="objMovi.Descritivo" @bind-Value="objMovi.Descritivo" ReadOnly="@Disabled" />
+            <FluentValidationMessage For="@(() => objMovi.Descritivo)" />
         </FluentGridItem>
         <FluentGridItem xs="3">
             <FluentNumberField TValue="decimal" Label="Valor" Name="objMovi.Valor" @bind-Value="objMovi.Valor" ReadOnly="@Disabled" />
+            <FluentValidationMessage For="@(() => objMovi.Valor)" />
         </FluentGridItem>
         <FluentGridItem xs="3">
             <FluentDatePicker Label="Data da movimentação" Name="datepicker" @bind-Value="objMovi.DataMovimentacao" ReadOnly="@Disabled" />
+            <FluentValidationMessage For="@(() => objMovi.DataMovimentacao)" />
         </FluentGridItem>
     </FluentGrid>
 
-    <FluentRadioGroup Name="tipo" @bind-Value="Numero" Label="Tipo de Movimentação" >
+    <FluentRadioGroup Name="tipo" @bind-Value="objMovi.Tipo" Label="Tipo de Movimentação">
         <FluentRadio Value="0"> Entrada </FluentRadio>
         <FluentRadio Value="1"> Saída </FluentRadio>
     </FluentRadioGroup>
     <br />
-    <FluentButton OnClick="@(()=> AcionarBotao())" Type="ButtonType.Submit" FormId="submit" Disabled="BotoesDisabled"> @txtBotao </FluentButton>
-    <FluentButton Disabled="false" OnClick="@(()=> navigation.NavigateTo("/caixa/"))"> Retornar </FluentButton>
+    <FluentButton OnClick="@(()=> AcionarBotao(context))" Type="ButtonType.Submit" FormId="submit" Disabled="BotoesDisabled" IconStart="@IconeButton"> @txtBotao </FluentButton>
+    <FluentButton Disabled="false" OnClick="@(()=> navigation.NavigateTo("/caixa/"))" IconStart="new Icons.Regular.Size20.ArrowCircleLeft()"> Retornar </FluentButton>
 </FluentEditForm>
 
 @code {
 
+    public Icon IconeButton { get; set; } = new Icons.Regular.Size16.Save();
     bool BotoesDisabled = false;
     public bool Disabled { get; set; } = false;
     public string txtBotao { get; set; } = "Adicionar movimentação";
@@ -45,7 +49,6 @@
     [SupplyParameterFromForm]
     public CAX001_MovimentacoesCaixa objMovi { get; set; } = new CAX001_MovimentacoesCaixa();
 
-    public int Numero { get; set; }
     [Parameter] public int acao { get; set; }
 
     [Parameter] public int id { get; set; }
@@ -65,6 +68,7 @@
         {
             case (int)Enumeradores.TipoView.Criar:
                 //aqui poderia mudar a cor do botão e colocar algum icone de lixeira
+                IconeButton = new Icons.Regular.Size20.Save();
                 txtBotao = "Adicionar movimentação";
                 BotoesDisabled = false;
                 Disabled = false;
@@ -72,10 +76,12 @@
             case (int)Enumeradores.TipoView.Editar:
                 Disabled = false;
                 BotoesDisabled = false;
+                IconeButton = new Icons.Regular.Size20.Edit();
                 //e aq colocar algum icone de lapis
                 txtBotao = "Editar movimentação";
                 break;
             case (int)Enumeradores.TipoView.Apagar:
+                IconeButton = new Icons.Regular.Size20.Delete();
                 Disabled = true;
                 BotoesDisabled = false;
                 //e aq colocar algum icone de lapis
@@ -83,33 +89,36 @@
                 break;
         }
     }
-    public async void AcionarBotao()
+    public async void AcionarBotao(EditContext editContext)
     {
-        switch (acao)
+        if (editContext.Validate())
         {
-            case (int)Enumeradores.TipoView.Criar:
-                repositorio.InserirMovimentacao(objMovi);
-                Toast.ShowCustom("Registro cadastrado com sucesso!", null, null, null, (new Icons.Regular.Size24.AddCircle(), Color.Accent));
-                break;
-            case (int)Enumeradores.TipoView.Editar:
-                await repositorio.EditarMovimentacao(objMovi);
-                Toast.ShowCustom("Registro cadastrado com sucesso!", null, null, null, (new Icons.Regular.Size24.AddCircle(), Color.Accent));
-                break;
-            case (int)Enumeradores.TipoView.Apagar:
-                var dialog = await dialogservice.ShowConfirmationAsync("Tem certeza que deseja cancelar?",
-                                                                       "Sim",
-                                                                       "Cancelar",
-                                                                       "Atenção");
-                var result = await dialog.Result;
-                if (!result.Cancelled)
-                {
-                    repositorio.ExcluirMovimentacao(id);
-                    await dialogservice.ShowInfoAsync("Retornando à página principal...",
-                                                      "Sucesso");
-                    Toast.ShowCustom("Exclusão confirmada com sucesso!", 10000, "100", null, (new Icons.Regular.Size24.Delete(), Color.Accent));
-                }
-                break;
+            switch (acao)
+            {
+                case (int)Enumeradores.TipoView.Criar:
+                    repositorio.InserirMovimentacao(objMovi);
+                    Toast.ShowCustom("Registro cadastrado com sucesso!", null, null, null, (new Icons.Regular.Size24.AddCircle(), Color.Accent));
+                    break;
+                case (int)Enumeradores.TipoView.Editar:
+                    await repositorio.EditarMovimentacao(objMovi);
+                    Toast.ShowCustom("Registro cadastrado com sucesso!", null, null, null, (new Icons.Regular.Size24.AddCircle(), Color.Accent));
+                    break;
+                case (int)Enumeradores.TipoView.Apagar:
+                    var dialog = await dialogservice.ShowConfirmationAsync("Tem certeza que deseja cancelar?",
+                                                                           "Sim",
+                                                                           "Cancelar",
+                                                                           "Atenção");
+                    var result = await dialog.Result;
+                    if (!result.Cancelled)
+                    {
+                        repositorio.ExcluirMovimentacao(id);
+                        await dialogservice.ShowInfoAsync("Retornando à página principal...",
+                                                          "Sucesso");
+                        Toast.ShowCustom("Exclusão confirmada com sucesso!", 10000, "100", null, (new Icons.Regular.Size24.Delete(), Color.Accent));
+                    }
+                    break;
+            }
+            navigation.NavigateTo($"/caixa");
         }
-        navigation.NavigateTo($"/caixa");
     }
 }

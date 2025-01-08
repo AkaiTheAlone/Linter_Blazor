@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Linter.Dados.Migrations
 {
     /// <inheritdoc />
-    public partial class Contas : Migration
+    public partial class TentandoHerdar : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -22,20 +22,6 @@ namespace Linter.Dados.Migrations
                 nullable: false,
                 defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
 
-            migrationBuilder.AddColumn<DateTime>(
-                name: "dataexclusao",
-                table: "cnt001_contasgerenciais",
-                type: "timestamp without time zone",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "discriminator",
-                table: "cnt001_contasgerenciais",
-                type: "character varying(34)",
-                maxLength: 34,
-                nullable: false,
-                defaultValue: "");
-
             migrationBuilder.AddColumn<int>(
                 name: "idusuariocriador",
                 table: "cnt001_contasgerenciais",
@@ -43,44 +29,37 @@ namespace Linter.Dados.Migrations
                 nullable: false,
                 defaultValue: 0);
 
-            migrationBuilder.AddColumn<int>(
-                name: "idusuarioexclusao",
-                table: "cnt001_contasgerenciais",
-                type: "integer",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "motivocancelamento",
-                table: "cnt001_contasgerenciais",
-                type: "text",
-                nullable: true);
+            migrationBuilder.CreateTable(
+                name: "cnt002_contasexcluidas",
+                columns: table => new
+                {
+                    idcontagerencial = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    descricao = table.Column<string>(type: "text", nullable: false),
+                    datacadastro = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    idusuariocriador = table.Column<int>(type: "integer", nullable: false),
+                    dataexclusao = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    motivocancelamento = table.Column<string>(type: "text", nullable: false),
+                    idusuarioexclusao = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_cnt002_contasexcluidas", x => x.idcontagerencial);
+                });
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "cnt002_contasexcluidas");
+
             migrationBuilder.DropColumn(
                 name: "datacadastro",
                 table: "cnt001_contasgerenciais");
 
             migrationBuilder.DropColumn(
-                name: "dataexclusao",
-                table: "cnt001_contasgerenciais");
-
-            migrationBuilder.DropColumn(
-                name: "discriminator",
-                table: "cnt001_contasgerenciais");
-
-            migrationBuilder.DropColumn(
                 name: "idusuariocriador",
-                table: "cnt001_contasgerenciais");
-
-            migrationBuilder.DropColumn(
-                name: "idusuarioexclusao",
-                table: "cnt001_contasgerenciais");
-
-            migrationBuilder.DropColumn(
-                name: "motivocancelamento",
                 table: "cnt001_contasgerenciais");
 
             migrationBuilder.CreateTable(
