@@ -1,4 +1,6 @@
 ﻿@page "/"
+@using Linter.Components.Relatorios
+
 @rendermode InteractiveServer
 
 @inject IToastService Toast
@@ -6,18 +8,21 @@
 <PageTitle> Institucional </PageTitle>
 
 
-    <h1 class="centralizado">
-        Bem vindo.
-    </h1>
-    <div class="centralizado">
+<h1 class="centralizado">
+    Bem vindo.
+</h1>
+<div class="centralizado">
     Welcome to your new Fluent Blazor app.
-    </div>
-    <FluentButton OnClick="exibetoast"></FluentButton>
+</div>
+<FluentButton OnClick="exibetoast"></FluentButton>
 
 
-@code{
+
+@code {
     public void exibetoast()
     {
+        //CriarRelatorio
+        //rpt.CriarRelatorio();
         Toast.ShowCustom("Exclusão confirmada com sucesso!", 100, "100", null, (new Icons.Regular.Size24.Delete(), Color.Accent));
     }
-    }
+}

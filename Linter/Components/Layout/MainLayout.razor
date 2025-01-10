@@ -1,5 +1,5 @@
 ﻿@inherits LayoutComponentBase
-@inject IToastService Toast
+
 <style>
     .centralizado {
         display: flex;
@@ -8,8 +8,12 @@
         height: 50px;
     }
 </style>
-<FluentDialogProvider />
-
+<FluentDialogProvider @rendermode="InteractiveServer" />
+<FluentToastProvider @rendermode="InteractiveServer" 
+                     RemoveToastsOnNavigation="false" 
+                     MaxToastCount="10" 
+                     ShowCloseButton="true" 
+                     Timeout="500" />
 <FluentLayout>
     <FluentHeader>
         Linter
@@ -37,7 +41,6 @@
 
         </Authorized>
     </AuthorizeView>
-    <FluentToastProvider RemoveToastsOnNavigation="false" Position="ToastPosition.TopStart" MaxToastCount="10" />
 </FluentLayout>
 
 

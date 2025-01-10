@@ -1,6 +1,9 @@
 ﻿@page "/contasgerenciais/{tipoView:int}/{id:int}"
 
 @inject CNT001_ContasGerenciaisRepositorio rep
+@inject CNT002_ContasExcluidasRepositorio repCancelamento
+@inject AuthenticationStateProvider auth
+
 @inject NavigationManager navigation
 <h3> @txtBotao </h3>
 
@@ -19,18 +22,28 @@
             </FluentGridItem>
         }
 
-        <FluentGridItem xs="3"> 
-            <FluentTextField Label="Descrição" Id="descritivo" Class="label-top" @bind-Value="Conta.Descricao" ReadOnly="@Disabled"/>
+        <FluentGridItem xs="3">
+            <FluentTextField Placeholder="Descrição..." Label="Descrição" Id="descritivo" Class="label-top" @bind-Value="Conta.Descricao" ReadOnly="@Disabled" />
+            <FluentValidationMessage For="@(() => Conta.Descricao)" />
         </FluentGridItem>
 
         <FluentGridItem xs="3">
-            <FluentDatePicker Label="Descrição" Id="descritivo" Class="label-top" /> @* @bind-Value="@(() => Conta.DataCadastro)" *@
+            <FluentDatePicker Label="Data da movimentação" Name="datepicker" @bind-Value="Conta.DataCadastro" ReadOnly="@Disabled" />
+            <FluentValidationMessage For="@(() => Conta.DataCadastro)" />
         </FluentGridItem>
+
+        @if (tipoView == Enumeradores.TipoView.Apagar)
+        {
+            <FluentGridItem xs="3">
+                <FluentTextArea Label="Data da movimentação" Name="datepicker" @bind-Value="MotivoCancelamento" ReadOnly="false" />
+            </FluentGridItem>
+        }
+
 
     </FluentGrid>
 
     <FluentButton OnClick="@(()=> AcionarBotao())" Type="ButtonType.Submit" FormId="submit"> @txtBotao </FluentButton>
-    <FluentButton Disabled="false" OnClick="@(()=> navigation.NavigateTo("/caixa/"))"> Retornar </FluentButton>
+    <FluentButton Type="ButtonType.Button" Disabled="false" OnClick="@(()=> navigation.NavigateTo("/caixa/"))"> Retornar </FluentButton>
 
 </FluentEditForm>
 
@@ -41,11 +54,13 @@
     [Parameter]
     public int id { get; set; }
     [SupplyParameterFromForm]
+    public string MotivoCancelamento { get; set; } = "";
     public CNT001_ContasGerenciais Conta { get; set; } = new CNT001_ContasGerenciais();
     public string txtBotao { get; set; } = "Adicionar movimentação";
-    public bool Disabled { get; set; } = true;
+    public bool Disabled { get; set; } = false;
     public Enumeradores.TipoView tipoView;
-
+    private ClaimsPrincipal? currentUser;
+    private string Username { get; set; }
     #endregion
 
     public void AcionarBotao()
@@ -53,9 +68,20 @@
         switch (tipoView)
         {
             case Enumeradores.TipoView.Criar:
+                Conta.DataCadastro = DateTime.Now;
                 rep.Inserir(Conta);
                 break;
             case Enumeradores.TipoView.Apagar:
+                repCancelamento.Inserir(new CNT002_ContasExcluidas
+                    {
+                        DataExclusao = DateTime.Now,
+                        MotivoCancelamento = MotivoCancelamento,
+                        DataCadastro = Conta.DataCadastro,
+                        Descricao = Conta.Descricao,
+                        idContaGerencial = Conta.idContaGerencial,
+                        idUsuarioCriador = Conta.idUsuarioCriador,
+                        UsuarioExclusao = Username //ver se esse metodo vai funcionar corretamente
+                    });
                 rep.Remover(Conta);
                 break;
             case Enumeradores.TipoView.Editar:
@@ -63,4 +89,17 @@
                 break;
         }
     }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await auth.GetAuthenticationStateAsync();
+        currentUser = authState.User;
+
+        if (currentUser?.Identity != null && currentUser.Identity.IsAuthenticated)
+        {
+            Username = currentUser.Identity.Name; // Nome do usuário
+        }
+    }
+}
+
 }

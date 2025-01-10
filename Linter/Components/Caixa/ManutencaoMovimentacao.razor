@@ -7,20 +7,17 @@
 
 <h3> @txtBotao </h3>
 
-<FluentToastProvider RemoveToastsOnNavigation="false" />
-<FluentDialogProvider />
 <FluentMenuProvider />
-
 
 <FluentEditForm Model="@objMovi" FormName="submit" OnValidSubmit="@AcionarBotao">
     <DataAnnotationsValidator />
     <FluentGrid>
         <FluentGridItem xs="3">
-            <FluentTextField Label="Descrição" Id="descritivo" Class="label-top" Name="objMovi.Descritivo" @bind-Value="objMovi.Descritivo" ReadOnly="@Disabled" />
+            <FluentTextField Placeholder="Descrição..." Label="Descrição" Id="descritivo" Class="label-top" Name="objMovi.Descritivo" @bind-Value="objMovi.Descritivo" ReadOnly="@Disabled" />
             <FluentValidationMessage For="@(() => objMovi.Descritivo)" />
         </FluentGridItem>
         <FluentGridItem xs="3">
-            <FluentNumberField TValue="decimal" Label="Valor" Name="objMovi.Valor" @bind-Value="objMovi.Valor" ReadOnly="@Disabled" />
+            <FluentNumberField Placeholder="Valor..." TValue="decimal" Label="Valor" Name="objMovi.Valor" @bind-Value="objMovi.Valor" ReadOnly="@Disabled" />
             <FluentValidationMessage For="@(() => objMovi.Valor)" />
         </FluentGridItem>
         <FluentGridItem xs="3">
@@ -35,9 +32,10 @@
     </FluentRadioGroup>
     <br />
     <FluentButton OnClick="@(()=> AcionarBotao(context))" Type="ButtonType.Submit" FormId="submit" Disabled="BotoesDisabled" IconStart="@IconeButton"> @txtBotao </FluentButton>
-    <FluentButton Disabled="false" OnClick="@(()=> navigation.NavigateTo("/caixa/"))" IconStart="new Icons.Regular.Size20.ArrowCircleLeft()"> Retornar </FluentButton>
-</FluentEditForm>
 
+    <FluentButton Type="ButtonType.Button" Disabled="false" OnClick="@(()=> navigation.NavigateTo("/caixa/"))" IconStart="new Icons.Regular.Size20.ArrowCircleLeft()" > Retornar </FluentButton>
+
+</FluentEditForm>
 @code {
 
     public Icon IconeButton { get; set; } = new Icons.Regular.Size16.Save();
@@ -104,15 +102,15 @@
                     Toast.ShowCustom("Registro cadastrado com sucesso!", null, null, null, (new Icons.Regular.Size24.AddCircle(), Color.Accent));
                     break;
                 case (int)Enumeradores.TipoView.Apagar:
-                    var dialog = await dialogservice.ShowConfirmationAsync("Tem certeza que deseja cancelar?",
+                    var resultado = await dialog.ShowConfirmationAsync("Tem certeza que deseja cancelar?",
                                                                            "Sim",
                                                                            "Cancelar",
                                                                            "Atenção");
-                    var result = await dialog.Result;
+                    var result = await resultado.Result;
                     if (!result.Cancelled)
                     {
                         repositorio.ExcluirMovimentacao(id);
-                        await dialogservice.ShowInfoAsync("Retornando à página principal...",
+                        await dialog.ShowInfoAsync("Retornando à página principal...",
                                                           "Sucesso");
                         Toast.ShowCustom("Exclusão confirmada com sucesso!", 10000, "100", null, (new Icons.Regular.Size24.Delete(), Color.Accent));
                     }

@@ -1,61 +1,81 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>aspnet-Linter-1007e5ca-78c8-422c-ad54-6eaaad24c9bb</UserSecretsId>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>annotations</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>aspnet-Linter-1007e5ca-78c8-422c-ad54-6eaaad24c9bb</UserSecretsId>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="ComponentesLDN\**" />
-    <Compile Remove="Components\ComponentesLDN\Botoes\**" />
-    <Compile Remove="Components\Geral\**" />
-    <Compile Remove="Controllers\**" />
-    <Compile Remove="wwwroot\recursos\**" />
-    <Content Remove="ComponentesLDN\**" />
-    <Content Remove="Components\ComponentesLDN\Botoes\**" />
-    <Content Remove="Components\Geral\**" />
-    <Content Remove="Controllers\**" />
-    <Content Remove="wwwroot\recursos\**" />
-    <EmbeddedResource Remove="ComponentesLDN\**" />
-    <EmbeddedResource Remove="Components\ComponentesLDN\Botoes\**" />
-    <EmbeddedResource Remove="Components\Geral\**" />
-    <EmbeddedResource Remove="Controllers\**" />
-    <EmbeddedResource Remove="wwwroot\recursos\**" />
-    <None Remove="ComponentesLDN\**" />
-    <None Remove="Components\ComponentesLDN\Botoes\**" />
-    <None Remove="Components\Geral\**" />
-    <None Remove="Controllers\**" />
-    <None Remove="wwwroot\recursos\**" />
-  </ItemGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <Optimize>False</Optimize>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Content Include="wwwroot\recursos\Icones\sair.png" />
-    <Content Include="wwwroot\recursos\Icones\semregistros.jpg" />
-    <Content Include="wwwroot\recursos\Imagens\image_minimalist.png" />
-  </ItemGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <Optimize>False</Optimize>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="iTextSharp" Version="5.5.13.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.11" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.11" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.11" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.11" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.11" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="ComponentesLDN\**" />
+		<Compile Remove="Components\ComponentesLDN\Botoes\**" />
+		<Compile Remove="Components\Geral\**" />
+		<Compile Remove="Controllers\**" />
+		<Compile Remove="wwwroot\recursos\**" />
+		<Content Remove="ComponentesLDN\**" />
+		<Content Remove="Components\ComponentesLDN\Botoes\**" />
+		<Content Remove="Components\Geral\**" />
+		<Content Remove="Controllers\**" />
+		<Content Remove="wwwroot\recursos\**" />
+		<EmbeddedResource Remove="ComponentesLDN\**" />
+		<EmbeddedResource Remove="Components\ComponentesLDN\Botoes\**" />
+		<EmbeddedResource Remove="Components\Geral\**" />
+		<EmbeddedResource Remove="Controllers\**" />
+		<EmbeddedResource Remove="wwwroot\recursos\**" />
+		<None Remove="ComponentesLDN\**" />
+		<None Remove="Components\ComponentesLDN\Botoes\**" />
+		<None Remove="Components\Geral\**" />
+		<None Remove="Controllers\**" />
+		<None Remove="wwwroot\recursos\**" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components" Version="4.11.0-beta.1" />
-    <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components.Icons" Version="4.10.4" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Utilidades\Reports.cs" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Linter.Modelos\Linter.Modelos.csproj" />
-    <ProjectReference Include="..\Linter.Repositorio\Linter.Dados.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="Relatorios\relatorioteste.frx" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Linter.Repositorio\Linter.Dados.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<Content Include="wwwroot\recursos\Icones\sair.png" />
+		<Content Include="wwwroot\recursos\Icones\semregistros.jpg" />
+		<Content Include="wwwroot\recursos\Imagens\image_minimalist.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="FastReport.OpenSource.Export.PdfSimple" Version="2025.1.0" />
+		<PackageReference Include="FastReport.OpenSource.Web" Version="2025.1.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.11" />
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.11" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.11" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.12.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.11" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.11" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.FluentUI.AspNetCore.Components" Version="4.11.0-beta.1" />
+		<PackageReference Include="Microsoft.FluentUI.AspNetCore.Components.Icons" Version="4.10.4" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Linter.Modelos\Linter.Modelos.csproj" />
+		<ProjectReference Include="..\Linter.Repositorio\Linter.Dados.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Resource Include="Relatorios\relatorioteste.frx">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Resource>
+	</ItemGroup>
 </Project>

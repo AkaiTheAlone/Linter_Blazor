@@ -42,6 +42,14 @@ namespace Linter.Dados.Repositorios
 
             return contexto.TAB001_Usuarios.AsQueryable();
         }
+        //public TAB001_Usuarios RetornaUm(int id)
+        //{
+        //    if (contexto == null || contexto.TAB001_Usuarios == null)
+        //        throw new ApplicationException("Erro ao retornar todas as movimentações.");
+
+        //    //return contexto.TAB001_Usuarios. ?? new TAB001_Usuarios(); ;
+        //}
+
         #endregion
 
         #region Manutencao

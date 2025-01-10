@@ -3,6 +3,7 @@ using Linter.Components.Account;
 using Linter.Dados.Contexto;
 using Linter.Dados.Repositorios;
 using Linter.Modelos.Modelos;
+using Linter.Utilidades;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,8 @@ builder.Services.AddRazorComponents()
 builder.Services.AddFluentUIComponents();
 
 builder.Services.AddCascadingAuthenticationState();
+
+
 
 builder.Services.AddAuthentication(options =>
     {
@@ -63,6 +66,8 @@ builder.Services.AddIdentityCore<TAB001_Usuarios>(options => options.SignIn.Requ
                 .AddSignInManager()
                 .AddDefaultTokenProviders();
 
+builder.Services.AddFastReport();
+
 #region Injeções de dependência
 
 #region Singletons
@@ -74,6 +79,7 @@ builder.Services.AddSingleton<IEmailSender<TAB001_Usuarios>, IdentityNoOpEmailSe
 builder.Services.AddTransient<CAX001_MovimentacoesRepositorio>();
 builder.Services.AddTransient<CAX002_MovimentacoesCanceladasRepositorio>();
 builder.Services.AddTransient<CNT001_ContasGerenciaisRepositorio>();
+builder.Services.AddTransient<CNT002_ContasExcluidasRepositorio>();
 #endregion
 
 #region Scopeds
@@ -93,6 +99,7 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
+app.UseFastReport();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

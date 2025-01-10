@@ -1,5 +1,5 @@
 ﻿@page "/usuarios/{tipoView:int}/{id:int}"
-
+@inject NavigationManager navigation
 @using Microsoft.AspNetCore.Identity
 @inject TAB001_UsuariosRepositorio rep
 @rendermode InteractiveServer
@@ -28,8 +28,6 @@
                         <FluentValidationMessage For="@(() => Usuario.PhoneNumber)"> </FluentValidationMessage>
                     </FluentGridItem>
 
-
-
                     @* <FluentCombobox TOption="Enumeradores.TipoUsuario" @bind-Value="Role" Label="Tipo de Usuário" style="width: 100%;">
 
                     </FluentCombobox> *@
@@ -51,7 +49,8 @@
         </FluentTabs>
     </FluentCard>
     <br />
-    <FluentButton OnClick="@(() => AcionarBotao(context))" > Adicionar Usuário </FluentButton>
+    <FluentButton IconStart="new Icons.Regular.Size20.Save()" OnClick="@(() => AcionarBotao(context))"> Adicionar Usuário </FluentButton>
+    <FluentButton Type="ButtonType.Button" Disabled="false" OnClick="@(()=> navigation.NavigateTo("/caixa/"))" IconStart="new Icons.Regular.Size20.ArrowCircleLeft()"> Retornar </FluentButton>
 </FluentEditForm>
 <br />
 
@@ -68,11 +67,60 @@
     public int id { get; set; } = 0;
     public string btnString { get; set; } = "";
     [SupplyParameterFromForm]
+
+
+    public Icon IconeButton { get; set; } = new Icons.Regular.Size16.Save();
+    bool BotoesDisabled = false;
+    public bool Disabled { get; set; } = false;
+    public string txtBotao { get; set; } = "Adicionar movimentação";
+    public Enumeradores.TipoMovimentacao? tipomov { get; set; }
+
+
     public TAB001_Usuarios Usuario { get; set; } = new TAB001_Usuarios();
+
+    protected async override Task OnInitializedAsync()
+    {
+        CarregaDados();
+    }
+
+
     public async Task RegistrarNovoUsuario()
     {
         await rep.InserirUsuario(Usuario, RolesParticipantes, Claims);
     }
+
+    public void CarregaDados()
+    {
+        if (tipoView != (int)Enumeradores.TipoView.Criar)
+        {
+            //Usuario = rep.RetornaUm(id);
+        }
+        switch ((int)tipoView)
+        {
+            case (int)Enumeradores.TipoView.Criar:
+                //aqui poderia mudar a cor do botão e colocar algum icone de lixeira
+                IconeButton = new Icons.Regular.Size20.Save();
+                txtBotao = "Adicionar movimentação";
+                BotoesDisabled = false;
+                Disabled = false;
+                break;
+            case (int)Enumeradores.TipoView.Editar:
+                Disabled = false;
+                BotoesDisabled = false;
+                IconeButton = new Icons.Regular.Size20.Edit();
+                //e aq colocar algum icone de lapis
+                txtBotao = "Editar movimentação";
+                break;
+            case (int)Enumeradores.TipoView.Apagar:
+                IconeButton = new Icons.Regular.Size20.Delete();
+                Disabled = true;
+                BotoesDisabled = false;
+                //e aq colocar algum icone de lapis
+                txtBotao = "Excluir movimentação";
+                break;
+        }
+    }
+
 
     public async Task AcionarBotao(EditContext editContext)
     {

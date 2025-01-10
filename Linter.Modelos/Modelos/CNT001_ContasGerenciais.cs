@@ -12,7 +12,7 @@ namespace Linter.Modelos.Modelos
         [Key]
         public int idContaGerencial { get; set; }
         public string Descricao { get; set; } = "";
-        public DateTime DataCadastro { get; set; }
+        public DateTime? DataCadastro { get; set; }
         public int idUsuarioCriador { get; set; }
     }
 }
