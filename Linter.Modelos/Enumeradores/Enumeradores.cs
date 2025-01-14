@@ -31,7 +31,7 @@ namespace Linter.Modelos
             Criar = 0,
             Editar = 1,
             Apagar = 2,
-            Exibir = 3
+            Consultar = 3
         }
         public enum TipoUsuario
         {

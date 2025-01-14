@@ -5,10 +5,13 @@
 @rendermode InteractiveServer
 
 <h3>@btnString</h3>
+
+<FluentMenuProvider />
+
+
 <FluentEditForm Model="Usuario">
     <FluentCard Height="400" Width="600" style="padding: 1.5rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); border-radius: 8px;" MinimalStyle="true">
         <FluentTabs>
-            <!-- Aba: Informações do Usuário -->
             <FluentTab Label="Usuário">
                 <FluentGrid>
                     <FluentGridItem>
@@ -38,29 +41,40 @@
             <FluentTab Label="Endereço">
                 <FluentGrid>
                     <FluentGridItem>
-                        <FluentTextField Label="Rua" @bind-Value="Usuario.Rua" style="width: 100%;" />
+                        <FluentTextField Placeholder="Rua..." Label="Rua" @bind-Value="Usuario.Rua" style="width: 100%;" />
                     </FluentGridItem>
                     <FluentGridItem>
-                        <FluentCombobox Items="Uteis.PegaNomeDeExibicao(Cidades)" @bind-Value="Usuario.Cidade" Label="Selecione a Cidade" style="width: 100%;">
-                        </FluentCombobox>
+
+                        tenho q descobrir como passar esses enumeradores aqui tbm
+                        @* <FluentCombobox TOption="Enumeradores.Cidades" Items="Cidades" @bind-Value="Usuario.Cidade" Label="Selecione a Cidade" style="width: 100%;">
+                        </FluentCombobox> *@
                     </FluentGridItem>
                 </FluentGrid>
+            </FluentTab>
+
+            <FluentTab Label="Permissões">
+
+                PRECISO DESCOBRIR COMO IMPLEMENTAR AS CLAIMS AQUI NESSA TELA
+
+                <FluentTextField>
+
+                </FluentTextField>
+
+
             </FluentTab>
         </FluentTabs>
     </FluentCard>
     <br />
     <FluentButton IconStart="new Icons.Regular.Size20.Save()" OnClick="@(() => AcionarBotao(context))"> Adicionar Usuário </FluentButton>
-    <FluentButton Type="ButtonType.Button" Disabled="false" OnClick="@(()=> navigation.NavigateTo("/caixa/"))" IconStart="new Icons.Regular.Size20.ArrowCircleLeft()"> Retornar </FluentButton>
+    <FluentButton Type="ButtonType.Button" Disabled="false" OnClick="@Retornar" IconStart="new Icons.Regular.Size20.ArrowCircleLeft()"> Retornar </FluentButton>
 </FluentEditForm>
 <br />
-
-
-
 
 @code {
     [Parameter]
     public Enumeradores.TipoView tipoView { get; set; }
     public Enumeradores.Cidades Cidades { get; set; }
+    public Claim ClaimTeste { get; set; }
     public List<Claim> Claims { get; set; }
     public List<string> RolesParticipantes { get; set; }
     [Parameter]
@@ -83,22 +97,20 @@
         CarregaDados();
     }
 
-
-    public async Task RegistrarNovoUsuario()
+    private void Retornar()
     {
-        await rep.InserirUsuario(Usuario, RolesParticipantes, Claims);
+        navigation.NavigateTo("/usuarios/");
     }
 
     public void CarregaDados()
     {
         if (tipoView != (int)Enumeradores.TipoView.Criar)
         {
-            //Usuario = rep.RetornaUm(id);
+            Usuario = rep.RetornaUm(id);
         }
         switch ((int)tipoView)
         {
             case (int)Enumeradores.TipoView.Criar:
-                //aqui poderia mudar a cor do botão e colocar algum icone de lixeira
                 IconeButton = new Icons.Regular.Size20.Save();
                 txtBotao = "Adicionar movimentação";
                 BotoesDisabled = false;
@@ -108,19 +120,16 @@
                 Disabled = false;
                 BotoesDisabled = false;
                 IconeButton = new Icons.Regular.Size20.Edit();
-                //e aq colocar algum icone de lapis
                 txtBotao = "Editar movimentação";
                 break;
             case (int)Enumeradores.TipoView.Apagar:
                 IconeButton = new Icons.Regular.Size20.Delete();
                 Disabled = true;
                 BotoesDisabled = false;
-                //e aq colocar algum icone de lapis
                 txtBotao = "Excluir movimentação";
                 break;
         }
     }
-
 
     public async Task AcionarBotao(EditContext editContext)
     {

@@ -1,7 +1,59 @@
-﻿@page "/admin/bloqueados"
+﻿@inject NavigationManager navigation
+@inject TAB001_UsuariosRepositorio rep
+@page "/admin/bloqueados"
 
-<h3>Usuários Bloqueados</h3>
+<h3 class="centralizado">Usuários Bloqueados</h3>
+
+<FluentCard Height="100" MinimalStyle="true">
+    <FluentDataGrid Items="UsuariosBloqueados"
+                    ResizableColumns=false
+                    ResizeType="DataGridResizeType.Exact"
+                    HeaderCellAsButtonWithMenu="true"
+                    ShowHover="true"
+                    AutoFit="false">
+        <ChildContent>
+            <PropertyColumn Width="150" Property="@(p=> p.Id)" Title="Descricao" Sortable="false" />
+            <PropertyColumn Width="300px" Property="@(p=> p.UserName)" Title="Descricao" Sortable="false" />
+            <PropertyColumn Width="200px" Property="@(p=> p.AccessFailedCount)" Title="Nº Tentativas de acesso falha" Sortable="false" />
+            <PropertyColumn Width="500px" Property="@(p=> p.Email)" Title="Descricao" Sortable="false" />
+            <PropertyColumn Width="500px" Property="@(p=> p.TipoUsuario)" Title="Descricao" Sortable="false" />
+            <PropertyColumn Width="500px" Property="@(p=> p.PhoneNumber)" Title="Descricao" Sortable="false" />
+            <TemplateColumn Title="Ações" Align="@Align.End" Width="200px">
+                <FluentButton aria-label="Restaurar" IconEnd="@(new Icons.Light.Size32.Options())" />
+                <FluentButton aria-label="Consultar" IconEnd="@(new Icons.Light.Size32.ZoomIn())" OnClick="@(()=> navigation.NavigateTo($"/contasgerenciais/{(int)Enumeradores.TipoView.Consultar}/{id:int}"))" />
+            </TemplateColumn>
+        </ChildContent>
+
+        <LoadingContent>
+            id
+            <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center">
+                Carregando...<br />
+                <FluentProgress Width="240px" />
+            </FluentStack>
+        </LoadingContent>
+    </FluentDataGrid>
+</FluentCard>
+
 
 @code {
+    public IQueryable<TAB001_Usuarios> UsuariosBloqueados { get; set; } 
+    public int id { get; set; }
 
+    protected override Task OnInitializedAsync()
+    {
+        //retorna todos os usuários que não estejam bloqueados 
+        UsuariosBloqueados = rep.RetornaTodos().Where(x => x.LockoutEnabled == false).AsQueryable();
+
+        return base.OnInitializedAsync();
+    }
+    public async void RestaurarUsuario(int id)
+    {
+        var usuario = rep.RetornaUm(id);
+
+        var lstRoles = 
+
+        usuario.AccessFailedCount = 0;
+        usuario.LockoutEnabled = true;
+        await rep.AtualizarUsuario(usuario);
+    }
 }

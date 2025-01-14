@@ -25,11 +25,14 @@ namespace Linter.Dados.Repositorios
         public TAB001_UsuariosRepositorio()
         {
             contexto = new ApplicationDbContext();
+            //eu n sei como fazer isso aq po 
+            /*userManager = new UserManager<TAB001_Usuarios<StoreOptions>><>*/;
         }
 
-        public TAB001_UsuariosRepositorio(ApplicationDbContext _contexto)
+        public TAB001_UsuariosRepositorio(ApplicationDbContext _contexto, UserManager<TAB001_Usuarios> _manager)
         {
             contexto = _contexto;
+            userManager = _manager;
         }
         #endregion
 
@@ -42,13 +45,13 @@ namespace Linter.Dados.Repositorios
 
             return contexto.TAB001_Usuarios.AsQueryable();
         }
-        //public TAB001_Usuarios RetornaUm(int id)
-        //{
-        //    if (contexto == null || contexto.TAB001_Usuarios == null)
-        //        throw new ApplicationException("Erro ao retornar todas as movimentações.");
+        public TAB001_Usuarios RetornaUm(int id)
+        {
+            if (contexto == null || contexto.TAB001_Usuarios == null)
+                throw new ApplicationException("Erro ao retornar todas as movimentações.");
 
-        //    //return contexto.TAB001_Usuarios. ?? new TAB001_Usuarios(); ;
-        //}
+            return contexto.TAB001_Usuarios.Where(X => X.Id == id).FirstOrDefault() ?? new TAB001_Usuarios(); ;
+        }
 
         #endregion
 
@@ -78,18 +81,31 @@ namespace Linter.Dados.Repositorios
 
         }
 
-        public async Task AtualizarUsuario(TAB001_Usuarios usuario, List<string> rolesPart ) //Claim claim
+        public async Task AtualizarUsuario(TAB001_Usuarios usuario, 
+                                           List<string>? rolesPart = null, 
+                                           List<Claim>? lstClaims = null) //Claim claim
         {
             if (contexto == null || contexto.TAB001_Usuarios == null)
                 throw new ApplicationException("Erro ao Atualizar Usuário.");
 
             //await userManager.RemoveFromRolesAsync()
             var roles = await userManager.GetRolesAsync(usuario);
+            var claims = await userManager.GetClaimsAsync(usuario);
             //preciso de um ienumerable de roles pra remover 
             //o get roles retorna uma IList
             //essa conversao deve dar um erro grotesco
-            await userManager.RemoveFromRolesAsync(usuario, roles);
-            await userManager.AddToRolesAsync(usuario, rolesPart);
+
+            if (rolesPart != null)
+            {
+                await userManager.RemoveFromRolesAsync(usuario, roles);
+                await userManager.AddToRolesAsync(usuario, rolesPart);
+            }
+            if(lstClaims != null)
+            {
+                await userManager.RemoveClaimsAsync(usuario, claims);
+                await userManager.AddClaimsAsync(usuario, lstClaims);
+            }
+            
             //await userManager.RemoveClaimsAsync(usuario);
             //eu n faço a mínima ideia do q uma claim faça.
             //await userManager.AddClaimAsync(usuario, claim);

@@ -8,7 +8,6 @@
 <h3> @txtBotao </h3>
 
 <FluentMenuProvider />
-<FluentDialogProvider />
 
 <FluentEditForm Model="@Conta" FormName="submit">
     <DataAnnotationsValidator />
@@ -56,7 +55,7 @@
     [SupplyParameterFromForm]
     public string MotivoCancelamento { get; set; } = "";
     public CNT001_ContasGerenciais Conta { get; set; } = new CNT001_ContasGerenciais();
-    public string txtBotao { get; set; } = "Adicionar movimentação";
+    public string txtBotao { get; set; } = "Adicionar Conta Administrativa";
     public bool Disabled { get; set; } = false;
     public Enumeradores.TipoView tipoView;
     private ClaimsPrincipal? currentUser;

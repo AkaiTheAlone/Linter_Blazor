@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Compile Remove="Modelos\TAB002_ContasGerenciais.cs" />
+    <Compile Remove="Modelos\TAB999_UsuariosBloqueados.cs" />
   </ItemGroup>
 
   <ItemGroup>
