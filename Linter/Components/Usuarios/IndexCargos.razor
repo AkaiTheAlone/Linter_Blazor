@@ -1,7 +1,16 @@
-﻿@page "/admin/perfis"
+﻿@page "/admin/cargos"
 
 
-@* <h3 class="centralizado"> Perfis de Usuário </h3>
+@rendermode InteractiveServer
+@inject IdentityRole role
+@inject RoleStore<IdentityRole> storerole
+@inject RoleManager<IdentityRole> manager
+@* pagina para administracao de cargos/roles
+precisa ter uma tela de manutencao de roles, 
+uma tela de manutencao de perfis que altere também as permissões desse perfil
+*@
+
+ <h3 class="centralizado"> Perfis de Usuário </h3>
 
 <AuthorizeView Context="outronome">
     <Authorized>
@@ -16,7 +25,7 @@
                 <FluentAppBarItem Text="Adicionar" IconRest="@(new Icons.Regular.Size24.AddCircle())" OnClick="@(()=> navigation.NavigateTo($"/caixa/{(int)Enumeradores.TipoView.Criar}/{0}"))" />
                 <FluentAppBarItem Text="Cancelamentos" IconRest="@(new Icons.Light.Size32.Delete())" OnClick="@(()=> navigation.NavigateTo("/caixa/cancelamentos"))" />
             </FluentAppBar>
-            <FluentDataGrid Items="queryMov"
+            <FluentDataGrid Items="Roles"
                             ResizableColumns=false
                             ResizeType="DataGridResizeType.Exact"
                             HeaderCellAsButtonWithMenu="true"
@@ -26,8 +35,8 @@
                 <ChildContent>
                     <PropertyColumn Width="100px" InitialSortDirection="SortDirection.Descending" Property="@(p=> p.idMovimentacao)" Sortable="true" Title="ID" />
                     <PropertyColumn Width="200" Property="@(p=> Linter.Utilidades.Uteis.PegaNomeDeExibicao((Enumeradores.TipoMovimentacao)p.Tipo))" Title="Tipo Movi." />
-                    <PropertyColumn Width="300px" Property="@(p=> p.DataMovimentacao)" Format="dd/MM/yyyy" Sortable="true" Title="Data" />
-                    <PropertyColumn Width="400px" Property="@(p=> p.Valor.ToString("C2"))" Title="Valor" Sortable="false" /> @* sortable não funciona com conversoes, descobrir solucao
+                    <PropertyColumn Width="300px" Property="@(p=> p.Name)" Format="dd/MM/yyyy" Sortable="true" Title="Data" />
+                    <PropertyColumn Width="400px" Property="@(p=> p.)" Title="Valor" Sortable="false" /> @* //sortable não funciona com conversoes, descobrir solucao *@
                     <PropertyColumn Width="600px" Property="@(p=> p.Descritivo)" Title="Descrição" Sortable="true" />
                     <TemplateColumn Title="Ações" Align="@Align.End" Width="200px">
                         <FluentButton aria-label="Editar" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() =>  navigation.NavigateTo($"/caixa/{(int)Enumeradores.TipoView.Editar}/{context.idMovimentacao}"))" />
@@ -59,8 +68,15 @@
 
 
 
- *@
+ 
 
 @code {
+    PaginationState pagination = new PaginationState { ItemsPerPage = 10};
+    public IQueryable<IdentityRole> Roles { get; set; }
 
+    protected override Task OnInitializedAsync()
+    {
+        manager.
+        return base.OnInitializedAsync();
+    }
 }

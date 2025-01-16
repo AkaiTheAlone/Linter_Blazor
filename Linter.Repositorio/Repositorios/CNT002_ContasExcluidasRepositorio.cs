@@ -19,7 +19,7 @@ namespace Linter.Dados.Repositorios
         }
         public CNT002_ContasExcluidasRepositorio()
         {
-            context = new ApplicationDbContext();
+            context = new ApplicationDbContext(new DbContextOptions<ApplicationDbContext>());
         }
         #endregion
 

@@ -19,10 +19,10 @@ namespace Linter.Modelos.Modelos
         public int idContaGerencial { get; set; }
         [Required(ErrorMessage = "Informe o valor da movimentação")]
         public decimal Valor { get; set; }
-        [Required(ErrorMessage = "Informe a razão da movimentação")]
-        [EnumDataType(typeof(Enumeradores.TipoMovimentacao))]
-        [NotMapped]
-        public Enumeradores.TipoMovimentacao Tipo_nrt { get; set; } //pensando em fazer isso como um enumerador
+        //[Required(ErrorMessage = "Informe a razão da movimentação")]
+        //[EnumDataType(typeof(Enumeradores.TipoMovimentacao))]
+        //[NotMapped]
+        //public Enumeradores.TipoMovimentacao Tipo_nrt { get; set; } //pensando em fazer isso como um enumerador
         public byte Tipo { get; set; } //pensando em fazer isso como um enumerador
         public int idUsuarioCancelamento { get; set; }
         public DateTime DataCancelamento { get; set; }

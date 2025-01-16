@@ -1,4 +1,3 @@
-using FastReport;
 using Linter.Modelos.Modelos;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -13,10 +12,6 @@ namespace Linter.Dados.Contexto
     public class ApplicationDbContext : IdentityDbContext<TAB001_Usuarios, IdentityRole<int>, int>
     {
         #region Construtor
-        public ApplicationDbContext()
-        {
-
-        }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
 
@@ -25,7 +20,7 @@ namespace Linter.Dados.Contexto
 
         #region Propriedades
         public DbSet<TAB001_Usuarios> TAB001_Usuarios { get; set; }
-        public DbSet<CAX001_MovimentacoesCaixa> CAX001_MovimentacoesCaixa { get; set; }
+        public DbSet<CAX001_Movimentacoes> CAX001_MovimentacoesCaixa { get; set; }
         public DbSet<CAX002_MovimentaocesCanceladas> CAX002_MovimentaocesCanceladas { get; set; }
         public DbSet<CNT001_ContasGerenciais> CNT001_ContasGerenciais { get; set; }
         public DbSet<CNT002_ContasExcluidas> CNT002_ContasExcluidas { get; set; }

@@ -1,26 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="01/09/2025 09:55:12" ReportInfo.Modified="01/09/2025 10:22:08" ReportInfo.CreatorVersion="2025.1.0.0">
-  <Dictionary>
-    <Parameter Name="Valor" DataType="System.Double" AsString=""/>
-    <Parameter Name="Descricao" DataType="System.String" AsString=""/>
-  </Dictionary>
-  <ReportPage Name="Page1" Watermark.Font="Arial, 60pt">
-    <ReportTitleBand Name="ReportTitle1" Width="718.2" Height="160.65" Guides="9.45">
-      <LineObject Name="Line1" Left="47.25" Top="47.25" Width="529.2"/>
-      <LineObject Name="Line2" Left="47.25" Top="132.3" Width="529.2"/>
-      <TextObject Name="Text1" Left="56.7" Top="56.7" Width="510.3" Height="18.9" Text="CRIANDO RELATORIOS COM FAST REPORTS&#13;&#10;" Font="Arial, 10pt"/>
-      <TextObject Name="Text2" Left="311.85" Top="94.5" Width="94.5" Height="18.9" Text="[Date]" Font="Arial, 10pt"/>
-      <TextObject Name="Text3" Left="113.4" Top="94.5" Width="189" Height="18.9" Text="DATA DA MOVIMENTAÇÃO:&#13;&#10;&#13;&#10;" Font="Arial, 10pt"/>
-    </ReportTitleBand>
-    <PageHeaderBand Name="PageHeader1" Top="164.65" Width="718.2" Height="28.35"/>
-    <DataBand Name="Data1" Top="197" Width="718.2" Height="75.6">
-      <TextObject Name="Text5" Left="47.25" Top="18.9" Width="94.5" Height="18.9" Text="Descrição:" Font="Arial, 10pt"/>
-      <TextObject Name="Text6" Left="47.25" Top="47.25" Width="94.5" Height="18.9" Text="Valor:&#13;&#10;" Font="Arial, 10pt"/>
-      <TextObject Name="Text7" Left="151.2" Top="47.25" Width="94.5" Height="18.9" Text="[Descricao]" Font="Arial, 10pt"/>
-      <TextObject Name="Text9" Left="151.2" Top="18.9" Width="94.5" Height="18.9" Text="[Valor]" Font="Arial, 10pt"/>
-    </DataBand>
-    <PageFooterBand Name="PageFooter1" Top="276.6" Width="718.2" Height="47.25">
-      <TextObject Name="Text4" Left="661.5" Top="18.9" Width="56.7" Height="18.9" Text="[Page]" Font="Arial, 10pt"/>
-    </PageFooterBand>
-  </ReportPage>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="01/15/2025 17:28:41" ReportInfo.Modified="01/15/2025 17:28:41" ReportInfo.CreatorVersion="2025.1.11.0">
+  <Dictionary/>
 </Report>

@@ -56,7 +56,7 @@ namespace Linter.Dados.Migrations
                     b.HasKey("idMovimentacao")
                         .HasName("pk_cax001_movimentacoescaixa");
 
-                    b.ToTable("cax001_movimentacoescaixa");
+                    b.ToTable("cax001_movimentacoescaixa", (string)null);
                 });
 
             modelBuilder.Entity("Linter.Modelos.Modelos.CAX002_MovimentaocesCanceladas", b =>
@@ -95,7 +95,7 @@ namespace Linter.Dados.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("idusuariocancelamento");
 
-                    b.ToTable("cax002_movimentaocescanceladas");
+                    b.ToTable("cax002_movimentaocescanceladas", (string)null);
                 });
 
             modelBuilder.Entity("Linter.Modelos.Modelos.CNT001_ContasGerenciais", b =>
@@ -123,7 +123,7 @@ namespace Linter.Dados.Migrations
                     b.HasKey("idContaGerencial")
                         .HasName("pk_cnt001_contasgerenciais");
 
-                    b.ToTable("cnt001_contasgerenciais");
+                    b.ToTable("cnt001_contasgerenciais", (string)null);
                 });
 
             modelBuilder.Entity("Linter.Modelos.Modelos.CNT002_ContasExcluidas", b =>
@@ -164,7 +164,7 @@ namespace Linter.Dados.Migrations
                     b.HasKey("idContaGerencial")
                         .HasName("pk_cnt002_contasexcluidas");
 
-                    b.ToTable("cnt002_contasexcluidas");
+                    b.ToTable("cnt002_contasexcluidas", (string)null);
                 });
 
             modelBuilder.Entity("Linter.Modelos.Modelos.TAB001_Usuarios", b =>

@@ -1,7 +1,7 @@
 ﻿@page "/caixa/{acao:int}/{id:int}"
 @using Linter.Components.ComponentesLDN
 @rendermode InteractiveServer
-@inject CAX001_MovimentacoesRepositorio repositorio
+@inject             Dados.Repositorios.CAX001_MovimentacoesRepositorio repositorio
 @inject NavigationManager navigation
 
 
@@ -46,7 +46,7 @@
     public Enumeradores.TipoMovimentacao? tipomov { get; set; }
     //quando não existe um modelo sendo passado pra essa tela nem carregado no initialized, precisa inicializar ele manualmente
     [SupplyParameterFromForm]
-    public CAX001_MovimentacoesCaixa objMovi { get; set; } = new CAX001_MovimentacoesCaixa();
+    public Modelos.Modelos.CAX001_Movimentacoes objMovi { get; set; } = new Modelos.Modelos.CAX001_Movimentacoes();
 
     [Parameter] public int acao { get; set; }
 

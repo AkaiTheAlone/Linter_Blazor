@@ -21,12 +21,12 @@ namespace Linter.Dados.Repositorios
         //private readonly SignInManager<TAB001_Usuarios> signInManager;
 
         #region Construtores
-
+        
         public TAB001_UsuariosRepositorio()
         {
-            contexto = new ApplicationDbContext();
+            contexto = new ApplicationDbContext(new DbContextOptions<ApplicationDbContext>());
             //eu n sei como fazer isso aq po 
-            /*userManager = new UserManager<TAB001_Usuarios<StoreOptions>><>*/;
+            //userManager = new UserManager<TAB001_Usuarios<StoreOptions>()>;
         }
 
         public TAB001_UsuariosRepositorio(ApplicationDbContext _contexto, UserManager<TAB001_Usuarios> _manager)

@@ -1,3 +1,4 @@
+using FastReport.DataVisualization.Charting;
 using Linter.Components;
 using Linter.Components.Account;
 using Linter.Dados.Contexto;
@@ -8,13 +9,15 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.FluentUI.AspNetCore.Components;
+using FastReport.Data;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
-
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddFluentUIComponents();
 
 builder.Services.AddCascadingAuthenticationState();
@@ -99,7 +102,6 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-app.UseFastReport();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -115,8 +117,10 @@ else
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
+//app.UseFastReport();
 app.UseAntiforgery();
-
+//app.MapControllers();
+//app.MapBlazorHub();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 

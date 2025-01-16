@@ -7,7 +7,17 @@
         align-items: center;
         height: 50px;
     }
+
+    .centralizarSemEspaco{
+        display: flex; /* Ativa o flexbox */
+        justify-content: center; /* Centraliza horizontalmente */
+        align-items: center; /* Centraliza verticalmente */
+        flex-direction: column; /* Garante que os elementos fiquem em coluna, com espaço */
+        gap: 16px; /* Adiciona espaço entre os elementos */
+        height: 100vh; /* Opcional: ocupa toda a altura da tela */
+    }
 </style>
+
 
 <FluentMenuProvider/>
 <FluentDialogProvider @rendermode="InteractiveServer" />

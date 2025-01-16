@@ -1,8 +1,26 @@
-﻿@page "/relatorios"
-
+﻿@inject Dados.Repositorios.CAX001_MovimentacoesRepositorio repCaixa
+@page "/relatorios"
+@rendermode InteractiveServer
 
 <h3 class="centralizado">Relatórios</h3>
 
+<p> pq nos abandonastes fast reports pq..</p>
+@* <WebReportContainer WebReport="@UserWebReport"  *@/>
+
 @code {
 
+    public Modelos.Modelos.CAX001_Movimentacoes Movimentacao { get; set; }
+    public WebReport UserWebReport { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        //var repRelatorio = new FastRelatorios();
+     //   var movimentacoes = repCaixa.RetornaMovimentacoesParaRPT();
+     //  repRelatorio.GerarRelatorioPdf(movimentacoes, "Movimentacoes");
+     //
+     //   var bytes = repRelatorio.GerarRelatorioMovimentacoes("relatorioteste", movimentacoes);
+
+
+    }
 }
+

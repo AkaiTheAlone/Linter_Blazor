@@ -19,7 +19,7 @@ namespace Linter.Dados.Repositorios
         #region Construtores
         public CNT001_ContasGerenciaisRepositorio()
         {
-            context = new ApplicationDbContext();
+            context = new ApplicationDbContext(new DbContextOptions<ApplicationDbContext>());
         }
         public CNT001_ContasGerenciaisRepositorio(ApplicationDbContext _contexto)
         {

@@ -39,11 +39,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Compile Remove="Utilidades\RelatorioController.cs" />
 		<Compile Remove="Utilidades\Reports.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Remove="Relatorios\relatorioteste.frx" />
+	  <None Remove="Relatorios\relatorioteste.frx" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -53,19 +54,22 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="FastReport.OpenSource.Export.PdfSimple" Version="2025.1.0" />
-		<PackageReference Include="FastReport.OpenSource.Web" Version="2025.1.0" />
+		<PackageReference Include="FastReport.Core" Version="2025.1.11-demo" />
+		<PackageReference Include="FastReport.Web" Version="2025.1.11-demo" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.11" />
 		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.11" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.11" />
-		<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.12.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.11" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.11" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.11">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.FluentUI.AspNetCore.Components" Version="4.11.0-beta.1" />
 		<PackageReference Include="Microsoft.FluentUI.AspNetCore.Components.Icons" Version="4.10.4" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.5.0" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.5.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -74,8 +78,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Resource Include="Relatorios\relatorioteste.frx">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Resource>
+	  <Folder Include="Relatorios\DataSets\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Relatorios\relatorioteste.frx">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Resource>
 	</ItemGroup>
 </Project>

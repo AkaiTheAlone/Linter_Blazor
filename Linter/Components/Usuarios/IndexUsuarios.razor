@@ -1,9 +1,7 @@
 ﻿@page "/usuarios"
-@using Linter.Components.Layout
 
 @inject TAB001_UsuariosRepositorio repositorio
 @inject NavigationManager navigations
-@layout MainLayout
 
 @* @attribute [Authorize(Roles = "Admin")] implementar depois*@
 @rendermode InteractiveServer
@@ -21,7 +19,7 @@
                 <FluentAppBarItem Text="Bloqueados" IconRest="@(new Icons.Light.Size32.LockClosed())" OnClick="@(()=> navigations.NavigateTo("/admin/bloqueados"))" />
                 <FluentAppBarItem Text="Auditoria" IconRest="@(new Icons.Light.Size32.Print())" OnClick="@(() => navigations.NavigateTo("/admin/auditoria"))" />
                 @* fazer isso aq depois pra adicionar roles e etc *@
-                <FluentAppBarItem Text="Perfis" IconRest="@(new Icons.Light.Size32.Print())" OnClick="@(() => navigations.NavigateTo("/admin/perfis"))" /> @* isso vao ser as roles *@
+                <FluentAppBarItem Text="Cargos" IconRest="@(new Icons.Light.Size32.DocumentSignature())" OnClick="@(() => navigations.NavigateTo("/admin/cargos"))" /> 
             </FluentAppBar>
             <FluentDataGrid Items="queryUser"
                             ResizableColumns=false

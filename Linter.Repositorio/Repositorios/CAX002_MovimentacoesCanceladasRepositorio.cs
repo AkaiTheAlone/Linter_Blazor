@@ -14,8 +14,8 @@ namespace Linter.Dados.Repositorios
         #region Construtores 
         private readonly ApplicationDbContext contexto;
         public CAX002_MovimentacoesCanceladasRepositorio()
-        {
-            contexto = new ApplicationDbContext();
+        { 
+            contexto = new ApplicationDbContext(new DbContextOptions<ApplicationDbContext>());
         }
         public CAX002_MovimentacoesCanceladasRepositorio(ApplicationDbContext _context)
         {

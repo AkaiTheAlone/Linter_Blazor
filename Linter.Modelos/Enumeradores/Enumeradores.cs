@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Linter.Modelos
+namespace Linter.Modelos.Enumeradores
 {
     public class Enumeradores
     {

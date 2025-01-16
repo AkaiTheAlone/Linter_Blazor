@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Linter.Modelos.Modelos
 {
-    public class CAX001_MovimentacoesCaixa
+    public class CAX001_Movimentacoes
     {
         [Key]
         public int idMovimentacao { get; set; }
@@ -20,12 +20,12 @@ namespace Linter.Modelos.Modelos
         [Required(ErrorMessage = "Informe a conta utilizada para esta movimentação.")]
         public int idContaGerencial { get; set; }
         [Required(ErrorMessage = "Informe o valor da movimentação")]
-        [CustomValidation(typeof(CAX001_MovimentacoesCaixa), nameof(ValidarValor))]
+        [CustomValidation(typeof(CAX001_Movimentacoes), nameof(ValidarValor))]
         public decimal Valor { get; set; }
-        [Required(ErrorMessage = "Informe a razão da movimentação")]
-        [EnumDataType(typeof(Enumeradores.TipoMovimentacao))]
-        [NotMapped]
-        public Enumeradores.TipoMovimentacao Tipo_nrt { get; set; }
+        //[Required(ErrorMessage = "Informe a razão da movimentação")]
+        //[EnumDataType(typeof(Enumeradores.TipoMovimentacao))]
+        //[NotMapped]
+        //public Enumeradores.TipoMovimentacao Tipo_nrt { get; set; }
         public byte Tipo { get; set; } 
 
 

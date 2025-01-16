@@ -1,5 +1,6 @@
 ﻿using Linter.Dados.Contexto;
 using Linter.Modelos.Modelos;
+using Microsoft.EntityFrameworkCore;
 
 namespace Linter.Dados.Repositorios
 {
@@ -9,7 +10,7 @@ namespace Linter.Dados.Repositorios
         private readonly ApplicationDbContext contexto;
         public CAX001_MovimentacoesRepositorio()
         {
-            contexto = new ApplicationDbContext();
+            contexto = new ApplicationDbContext(new DbContextOptions<ApplicationDbContext>());
         }
         public CAX001_MovimentacoesRepositorio(ApplicationDbContext _context)
         {
@@ -18,7 +19,7 @@ namespace Linter.Dados.Repositorios
         #endregion
 
         #region Manutencao
-        public async void InserirMovimentacao(CAX001_MovimentacoesCaixa caixa)
+        public async void InserirMovimentacao(CAX001_Movimentacoes caixa)
         {
             if (contexto != null || caixa != null || contexto.CAX001_MovimentacoesCaixa != null)
             {
@@ -35,7 +36,7 @@ namespace Linter.Dados.Repositorios
                 await contexto.SaveChangesAsync();
             }
         }
-        public async Task<CAX001_MovimentacoesCaixa> EditarMovimentacao(CAX001_MovimentacoesCaixa caixa)
+        public async Task<CAX001_Movimentacoes> EditarMovimentacao(CAX001_Movimentacoes caixa)
         {
             if (contexto != null || caixa != null)
             {
@@ -48,15 +49,15 @@ namespace Linter.Dados.Repositorios
 
         #region Retornos 
 
-        public List<CAX001_MovimentacoesCaixa> RetornaMovimentacoesParaRPT()
+        public IEnumerable<CAX001_Movimentacoes> RetornaMovimentacoesParaRPT()
         {
             if (contexto == null || contexto.CAX001_MovimentacoesCaixa == null)
                 throw new ApplicationException("Erro ao retornar todas as movimentações.");
 
-            return contexto.CAX001_MovimentacoesCaixa.ToList<CAX001_MovimentacoesCaixa>();
+            return contexto.CAX001_MovimentacoesCaixa.AsEnumerable();
         }
 
-        public IQueryable<CAX001_MovimentacoesCaixa> RetornaMovimentacoes()
+        public IQueryable<CAX001_Movimentacoes> RetornaMovimentacoes()
         {
             if (contexto == null || contexto.CAX001_MovimentacoesCaixa == null)
                 throw new ApplicationException("Erro ao retornar todas as movimentações.");
@@ -64,7 +65,7 @@ namespace Linter.Dados.Repositorios
             return contexto.CAX001_MovimentacoesCaixa.AsQueryable();
         }
 
-        public CAX001_MovimentacoesCaixa RetornaMovimentacao(int id)
+        public CAX001_Movimentacoes RetornaMovimentacao(int id)
         {
             if (contexto == null || contexto.CAX001_MovimentacoesCaixa == null)
                 throw new ApplicationException("Erro ao retornar esta movimentação.");
