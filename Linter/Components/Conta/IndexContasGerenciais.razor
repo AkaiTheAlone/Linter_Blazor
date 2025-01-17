@@ -7,9 +7,9 @@
 
 <AuthorizeView Context="contexto">
     <Authorized>
-            <h2 class="centralizado">Contas Gerenciais</h2>
+        <h2 class="centralizado">Contas Gerenciais</h2>
         <FluentMenuProvider />
-      
+
         <FluentCard Height="100" MinimalStyle="true">
 
             <FluentAppBar Orientation="Orientation.Horizontal" Class="centralizado">
@@ -23,10 +23,11 @@
                             HeaderCellAsButtonWithMenu="true"
                             ShowHover="true"
                             AutoFit="false"
-                            Pagination="pagination">
+                            Pagination="pagination"
+                            RowSize="DataGridRowSize.Medium">
                 <ChildContent>
-                    <PropertyColumn Width="200px" Property="@(p=> p.idContaGerencial)" Sortable="true" Title="ID Conta" />
-                    <PropertyColumn Width="1000px" Property="@(p=> p.Descricao)" Title="Descricao" Sortable="false" />
+                    <PropertyColumn Property="@(p=> p.idContaGerencial)" Sortable="true" Title="ID Conta" />
+                    <PropertyColumn Property="@(p=> p.Descricao)" Title="Descricao" Sortable="false" />
                     <TemplateColumn Title="Ações" Align="@Align.End" Width="200px">
                         <FluentButton aria-label="Editar" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => navigation.NavigateTo($"/contasgerenciais/{(int)Enumeradores.TipoView.Editar}/{context.idContaGerencial}"))" />
                         <FluentButton aria-label="Deletar" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => navigation.NavigateTo($"/contasgerenciais/{(int)Enumeradores.TipoView.Apagar}/{context.idContaGerencial}"))" />

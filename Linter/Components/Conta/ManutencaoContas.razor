@@ -1,5 +1,6 @@
 ﻿@page "/contasgerenciais/{tipoView:int}/{id:int}"
 
+@rendermode InteractiveServer
 @inject CNT001_ContasGerenciaisRepositorio rep
 @inject CNT002_ContasExcluidasRepositorio repCancelamento
 @inject AuthenticationStateProvider auth
@@ -11,7 +12,6 @@
 
 <FluentEditForm Model="@Conta" FormName="submit">
     <DataAnnotationsValidator />
-    <ValidationSummary />
 
     <FluentGrid>
         @if (tipoView != Enumeradores.TipoView.Criar)
@@ -37,12 +37,10 @@
                 <FluentTextArea Label="Data da movimentação" Name="datepicker" @bind-Value="MotivoCancelamento" ReadOnly="false" />
             </FluentGridItem>
         }
-
-
     </FluentGrid>
 
     <FluentButton OnClick="@(()=> AcionarBotao())" Type="ButtonType.Submit" FormId="submit"> @txtBotao </FluentButton>
-    <FluentButton Type="ButtonType.Button" Disabled="false" OnClick="@(()=> navigation.NavigateTo("/caixa/"))"> Retornar </FluentButton>
+    <FluentButton Type="ButtonType.Button" Disabled="false" OnClick="@(()=> navigation.NavigateTo("/contasgerenciais"))"> Retornar </FluentButton>
 
 </FluentEditForm>
 
@@ -88,7 +86,7 @@
                 break;
         }
     }
-    
+
     protected override async Task OnInitializedAsync()
     {
         var authState = await auth.GetAuthenticationStateAsync();

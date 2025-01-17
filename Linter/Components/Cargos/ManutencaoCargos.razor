@@ -1,0 +1,46 @@
+﻿@page "/cargos/{acao:int}/{id:int}"
+@inject TAB002_CargosRepositorio rep
+
+
+@inject NavigationManager navigation
+<h3> @txtBotao </h3>
+
+<FluentMenuProvider />
+
+<FluentEditForm Model="@Cargo" FormName="submit">
+    <DataAnnotationsValidator />
+
+    <FluentGrid>
+        @if (tipoView != Enumeradores.TipoView.Criar)
+        {
+            <FluentGridItem xs="3">
+                <FluentNumberField Label="IdUsuario" Id="descritivo" Class="label-top" @bind-Value="Cargo.Id" ReadOnly="@Disabled" />
+            </FluentGridItem>
+        }
+
+        <FluentGridItem xs="3">
+            <FluentTextField Placeholder="Descrição..." Label="Descrição" Id="descritivo" Class="label-top" @bind-Value="Cargo.Name" ReadOnly="@Disabled" />
+            <FluentValidationMessage For="@(() => Cargo.Name)" />
+        </FluentGridItem>
+    </FluentGrid>
+
+    <FluentButton OnClick="@(()=> AcionarBotao())" Type="ButtonType.Submit" FormId="submit"> @txtBotao </FluentButton>
+    <FluentButton Type="ButtonType.Button" Disabled="false" OnClick="@(()=> navigation.NavigateTo("/caixa/"))"> Retornar </FluentButton>
+
+</FluentEditForm>
+
+@code {
+    [Parameter]
+    public Enumeradores.TipoView acao { get; set; }
+    [Parameter]
+    public int id { get; set; }
+    public string txtBotao { get; set; } = "Adicionar Novo Cargo";
+    public IdentityRole<int> Cargo { get; set; } = new IdentityRole<int>();
+    public Enumeradores.TipoView tipoView{ get; set; }
+    public bool Disabled { get; set; }    
+    public void AcionarBotao()
+    {
+        rep.RetornaUm(id);
+
+    }
+}

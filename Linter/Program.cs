@@ -83,6 +83,7 @@ builder.Services.AddTransient<CAX001_MovimentacoesRepositorio>();
 builder.Services.AddTransient<CAX002_MovimentacoesCanceladasRepositorio>();
 builder.Services.AddTransient<CNT001_ContasGerenciaisRepositorio>();
 builder.Services.AddTransient<CNT002_ContasExcluidasRepositorio>();
+builder.Services.AddTransient<TAB002_CargosRepositorio>();
 #endregion
 
 #region Scopeds

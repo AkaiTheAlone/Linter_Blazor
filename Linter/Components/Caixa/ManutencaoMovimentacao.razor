@@ -1,7 +1,7 @@
 ﻿@page "/caixa/{acao:int}/{id:int}"
 @using Linter.Components.ComponentesLDN
 @rendermode InteractiveServer
-@inject             Dados.Repositorios.CAX001_MovimentacoesRepositorio repositorio
+@inject CAX001_MovimentacoesRepositorio repositorio
 @inject NavigationManager navigation
 
 
@@ -33,7 +33,6 @@
     <br />
     <FluentButton OnClick="@(()=> AcionarBotao(context))" Type="ButtonType.Submit" FormId="submit" Disabled="BotoesDisabled" IconStart="@IconeButton"> @txtBotao </FluentButton>
     <FluentButton Type="ButtonType.Button" Disabled="false" OnClick="@(Redirect0)" IconStart="new Icons.Regular.Size20.ArrowCircleLeft()"> Retornar </FluentButton>
-
 </FluentEditForm>
 
 
@@ -46,7 +45,7 @@
     public Enumeradores.TipoMovimentacao? tipomov { get; set; }
     //quando não existe um modelo sendo passado pra essa tela nem carregado no initialized, precisa inicializar ele manualmente
     [SupplyParameterFromForm]
-    public Modelos.Modelos.CAX001_Movimentacoes objMovi { get; set; } = new Modelos.Modelos.CAX001_Movimentacoes();
+    public Modelos.Modelos.CAX001_Movimentacoes objMovi { get; set; } = new CAX001_Movimentacoes();
 
     [Parameter] public int acao { get; set; }
 

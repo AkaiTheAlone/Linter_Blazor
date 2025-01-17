@@ -5,7 +5,6 @@
 
 @* @attribute [Authorize(Roles = "Admin")] implementar depois*@
 @rendermode InteractiveServer
-
 <FluentMenuProvider />
 <AuthorizeView Context="contexto">
     <Authorized>
@@ -19,20 +18,21 @@
                 <FluentAppBarItem Text="Bloqueados" IconRest="@(new Icons.Light.Size32.LockClosed())" OnClick="@(()=> navigations.NavigateTo("/admin/bloqueados"))" />
                 <FluentAppBarItem Text="Auditoria" IconRest="@(new Icons.Light.Size32.Print())" OnClick="@(() => navigations.NavigateTo("/admin/auditoria"))" />
                 @* fazer isso aq depois pra adicionar roles e etc *@
-                <FluentAppBarItem Text="Cargos" IconRest="@(new Icons.Light.Size32.DocumentSignature())" OnClick="@(() => navigations.NavigateTo("/admin/cargos"))" /> 
+                <FluentAppBarItem Text="Cargos" IconRest="@(new Icons.Light.Size32.DocumentSignature())" OnClick="@(() => navigations.NavigateTo("/admin/cargos"))" />
             </FluentAppBar>
             <FluentDataGrid Items="queryUser"
                             ResizableColumns=false
                             ResizeType="DataGridResizeType.Exact"
                             HeaderCellAsButtonWithMenu="true"
-                            ShowHover="false"
-                            AutoFit="true"
-                            Pagination="pagination">
+                            ShowHover="true"
+                            AutoFit="false"
+                            Pagination="pagination"
+                            RowSize="DataGridRowSize.Medium">
                 <ChildContent>
-                    <PropertyColumn Width="100px" InitialSortDirection="SortDirection.Descending" Property="@(p=> p.Id)" Sortable="true" Title="ID" Align="Align.Center" />
-                    <PropertyColumn Width="300px" Property="@(p=> Linter.Utilidades.Uteis.PegaNomeDeExibicao((Enumeradores.TipoUsuario)p.TipoUsuario))" Title="Tipo Usuário." />
-                    <PropertyColumn Width="200px" Property="@(p=> p.UserName)" Sortable="true" Title="Nome de Usuário" />
-                    <PropertyColumn Width="200px" Property="@(p=> p.Email)" Title="Email" Sortable="true" />
+                    <PropertyColumn InitialSortDirection="SortDirection.Descending" Property="@(p=> p.Id)" Sortable="true" Title="ID" Align="Align.Center" />
+                    <PropertyColumn Property="@(p=> Linter.Utilidades.Uteis.PegaNomeDeExibicao((Enumeradores.TipoUsuario)p.TipoUsuario))" Title="Tipo Usuário." />
+                    <PropertyColumn Property="@(p=> p.UserName)" Sortable="true" Title="Nome de Usuário" />
+                    <PropertyColumn Property="@(p=> p.Email)" Title="Email" Sortable="true" />
                     <TemplateColumn Title="Ações" Align="@Align.End" Width="200px">
                         <FluentButton aria-label="Editar" IconStart="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => navigations.NavigateTo($"usuarios/{(int)Enumeradores.TipoView.Editar}/{context.Id}"))" />
                         <FluentButton aria-label="Deletar" IconStart="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => navigations.NavigateTo($"usuarios/{(int)Enumeradores.TipoView.Apagar}/{context.Id}"))" />

@@ -1,4 +1,5 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
 
 <style>
     .centralizado {
@@ -8,29 +9,49 @@
         height: 50px;
     }
 
-    .centralizarSemEspaco{
-        display: flex; /* Ativa o flexbox */
-        justify-content: center; /* Centraliza horizontalmente */
-        align-items: center; /* Centraliza verticalmente */
-        flex-direction: column; /* Garante que os elementos fiquem em coluna, com espaço */
-        gap: 16px; /* Adiciona espaço entre os elementos */
-        height: 100vh; /* Opcional: ocupa toda a altura da tela */
+    .centralizarSemEspaco {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 16px;
+        height: 100vh;
+    }
+
+    .linterTexto {
+        font-family: 'Script MT', cursive
+    }
+
+    .sair {
+        outline: 1px;
     }
 </style>
 
 
-<FluentMenuProvider/>
+<FluentMenuProvider />
 <FluentDialogProvider @rendermode="InteractiveServer" />
-<FluentToastProvider @rendermode="InteractiveServer" 
-                     RemoveToastsOnNavigation="false" 
-                     MaxToastCount="10" 
-                     ShowCloseButton="true" 
+<FluentToastProvider @rendermode="InteractiveServer"
+                     RemoveToastsOnNavigation="false"
+                     MaxToastCount="10"
+                     ShowCloseButton="true"
                      Timeout="500" />
 <FluentLayout>
-    <FluentHeader>
-        Linter
-        <div style="margin-left:auto">
-            <img src="/imagens/ldn_logo.png" width="100" height="60" />
+    <FluentHeader Height="70">
+        <h1 class="linterTexto">
+            Linter
+        </h1>
+
+        @*         preciso descobrir um jeito de mostrar esse botão apenas quando estamos logados *@
+        <form action="Account/Logout" method="post" style="margin-left:auto">
+            <AntiforgeryToken />
+            <input type="hidden" name="ReturnUrl" value="@currentUrl" />
+            <div class="content" style="align-content:center">
+                <FluentButton Class="sair" Type="ButtonType.Submit" IconStart="@(new Icons.Regular.Size32.PersonArrowBack())" Style="width:100%;">Sair</FluentButton>
+            </div>
+        </form>
+
+        <div style="margin-left:inherit">
+            <img src="/recursos/imagens/marca sem tag-05.png" height="60" width="100" />
         </div>
     </FluentHeader>
 
@@ -61,3 +82,25 @@
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
+@code {
+
+    private bool expanded = true;
+    private string? currentUrl;
+
+    protected override void OnInitialized()
+    {
+        currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+        NavigationManager.LocationChanged += OnLocationChanged;
+    }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        currentUrl = NavigationManager.ToBaseRelativePath(e.Location);
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
+}

@@ -17,7 +17,8 @@
                             ResizeType="DataGridResizeType.Exact"
                             HeaderCellAsButtonWithMenu="true"
                             ShowHover="true"
-                            AutoFit="false">
+                            AutoFit="false"
+                            RowSize="DataGridRowSize.Medium"> @* fazer pagination pra essa pagina dps  *@
                 <ChildContent>
                     <PropertyColumn Width="70px" InitialSortDirection="SortDirection.Descending" Property="@(p=> p.idMovimentacao)" Sortable="true" Title="ID" />
                     <PropertyColumn Width="120px" Property="@(p=> Linter.Utilidades.Uteis.PegaNomeDeExibicao((Enumeradores.TipoUsuario)p.Tipo))" Title="Tipo Movi." />

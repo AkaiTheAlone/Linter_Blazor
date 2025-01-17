@@ -7,19 +7,20 @@
 <FluentMenuProvider />
 <FluentDialogProvider />
 
-<FluentCard Height="100" MinimalStyle="true">
+<FluentCard Height="100" MinimalStyle="true" >
     <FluentDataGrid Items="queryConta"
                     ResizableColumns=false
                     ResizeType="DataGridResizeType.Exact"
                     HeaderCellAsButtonWithMenu="true"
                     ShowHover="true"
-                    AutoFit="false">
+                    AutoFit="false"
+                    RowSize="DataGridRowSize.Medium">
         <ChildContent>
-            <PropertyColumn Width="120px" Property="@(p=> p.idContaGerencial)" Sortable="true" Title="ID Conta" />
-            <PropertyColumn Width="600px" Property="@(p=> p.Descricao)" Title="Descricao" Sortable="false" />
-            <PropertyColumn Width="600px" Property="@(p=> p.DataExclusao)" Title="Descricao" Sortable="false" />
-            <PropertyColumn Width="600px" Property="@(p=> p.MotivoCancelamento)" Title="Descricao" Sortable="false" />
-            <PropertyColumn Width="600px" Property="@(p=> p.UsuarioExclusao)" Title="Descricao" Sortable="false" />
+            <PropertyColumn Property="@(p=> p.idContaGerencial)" Sortable="true" Title="ID Conta" />
+            <PropertyColumn Property="@(p=> p.Descricao)" Title="Descricao" Sortable="false" />
+            <PropertyColumn Property="@(p=> p.DataExclusao)" Title="Descricao" Sortable="false" />
+            <PropertyColumn Property="@(p=> p.MotivoCancelamento)" Title="Descricao" Sortable="false" />
+            <PropertyColumn Property="@(p=> p.UsuarioExclusao)" Title="Descricao" Sortable="false" />
             <TemplateColumn Title="Ações" Align="@Align.End" Width="200px">
                 <FluentButton aria-label="Restaurar" IconEnd="@(new Icons.Light.Size32.Options())" />
                 <FluentButton aria-label="Consultar" IconEnd="@(new Icons.Light.Size32.ZoomIn())" />
