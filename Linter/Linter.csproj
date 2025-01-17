@@ -44,6 +44,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Content Remove="Components\ComponentesLDN\LDN_CardGrid.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <None Remove="Relatorios\relatorioteste.frx" />
 	</ItemGroup>
 

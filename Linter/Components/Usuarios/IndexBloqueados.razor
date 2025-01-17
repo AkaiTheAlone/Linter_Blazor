@@ -1,24 +1,32 @@
 ﻿@inject NavigationManager navigation
 @inject TAB001_UsuariosRepositorio rep
 @page "/admin/bloqueados"
+@rendermode InteractiveServer
+
 
 <h3 class="centralizado">Usuários Bloqueados</h3>
 
 <FluentCard Height="100" MinimalStyle="true">
     <FluentDataGrid Items="UsuariosBloqueados"
                     ResizableColumns=false
-                    ResizeType="DataGridResizeType.Exact"
-                    HeaderCellAsButtonWithMenu="true"
+                    HeaderCellAsButtonWithMenu="false"
                     ShowHover="true"
                     AutoFit="false"
-                    RowSize="DataGridRowSize.Medium">
+                    RowSize="DataGridRowSize.Medium"
+                    Pagination="@pagination">
         <ChildContent>
-            <PropertyColumn Width="150" Property="@(p=> p.Id)" Title="Descricao" Sortable="false" />
-            <PropertyColumn Width="300px" Property="@(p=> p.UserName)" Title="Descricao" Sortable="false" />
-            <PropertyColumn Width="200px" Property="@(p=> p.AccessFailedCount)" Title="Nº Tentativas de acesso falha" Sortable="false" />
-            <PropertyColumn Width="500px" Property="@(p=> p.Email)" Title="Descricao" Sortable="false" />
-            <PropertyColumn Width="500px" Property="@(p=> p.TipoUsuario)" Title="Descricao" Sortable="false" />
-            <PropertyColumn Width="500px" Property="@(p=> p.PhoneNumber)" Title="Descricao" Sortable="false" />
+            <PropertyColumn Property="@(p=> p.Id)" Title="Descricao" Sortable="true" />
+            <PropertyColumn Property="@(p=> p.UserName)" Title="Descricao" Sortable="true">
+                <ColumnOptions>
+                    <div class="search-box">
+                        <FluentSearch type="search" Autofocus=true Placeholder="Descrição..." @bind-Value=nomeFiltro @oninput="Filtrar" @bind-Value:after="Limpar" />
+                    </div>
+                </ColumnOptions>
+
+            </PropertyColumn>
+            <PropertyColumn Property="@(p=> p.AccessFailedCount)" Title="Falhas Acesso" Sortable="false" />
+            <PropertyColumn Property="@(p=> p.Email)" Title="Email" Sortable="false" />
+            <PropertyColumn Property="@(p=> p.PhoneNumber)" Title="Telefone" Sortable="false" />
             <TemplateColumn Title="Ações" Align="@Align.End" Width="200px">
                 <FluentButton aria-label="Restaurar" IconEnd="@(new Icons.Light.Size32.Options())" />
                 <FluentButton aria-label="Consultar" IconEnd="@(new Icons.Light.Size32.ZoomIn())" OnClick="@(()=> navigation.NavigateTo($"/contasgerenciais/{(int)Enumeradores.TipoView.Consultar}/{id:int}"))" />
@@ -26,7 +34,6 @@
         </ChildContent>
 
         <LoadingContent>
-            id
             <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center">
                 Carregando...<br />
                 <FluentProgress Width="240px" />
@@ -35,14 +42,17 @@
     </FluentDataGrid>
 </FluentCard>
 
+<LDN_Paginator Pagination="pagination" strTipo="usuários"> </LDN_Paginator>
+
 
 @code {
-    public IQueryable<TAB001_Usuarios> UsuariosBloqueados { get; set; } 
+    public IQueryable<TAB001_Usuarios> UsuariosBloqueados { get; set; }
     public int id { get; set; }
-
+    public PaginationState pagination { get; set; } = new PaginationState { ItemsPerPage = 10 };
+    string nomeFiltro = string.Empty;
     protected override Task OnInitializedAsync()
     {
-        //retorna todos os usuários que não estejam bloqueados 
+        //retorna todos os usuários que não estejam bloqueados
         UsuariosBloqueados = rep.RetornaTodos().Where(x => x.LockoutEnabled == false).AsQueryable();
 
         return base.OnInitializedAsync();
@@ -51,10 +61,49 @@
     {
         var usuario = rep.RetornaUm(id);
 
-        var lstRoles = 
-
         usuario.AccessFailedCount = 0;
         usuario.LockoutEnabled = true;
         await rep.AtualizarUsuario(usuario);
     }
+
+    private void Filtrar(ChangeEventArgs args)
+    {
+        if (args.Value is string value)
+        {
+            nomeFiltro = value;
+        }
+
+    }
+
+    private void Limpar()
+    {
+        if (string.IsNullOrWhiteSpace(nomeFiltro))
+        {
+            nomeFiltro = string.Empty;
+        }
+    }
+
+
+    //nao sei pra q serve, tava na documentacao do fluent
+    public class StringLengthComparer : IComparer<string>
+    {
+        public static readonly StringLengthComparer Instance = new StringLengthComparer();
+
+        public int Compare(string? x, string? y)
+        {
+            if (x is null)
+            {
+                return y is null ? 0 : -1;
+            }
+
+            if (y is null)
+            {
+                return 1;
+            }
+
+            return x.Length.CompareTo(y.Length);
+        }
+    }
+
+
 }

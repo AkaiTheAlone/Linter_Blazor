@@ -44,14 +44,10 @@
                 </LoadingContent>
             </FluentDataGrid>
         </FluentCard>
-        <FluentPaginator State="@pagination">
-            <SummaryTemplate>
-                <strong>@(pagination.TotalItemCount ?? 0)</strong> movimentações
-            </SummaryTemplate>
-            <PaginationTextTemplate>
-                Página <strong>@(pagination.CurrentPageIndex + 1)</strong> de <strong>@(pagination.LastPageIndex + 1)</strong> página(s)
-            </PaginationTextTemplate>
-        </FluentPaginator>
+
+
+        <LDN_Paginator Pagination="pagination" strTipo="usuários"> </LDN_Paginator>
+
     </Authorized>
     <NotAuthorized>
         <NaoAutorizado />

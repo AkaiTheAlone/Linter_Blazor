@@ -1,0 +1,16 @@
+﻿
+<FluentPaginator State="@Pagination">
+    <SummaryTemplate>
+        <strong>@(Pagination.TotalItemCount ?? 0)</strong> @strTipo
+    </SummaryTemplate>
+    <PaginationTextTemplate>
+        Página <strong>@(Pagination.CurrentPageIndex + 1)</strong> de <strong>@(Pagination.LastPageIndex + 1)</strong> página(s)
+    </PaginationTextTemplate>
+</FluentPaginator>
+
+
+
+@code {
+    [Parameter] public PaginationState Pagination { get; set; }
+    [Parameter] public string strTipo { get; set; } = "Defina um valor usando a propriedade '' ";
+}

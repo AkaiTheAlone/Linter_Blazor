@@ -8,22 +8,25 @@
     <nav class="sitenav" aria-labelledby="main-menu">
         <FluentNavMenu Id="main-menu" Collapsible="true" Width="250" Title="Navigation menu" @bind-Expanded="expanded" CustomToggle="true">
             <FluentNavLink Href="/" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.Home())" IconColor="Color.Accent">Início</FluentNavLink>
+            <FluentTooltip Anchor="delay3" @rendermode=InteractiveServer HideTooltipOnCursorLeave="true" Position=TooltipPosition.End Delay=500> Gerenciar usuários (Administrador)</FluentTooltip>
             <AuthorizeView>
                 <Authorized>
                     <FluentNavGroup Title="Usuários" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.Person())" IconColor="Color.Accent">
                         <FluentNavLink Href="/usuarios" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.Person())" IconColor="Color.Accent"> Registrados </FluentNavLink>
                         <FluentNavLink Href="/admin/bloqueados" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.CodeBlock())" IconColor="Color.Accent"> Bloqueados </FluentNavLink>
-                        <FluentNavLink Href="/admin/bloqueados" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.CodeBlock())" IconColor="Color.Accent"> Cargos </FluentNavLink>
                     </FluentNavGroup>
-
                     <FluentNavLink Href="/contasgerenciais" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.BuildingBank())" IconColor="Color.Accent">Contas</FluentNavLink>
+                    <FluentTooltip Anchor="delay3" @rendermode=InteractiveServer HideTooltipOnCursorLeave="true" Position=TooltipPosition.End Delay=500> Gerenciar usuários (Administrador)</FluentTooltip>
                     <FluentNavLink Href="/caixa" Icon="@(new Icons.Regular.Size20.Money())"> Movimentações </FluentNavLink>
+                    <FluentTooltip Anchor="delay3" @rendermode=InteractiveServer HideTooltipOnCursorLeave="true" Position=TooltipPosition.End Delay=500> Gerenciar movimentações financeiras</FluentTooltip>
                     <FluentNavLink Href="/relatorios" Icon="@(new Icons.Regular.Size20.BookCoins())"> Relatórios </FluentNavLink>
+                    <FluentTooltip Anchor="delay3" HideTooltipOnCursorLeave="true" @rendermode=InteractiveServer Position=TooltipPosition.End Delay=500> Imprimir e exportar relatórios </FluentTooltip>
 
                     <br />
                 </Authorized>
                 <NotAuthorized>
-                    <FluentNavLink Href="Account/Login">Login</FluentNavLink>
+                    <FluentNavLink Href="Account/Login" Icon="@(new Icons.Regular.Size20.ContactCardRibbon())"> Login </FluentNavLink>
+                    <FluentTooltip Anchor="delay3" HideTooltipOnCursorLeave="true" Position=TooltipPosition.End Delay=500> Entre na sua conta</FluentTooltip>
                 </NotAuthorized>
             </AuthorizeView>
         </FluentNavMenu>

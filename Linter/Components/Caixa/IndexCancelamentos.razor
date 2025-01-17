@@ -18,7 +18,8 @@
                             HeaderCellAsButtonWithMenu="true"
                             ShowHover="true"
                             AutoFit="false"
-                            RowSize="DataGridRowSize.Medium"> @* fazer pagination pra essa pagina dps  *@
+                            RowSize="DataGridRowSize.Medium">
+                @* fazer pagination pra essa pagina dps  *@
                 <ChildContent>
                     <PropertyColumn Width="70px" InitialSortDirection="SortDirection.Descending" Property="@(p=> p.idMovimentacao)" Sortable="true" Title="ID" />
                     <PropertyColumn Width="120px" Property="@(p=> Linter.Utilidades.Uteis.PegaNomeDeExibicao((Enumeradores.TipoUsuario)p.Tipo))" Title="Tipo Movi." />
@@ -32,8 +33,6 @@
 
                     </FluentDataGridRow>
                 </ChildContent>
-
-                @*talvez isso só sirva pra um rendermode específico *@
                 <LoadingContent>
                     <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center">
                         Carregando...<br />
@@ -42,15 +41,18 @@
                 </LoadingContent>
             </FluentDataGrid>
         </FluentCard>
+
+        <LDN_Paginator Pagination="pagination" strTipo="usuários"> </LDN_Paginator>
+
     </Authorized>
-    <NotAuthorized> 
+    <NotAuthorized>
         <NaoAutorizado></NaoAutorizado>
     </NotAuthorized>
 </AuthorizeView>
 @code {
     public IQueryable<CAX002_MovimentaocesCanceladas> queryCanceladas;
 
-
+    public PaginationState pagination { get; set; } = new PaginationState { ItemsPerPage = 10 };
     protected override Task OnInitializedAsync()
     {
         queryCanceladas = rep.RetornaMovimentacoesCanceladas();

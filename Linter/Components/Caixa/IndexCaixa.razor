@@ -4,23 +4,6 @@
 @inject ToastService Toast
 @inject IDialogService dialogservice
 
-<style>
-    .label-top .fluent-textfield__label {
-        display: block;
-        margin-bottom: 4px;
-    }
-
-    .fluent-textfield {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .fluent-textfield__input {
-        margin-top: 4px;
-    }
-
-</style>
-
 <PageTitle> Controle de movimentações </PageTitle>
 
 <AuthorizeView Context="outronome">
@@ -31,25 +14,43 @@
             <h2 class="centralizado"> Controle de Movimentações </h2>
         </div>
 
-        <FluentCard Height="100" MinimalStyle="true">
+        <FluentCard MinimalStyle="true" Height="100">
             <FluentAppBar Orientation="Orientation.Horizontal" Class="centralizado">
                 <FluentAppBarItem Text="Adicionar" IconRest="@(new Icons.Regular.Size24.AddCircle())" OnClick="@(()=> navigation.NavigateTo($"/caixa/{(int)Enumeradores.TipoView.Criar}/{0}"))" />
                 <FluentAppBarItem Text="Cancelamentos" IconRest="@(new Icons.Light.Size32.Delete())" OnClick="@(()=> navigation.NavigateTo("/caixa/cancelamentos"))" />
             </FluentAppBar>
-            <FluentDataGrid Items="queryMov"
+            <FluentDataGrid Items="lstFiltrada"
                             ResizableColumns=false
-                            ResizeType="DataGridResizeType.Exact"
-                            HeaderCellAsButtonWithMenu="true"
+                            HeaderCellAsButtonWithMenu="false"
                             ShowHover="true"
                             AutoFit="false"
                             Pagination="pagination"
                             RowSize="DataGridRowSize.Medium">
+                <EmptyContent>
+                    <FluentIcon Value="@(new Icons.Filled.Size24.ChatEmpty())" Color="@Color.Accent" />&nbsp; Nenhum registro para ser exibido!
+                </EmptyContent>
                 <ChildContent>
-                    <PropertyColumn InitialSortDirection="SortDirection.Descending" Property="@(p=> p.idMovimentacao)" Sortable="true" Title="ID" />
-                    <PropertyColumn Property="@(p=> Linter.Utilidades.Uteis.PegaNomeDeExibicao((Enumeradores.TipoMovimentacao)p.Tipo))" Title="Tipo Movi." />
-                    <PropertyColumn Property="@(p=> p.DataMovimentacao)" Format="dd/MM/yyyy" Sortable="true" Title="Data" />
+                    <PropertyColumn InitialSortDirection="SortDirection.Descending" Property="@(p=> p.idMovimentacao)" Sortable="true" Title="ID" IsDefaultSortColumn="true">
+                        @*  <ColumnOptions>
+                        <div class="search-box">
+                        <FluentSearch type="search" Autofocus=true Placeholder="ID..." @bind-Value=idFiltro @oninput="Filtrar" @bind-Value:after="Limpar" />
+                        </div>
+                        </ColumnOptions>
+                        tenho q descobrir como fazer um filtro combinado dps
+                        *@
+
+                    </PropertyColumn>
+
+                    <PropertyColumn Property="@(p=> Linter.Utilidades.Uteis.PegaNomeDeExibicao((Enumeradores.TipoMovimentacao)p.Tipo))" Title="Tipo Movi." Align="Align.Start" />
+                    <PropertyColumn Property="@(p=> p.DataMovimentacao)" Format="dd/MM/yyyy" Sortable="true" Title="Data" Align="Align.Start" />
                     <PropertyColumn Property="@(p=> p.Valor.ToString("C2"))" Title="Valor" Sortable="false" /> @* sortable não funciona com conversoes, descobrir solucao*@
-                    <PropertyColumn Property="@(p=> p.Descritivo)" Title="Descrição" Sortable="true" />
+                    <PropertyColumn Property="@(p=> p.Descritivo)" Title="Descrição" Sortable="true">
+                        <ColumnOptions>
+                            <div class="search-box">
+                                <FluentSearch type="search" Autofocus=true Placeholder="ID..." @bind-Value=nomeFiltro @oninput="Filtrar" @bind-Value:after="Limpar" />
+                            </div>
+                        </ColumnOptions>
+                    </PropertyColumn>
                     <TemplateColumn Title="Ações">
                         <FluentButton aria-label="Editar" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() =>  navigation.NavigateTo($"/caixa/{(int)Enumeradores.TipoView.Editar}/{context.idMovimentacao}"))" />
                         <FluentButton aria-label="Deletar" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => navigation.NavigateTo($"/caixa/{(int)Enumeradores.TipoView.Apagar}/{context.idMovimentacao}"))" />
@@ -64,22 +65,15 @@
                 </LoadingContent>
 
             </FluentDataGrid>
-            <FluentDivider />
-            <br />
 
             Saldo Total = <strong class="@Cor">
                 @Saldo.ToString("C2")
             </strong>
+            <FluentDivider />
 
         </FluentCard>
-        <FluentPaginator State="@pagination">
-            <SummaryTemplate>
-                <strong>@(pagination.TotalItemCount ?? 0)</strong> movimentações
-            </SummaryTemplate>
-            <PaginationTextTemplate>
-                Página <strong>@(pagination.CurrentPageIndex + 1)</strong> de <strong>@(pagination.LastPageIndex + 1)</strong> página(s)
-            </PaginationTextTemplate>
-        </FluentPaginator>
+
+        <LDN_Paginator Pagination="pagination" strTipo="movimentações" />
 
     </Authorized>
     <NotAuthorized>
@@ -96,11 +90,14 @@
     [Parameter] public int idMovimentacao { get; set; } = 0;
     public Enumeradores.TipoMovimentacao? tipomov { get; set; }
     [SupplyParameterFromForm] public Modelos.Modelos.CAX001_Movimentacoes Caixa { get; set; } = new Modelos.Modelos.CAX001_Movimentacoes();
-    public IQueryable<Modelos.Modelos.CAX001_Movimentacoes> queryMov;
+    public IQueryable<CAX001_Movimentacoes> queryMov;
+    //tenho q descobrir como fazer isso aq sem fazer 2 iqueryables, fica mta variavel solta
+    IQueryable<CAX001_Movimentacoes>? lstFiltrada => queryMov?.Where(x => x.Descritivo.ToUpper().Contains(nomeFiltro.ToUpper()));
 
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
-    #endregion
 
+    string nomeFiltro = "";
+    #endregion
 
     protected override async Task<IQueryable> OnInitializedAsync()
     {
@@ -117,13 +114,43 @@
 
         return queryMov;
     }
-    public void CriarRelatorio(int id)
+
+    private void Filtrar(ChangeEventArgs args)
     {
-        var mov = repositorio.RetornaMovimentacao(id);
-        //nao precisa passar a extensao do arquivo
-        //RelatorioController.CriarRelatorio("relatorioteste", mov);
+        if (args.Value is string value)
+        {
+            nomeFiltro = value;
+        }
+
     }
 
+    private void Limpar()
+    {
+        if (string.IsNullOrWhiteSpace(nomeFiltro))
+        {
+            nomeFiltro = string.Empty;
+        }
+    }
+
+    public class StringLengthComparer : IComparer<string>
+    {
+        public static readonly StringLengthComparer Instance = new StringLengthComparer();
+
+        public int Compare(string? x, string? y)
+        {
+            if (x is null)
+            {
+                return y is null ? 0 : -1;
+            }
+
+            if (y is null)
+            {
+                return 1;
+            }
+
+            return x.Length.CompareTo(y.Length);
+        }
+    }
 }
 @*ESSE ERRO ESTA APARECENDO AO TENTAR DAR UM SORT NA COLUNA DE VALORES (DECIMAL)
 

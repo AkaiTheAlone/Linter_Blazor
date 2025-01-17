@@ -3,7 +3,7 @@
 @inject TAB001_UsuariosRepositorio repositorio
 @inject NavigationManager navigations
 
-@* @attribute [Authorize(Roles = "Admin")] implementar depois*@
+
 @rendermode InteractiveServer
 <FluentMenuProvider />
 <AuthorizeView Context="contexto">
@@ -16,14 +16,10 @@
             <FluentAppBar Orientation="Orientation.Horizontal" Class="centralizado">
                 <FluentAppBarItem Text="Adicionar" IconRest="@(new Icons.Light.Size32.PeopleAdd())" OnClick="@(() => navigations.NavigateTo($"/usuarios/{(int)Enumeradores.TipoView.Criar}/{0}"))" />
                 <FluentAppBarItem Text="Bloqueados" IconRest="@(new Icons.Light.Size32.LockClosed())" OnClick="@(()=> navigations.NavigateTo("/admin/bloqueados"))" />
-                <FluentAppBarItem Text="Auditoria" IconRest="@(new Icons.Light.Size32.Print())" OnClick="@(() => navigations.NavigateTo("/admin/auditoria"))" />
-                @* fazer isso aq depois pra adicionar roles e etc *@
-                <FluentAppBarItem Text="Cargos" IconRest="@(new Icons.Light.Size32.DocumentSignature())" OnClick="@(() => navigations.NavigateTo("/admin/cargos"))" />
             </FluentAppBar>
             <FluentDataGrid Items="queryUser"
                             ResizableColumns=false
-                            ResizeType="DataGridResizeType.Exact"
-                            HeaderCellAsButtonWithMenu="true"
+                            HeaderCellAsButtonWithMenu="false"
                             ShowHover="true"
                             AutoFit="false"
                             Pagination="pagination"
@@ -33,10 +29,16 @@
                     <PropertyColumn Property="@(p=> Linter.Utilidades.Uteis.PegaNomeDeExibicao((Enumeradores.TipoUsuario)p.TipoUsuario))" Title="Tipo Usuário." />
                     <PropertyColumn Property="@(p=> p.UserName)" Sortable="true" Title="Nome de Usuário" />
                     <PropertyColumn Property="@(p=> p.Email)" Title="Email" Sortable="true" />
-                    <TemplateColumn Title="Ações" Align="@Align.End" Width="200px">
-                        <FluentButton aria-label="Editar" IconStart="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => navigations.NavigateTo($"usuarios/{(int)Enumeradores.TipoView.Editar}/{context.Id}"))" />
-                        <FluentButton aria-label="Deletar" IconStart="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => navigations.NavigateTo($"usuarios/{(int)Enumeradores.TipoView.Apagar}/{context.Id}"))" />
-                    </TemplateColumn>
+
+                    <AuthorizeView Roles="Administrator" Context="AutContext">
+                        <Authorized>
+                            <TemplateColumn Title="Ações" Align="@Align.End" Width="200px">
+                                <FluentButton aria-label="Editar" IconStart="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => navigations.NavigateTo($"usuarios/{(int)Enumeradores.TipoView.Editar}/{context.Id}"))" />
+                                <FluentButton aria-label="Deletar" IconStart="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => navigations.NavigateTo($"usuarios/{(int)Enumeradores.TipoView.Apagar}/{context.Id}"))" />
+                            </TemplateColumn>
+                        </Authorized>
+                        <NotAuthorized />
+                    </AuthorizeView>
                 </ChildContent>
 
                 <LoadingContent>
@@ -47,14 +49,9 @@
                 </LoadingContent>
             </FluentDataGrid>
         </FluentCard>
-        <FluentPaginator State="@pagination">
-            <SummaryTemplate>
-                <strong>@(pagination.TotalItemCount ?? 0)</strong> usuários
-            </SummaryTemplate>
-            <PaginationTextTemplate>
-                Página <strong>@(pagination.CurrentPageIndex + 1) </strong> de <strong>@(pagination.LastPageIndex + 1)</strong> página(s)
-            </PaginationTextTemplate>
-        </FluentPaginator>
+
+        <LDN_Paginator Pagination="pagination" strTipo="usuários"> </LDN_Paginator>
+
     </Authorized>
     <NotAuthorized>
         <NaoAutorizado />

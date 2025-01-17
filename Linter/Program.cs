@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.FluentUI.AspNetCore.Components;
 using FastReport.Data;
 using Npgsql;
+using Microsoft.FluentUI.AspNetCore.Components.Components.Tooltip;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,15 +51,15 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddAuthorizationCore();
 builder.Services.AddAuthentication();
-
-//builder.Services.AddIdentity<TAB001_Usuarios, IdentityRole>(opt => 
-//{ 
+//isso aq ta crashando, descobrir o pq
+//builder.Services.AddIdentity<TAB001_Usuarios, IdentityRole>(opt =>
+//{
 //    //depois de terminar eu ativo td dnv
 //    opt.Password.RequireDigit = false;
 //    opt.Password.RequiredLength = 1;
-//    opt.Password.RequireLowercase= false;
+//    opt.Password.RequireLowercase = false;
 //    opt.Password.RequireUppercase = false;
-//    opt.Password.RequireNonAlphanumeric= false;
+//    opt.Password.RequireNonAlphanumeric = false;
 //    opt.SignIn.RequireConfirmedEmail = false;
 //    opt.SignIn.RequireConfirmedPhoneNumber = false;
 //    opt.SignIn.RequireConfirmedAccount = false;
@@ -91,6 +92,7 @@ builder.Services.AddScoped<TAB001_UsuariosRepositorio>();
 builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
+builder.Services.AddScoped<ITooltipService, TooltipService>();
 #endregion
 
 #endregion

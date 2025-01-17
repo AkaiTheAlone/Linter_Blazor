@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
+using System.Text;
 using System.Xml;
 
 namespace Linter.Dados.Contexto
@@ -27,14 +29,14 @@ namespace Linter.Dados.Contexto
         #endregion
 
         #region OnModelCreating
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
             #region Remover aspas do Postgre
 
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(builder);
 
             //essa funcao serve pra deixar todos os 
-            foreach (var entity in modelBuilder.Model.GetEntityTypes())
+            foreach (var entity in builder.Model.GetEntityTypes())
             {
                 entity.SetTableName(entity.GetTableName()?.ToLower());
 
@@ -66,121 +68,121 @@ namespace Linter.Dados.Contexto
 
             //conforme o uso pretendo mudar o nome dessas classes pra palavras chave mais especificas 
 
-            modelBuilder.Entity<TAB001_Usuarios>()
+            builder.Entity<TAB001_Usuarios>()
                         .ToTable("tab001_usuarios");
 
             //tab002 proprietária
 
-            modelBuilder.Entity<IdentityRole<int>>()
-                        .ToTable("tab003_cargos");
+            builder.Entity<IdentityRole<int>>()
+                        .ToTable("tab002_cargos");
 
-            modelBuilder.Entity<IdentityUserRole<int>>()
-                        .ToTable("tab003a_usuarioscargos");
+            builder.Entity<IdentityUserRole<int>>()
+                        .ToTable("tab003_usuarioscargos");
 
-            modelBuilder.Entity<IdentityUserLogin<int>>()
+            builder.Entity<IdentityUserLogin<int>>()
                         .ToTable("tab004_usuarioslogin");
 
-            modelBuilder.Entity<IdentityUserToken<int>>()
+            builder.Entity<IdentityUserToken<int>>()
                         .ToTable("tab005_usuariostokens");
 
-            modelBuilder.Entity<IdentityRoleClaim<int>>()
+            builder.Entity<IdentityRoleClaim<int>>()
                         .ToTable("tab006_cargosdeidentidade");
 
-            modelBuilder.Entity<IdentityUserClaim<int>>()
+            builder.Entity<IdentityUserClaim<int>>()
                         .ToTable("tab007_solicitacoescargo"); //esse nome n faz sentido
             #endregion
 
             #region Renomear colunas das tabelas + Propriedades de colunas
 
             #region TAB001 + IdentityUser
-            modelBuilder.Entity<TAB001_Usuarios>()
+            builder.Entity<TAB001_Usuarios>()
                         .Property(u => u.UserName)
                         .HasColumnName("nomeusuario");
 
-            modelBuilder.Entity<TAB001_Usuarios>()
+            builder.Entity<TAB001_Usuarios>()
                         .Property(u => u.PasswordHash)
                         .HasColumnName("senhahash");
 
-            modelBuilder.Entity<TAB001_Usuarios>()
+            builder.Entity<TAB001_Usuarios>()
                         .Property(u => u.AccessFailedCount)
                         .HasColumnName("numeroacessosfalhos");
 
-            modelBuilder.Entity<TAB001_Usuarios>()
+            builder.Entity<TAB001_Usuarios>()
                        .Property(u => u.PhoneNumber)
                        .HasColumnName("numerotelefone");
 
-            modelBuilder.Entity<TAB001_Usuarios>()
+            builder.Entity<TAB001_Usuarios>()
                         .Property(u => u.EmailConfirmed)
                         .HasColumnName("confirmacaoemail");
 
-            modelBuilder.Entity<TAB001_Usuarios>()
+            builder.Entity<TAB001_Usuarios>()
                         .Property(u => u.TwoFactorEnabled)
                         .HasColumnName("autentificacao2fa");
 
-            modelBuilder.Entity<TAB001_Usuarios>()
+            builder.Entity<TAB001_Usuarios>()
                         .Property(u => u.NormalizedUserName)
                         .HasColumnName("nomenormalizado");
 
-            modelBuilder.Entity<TAB001_Usuarios>()
+            builder.Entity<TAB001_Usuarios>()
                         .Property(u => u.LockoutEnabled)
                         .HasColumnName("bloqueiohabilitado");
 
-            modelBuilder.Entity<TAB001_Usuarios>() //essa propriedade serve pra bloquear/desbloquear uma conta
+            builder.Entity<TAB001_Usuarios>() //essa propriedade serve pra bloquear/desbloquear uma conta
                         .Property(u => u.LockoutEnabled)
                         .HasColumnName("statusdesbloqueio");
 
-            modelBuilder.Entity<TAB001_Usuarios>() //isso serve em complemento para a anterior, se estiver bloqueado, aqui é passado a data que vai ser desbloqueado
+            builder.Entity<TAB001_Usuarios>() //isso serve em complemento para a anterior, se estiver bloqueado, aqui é passado a data que vai ser desbloqueado
                         .Property(u => u.LockoutEnd)
                         .HasColumnName("datadesbloqueio");
 
-            modelBuilder.Entity<TAB001_Usuarios>()
+            builder.Entity<TAB001_Usuarios>()
                        .Property(u => u.LockoutEnd)
                        .HasColumnName("datadesbloqueio");
 
-            modelBuilder.Entity<TAB001_Usuarios>()
+            builder.Entity<TAB001_Usuarios>()
                         .Property(u => u.NormalizedEmail)
                         .HasColumnName("emailnormalizado");
 
-            modelBuilder.Entity<TAB001_Usuarios>()
+            builder.Entity<TAB001_Usuarios>()
                        .Property(u => u.PhoneNumberConfirmed)
                        .HasColumnName("confirmacaotelefone");
 
-            modelBuilder.Entity<TAB001_Usuarios>()
+            builder.Entity<TAB001_Usuarios>()
                       .Property(u => u.SecurityStamp)
                       .HasColumnName("marcadeseguranca");
 
-            modelBuilder.Entity<TAB001_Usuarios>() //isso aq serve pra marcar o atual estado de um dado
+            builder.Entity<TAB001_Usuarios>() //isso aq serve pra marcar o atual estado de um dado
                       .Property(u => u.ConcurrencyStamp) //ex: se um admin alterar um valor e outro admin estiver alterando ele ao mesmo tempo, algum dos dois deverá 
                       .HasColumnName("marcadeconcorrencia"); //receber um codigo de erro dizendo q a marca de concorrencia do servidor e local sao incompativeis
 
-            modelBuilder.Entity<TAB001_Usuarios>()
+            builder.Entity<TAB001_Usuarios>()
                       .Property(u => u.CEP)
                       .IsRequired(false);
 
-            modelBuilder.Entity<TAB001_Usuarios>()
+            builder.Entity<TAB001_Usuarios>()
                      .Property(u => u.Rua)
                      .IsRequired(false);
 
-            modelBuilder.Entity<TAB001_Usuarios>()
+            builder.Entity<TAB001_Usuarios>()
                      .Property(u => u.Bairro)
                      .IsRequired(false);
 
-            modelBuilder.Entity<TAB001_Usuarios>()
+            builder.Entity<TAB001_Usuarios>()
                      .Property(u => u.Cidade)
                      .IsRequired(false);
             #endregion
 
             #region TAB003 // IdentityRole
 
-            modelBuilder.Entity<IdentityRole<int>>()
+            builder.Entity<IdentityRole<int>>()
                        .Property(u => u.Name)
                        .HasColumnName("nome");
 
-            modelBuilder.Entity<IdentityRole<int>>()
+            builder.Entity<IdentityRole<int>>()
                         .Property(u => u.NormalizedName)
                         .HasColumnName("nomenormalizado");
 
-            modelBuilder.Entity<IdentityRole<int>>()
+            builder.Entity<IdentityRole<int>>()
                         .Property(u => u.ConcurrencyStamp)
                         .HasColumnName("marcadeconcorrencia");
 
@@ -188,11 +190,11 @@ namespace Linter.Dados.Contexto
 
             #region TAB003A // IdentityUserRole
 
-            modelBuilder.Entity<IdentityUserRole<int>>()
+            builder.Entity<IdentityUserRole<int>>()
                        .Property(u => u.UserId)
                        .HasColumnName("idusuario");
 
-            modelBuilder.Entity<IdentityUserRole<int>>()
+            builder.Entity<IdentityUserRole<int>>()
                         .Property(u => u.RoleId)
                         .HasColumnName("idcargo");
 
@@ -200,19 +202,19 @@ namespace Linter.Dados.Contexto
 
             #region TAB004 // IdentityUserLogin
 
-            modelBuilder.Entity<IdentityUserLogin<int>>()
+            builder.Entity<IdentityUserLogin<int>>()
                       .Property(u => u.UserId)
                       .HasColumnName("idusuario");
 
-            modelBuilder.Entity<IdentityUserLogin<int>>()
+            builder.Entity<IdentityUserLogin<int>>()
                         .Property(u => u.ProviderKey)
                         .HasColumnName("provedordachave");
 
-            modelBuilder.Entity<IdentityUserLogin<int>>()
+            builder.Entity<IdentityUserLogin<int>>()
                         .Property(u => u.LoginProvider)
                         .HasColumnName("provedordelogin");
 
-            modelBuilder.Entity<IdentityUserLogin<int>>()
+            builder.Entity<IdentityUserLogin<int>>()
                         .Property(u => u.ProviderDisplayName)
                         .HasColumnName("nomedeexibicao");
 
@@ -220,57 +222,105 @@ namespace Linter.Dados.Contexto
 
             #region TAB005 // IdentityUserToken
 
-            modelBuilder.Entity<IdentityUserToken<int>>()
+            builder.Entity<IdentityUserToken<int>>()
                       .Property(u => u.UserId)
                       .HasColumnName("idusuario");
 
-            modelBuilder.Entity<IdentityUserToken<int>>()
+            builder.Entity<IdentityUserToken<int>>()
                         .Property(u => u.LoginProvider)
                         .HasColumnName("provedordologin");
 
-            modelBuilder.Entity<IdentityUserToken<int>>()
+            builder.Entity<IdentityUserToken<int>>()
                         .Property(u => u.Value)
                         .HasColumnName("valor"); //valor de q?
 
-            modelBuilder.Entity<IdentityUserToken<int>>()
+            builder.Entity<IdentityUserToken<int>>()
                         .Property(u => u.Name)
                         .HasColumnName("nome");
             #endregion
 
             #region TAB006 // IdentityRoleClaim
 
-            modelBuilder.Entity<IdentityRoleClaim<int>>()
+            builder.Entity<IdentityRoleClaim<int>>()
                         .Property(u => u.RoleId)
                         .HasColumnName("idcargo");
 
-            modelBuilder.Entity<IdentityRoleClaim<int>>()
+            builder.Entity<IdentityRoleClaim<int>>()
                         .Property(u => u.ClaimType)
                         .HasColumnName("tiposolicitacao");
 
-            modelBuilder.Entity<IdentityRoleClaim<int>>()
+            builder.Entity<IdentityRoleClaim<int>>()
                         .Property(u => u.ClaimValue)
                         .HasColumnName("valorsolicitacao");
             #endregion
 
             #region TAB007 // IdentityUserClaim
 
-            modelBuilder.Entity<IdentityUserClaim<int>>()
+            builder.Entity<IdentityUserClaim<int>>()
                        .Property(u => u.ClaimType)
                        .HasColumnName("tiposolicitacao");
 
-            modelBuilder.Entity<IdentityUserClaim<int>>()
+            builder.Entity<IdentityUserClaim<int>>()
                         .Property(u => u.ClaimValue)
                         .HasColumnName("valorsolicitacao");
 
-            modelBuilder.Entity<IdentityUserClaim<int>>()
+            builder.Entity<IdentityUserClaim<int>>()
                         .Property(u => u.UserId)
                         .HasColumnName("idusuario");
             #endregion
 
             #region CAX002_MovimentacoesCanceladas
-            modelBuilder.Entity<CAX002_MovimentaocesCanceladas>().HasNoKey();
+            builder.Entity<CAX002_MovimentaocesCanceladas>().HasNoKey();
             #endregion
 
+            #endregion
+
+            #region Criação dos Usuários/Roles/Claims
+
+            builder.Entity<IdentityRole<int>>().HasData(new IdentityRole<int>
+            {
+                Id = 1,
+                Name = "Administrador",
+                NormalizedName = "ADMINISTRADOR"
+            });
+
+            builder.Entity<IdentityRole<int>>().HasData(new IdentityRole<int>
+            {
+                Id = 2,
+                Name = "usuario",
+                NormalizedName = "USUARIO"
+            });
+            builder.Entity<IdentityRole<int>>().HasData(new IdentityRole<int>
+            {
+                Id = 3,
+                Name = "suporte",
+                NormalizedName = "SUPORTE",
+            });
+
+
+            //INSERINDO UM ADMINISTRADOR PARA REGISTRAR NOVOS USUÁRIOS
+            var hasher = new PasswordHasher<TAB001_Usuarios>();
+            var ADMINISTRADOR = new TAB001_Usuarios
+            {
+                Id = 1,
+                UserName = "administrador",
+                NormalizedUserName = "ADMINISTRADOR",
+                Email = "admin@ldnsistemas.com",
+                NormalizedEmail = "ADMIN@LDNSISTEMAS.COM",
+                EmailConfirmed = true,
+                SecurityStamp = Guid.NewGuid().ToString()
+            };
+            ADMINISTRADOR.PasswordHash = hasher.HashPassword(ADMINISTRADOR, "LDN@admin2025");
+
+            builder.Entity<TAB001_Usuarios>().HasData(ADMINISTRADOR);
+
+            builder.Entity<IdentityUserRole<int>>().HasData(new IdentityUserRole<int>
+            {
+                RoleId = 1,
+                UserId = 1
+            });
+
+            base.OnModelCreating(builder);
             #endregion
         }
         #endregion
