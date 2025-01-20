@@ -1,0 +1,22 @@
+﻿@inject NavigationManager navigation
+<AuthorizeView>
+    <Authorized>
+        <form action="Account/Logout" method="post" style="margin-left:auto">
+            <AntiforgeryToken />
+            <input type="hidden" name="ReturnUrl" value="@currentUrl" />
+            <div class="content" style="align-content:center">
+                <FluentButton Class="sair" Type="ButtonType.Submit" IconStart="@(new Icons.Regular.Size32.PersonArrowBack())" Style="width:100%;">Sair</FluentButton>
+            </div>
+        </form>
+    </Authorized>
+</AuthorizeView>
+
+@code {
+
+    private string? currentUrl;
+    protected override void OnInitialized()
+    {
+
+        currentUrl = navigation.ToBaseRelativePath(navigation.Uri);
+    }
+}

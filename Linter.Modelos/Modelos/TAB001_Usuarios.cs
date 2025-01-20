@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Linter.Modelos.Modelos
 {
@@ -14,6 +15,8 @@ namespace Linter.Modelos.Modelos
         public string? Cidade { get; set; }
         public string? Bairro { get; set; }
         public string? CEP { get; set; }
+        [NotMapped]
+        public IdentityRole? Role { get; set; } //NRT
     }
 
 }

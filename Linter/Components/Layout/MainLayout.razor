@@ -1,12 +1,12 @@
 ﻿@inherits LayoutComponentBase
-@inject NavigationManager NavigationManager
+@inject NavigationManager navigations
 
 <style>
     .centralizado {
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 50px;
+        flex-wrap: wrap;
     }
 
     .centralizarSemEspaco {
@@ -41,18 +41,14 @@
             Linter
         </h1>
 
-        @*         preciso descobrir um jeito de mostrar esse botão apenas quando estamos logados *@
-        <form action="Account/Logout" method="post" style="margin-left:auto">
-            <AntiforgeryToken />
-            <input type="hidden" name="ReturnUrl" value="@currentUrl" />
-            <div class="content" style="align-content:center">
-                <FluentButton Class="sair" Type="ButtonType.Submit" IconStart="@(new Icons.Regular.Size32.PersonArrowBack())" Style="width:100%;">Sair</FluentButton>
-            </div>
-        </form>
+        <LogoutBotao>
 
-        <div style="margin-left:inherit">
+        </LogoutBotao>
+        <div style="margin-left:auto">
             <img src="/recursos/imagens/marca sem tag-05.png" height="60" width="100" />
         </div>
+
+
     </FluentHeader>
 
     <FluentStack Class="main" Orientation="Orientation.Horizontal" Width="100%">
@@ -89,18 +85,17 @@
 
     protected override void OnInitialized()
     {
-        currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
-        NavigationManager.LocationChanged += OnLocationChanged;
+        navigations.LocationChanged += OnLocationChanged;
     }
 
     private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
     {
-        currentUrl = NavigationManager.ToBaseRelativePath(e.Location);
+        currentUrl = navigations.ToBaseRelativePath(e.Location);
         StateHasChanged();
     }
 
     public void Dispose()
     {
-        NavigationManager.LocationChanged -= OnLocationChanged;
+        navigations.LocationChanged -= OnLocationChanged;
     }
 }

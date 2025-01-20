@@ -1,6 +1,7 @@
 ﻿@rendermode InteractiveServer
 @implements IDisposable
 @inject NavigationManager NavigationManager
+@inject TAB001_UsuariosRepositorio rep
 
 <div class="navmenu">
     <input type="checkbox" title="Menu expand/collapse toggle" id="navmenu-toggle" class="navmenu-icon" />
@@ -25,7 +26,14 @@
                     <br />
                 </Authorized>
                 <NotAuthorized>
-                    <FluentNavLink Href="Account/Login" Icon="@(new Icons.Regular.Size20.ContactCardRibbon())"> Login </FluentNavLink>
+                    @if (PrecisaRegistrar)
+                    {
+                        <FluentNavLink Href="/Account/75e11e1087ba6e396e2e2ec41d2f257781dbe39a9d78485bf9e9e91f42a012c46c9dc28720cdcdc15248b7447805deca6d211ddb077e150ed40efb4ba0f06943" Icon="@(new Icons.Regular.Size20.ContactCardRibbon())"> Registrar </FluentNavLink>
+                    }
+                    else
+                    {
+                        <FluentNavLink Href="Account/Login" Icon="@(new Icons.Regular.Size20.ContactCardRibbon())"> Login </FluentNavLink>
+                    }
                     <FluentTooltip Anchor="delay3" HideTooltipOnCursorLeave="true" Position=TooltipPosition.End Delay=500> Entre na sua conta</FluentTooltip>
                 </NotAuthorized>
             </AuthorizeView>
@@ -36,9 +44,14 @@
 @code {
     private bool expanded = true;
     private string? currentUrl;
-
+    private bool PrecisaRegistrar { get; set; }
     protected override void OnInitialized()
     {
+        var user = rep.RetornaUm(1);
+        if (rep.RetornaUm(1).Id == 0)
+        {
+            PrecisaRegistrar = true;
+        }
         currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
         NavigationManager.LocationChanged += OnLocationChanged;
     }

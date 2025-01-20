@@ -59,7 +59,6 @@ namespace Linter.Dados.Repositorios
 
         public async Task InserirUsuario(TAB001_Usuarios usuario, List<string> Role, List<Claim> CLAIMS)
         {
-
             contexto.TAB001_Usuarios.Update(usuario);
 
             await userManager.AddToRolesAsync(usuario, Role);
@@ -78,7 +77,6 @@ namespace Linter.Dados.Repositorios
 
             contexto.TAB001_Usuarios.Remove(usuario);
             await contexto.SaveChangesAsync();
-
         }
 
         public async Task AtualizarUsuario(TAB001_Usuarios usuario, 

@@ -31,6 +31,33 @@ namespace Linter.Dados.Contexto
         #region OnModelCreating
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            #region Criação dos Usuários/Roles/Claims
+
+            builder.Entity<IdentityRole<int>>().HasData(new IdentityRole<int>
+            {
+                Id = 1,
+                Name = "Administrador",
+                NormalizedName = "ADMINISTRADOR",
+            });
+
+            builder.Entity<IdentityRole<int>>().HasData(new IdentityRole<int>
+            {
+                Id = 2,
+                Name = "usuario",
+                NormalizedName = "USUARIO",
+                ConcurrencyStamp = Guid.NewGuid().ToString()
+            });
+            builder.Entity<IdentityRole<int>>().HasData(new IdentityRole<int>
+            {
+                Id = 3,
+                Name = "suporte",
+                NormalizedName = "SUPORTE",
+                ConcurrencyStamp = Guid.NewGuid().ToString()
+            });
+
+            base.OnModelCreating(builder);
+            #endregion
+
             #region Remover aspas do Postgre
 
             base.OnModelCreating(builder);
@@ -273,54 +300,6 @@ namespace Linter.Dados.Contexto
             builder.Entity<CAX002_MovimentaocesCanceladas>().HasNoKey();
             #endregion
 
-            #endregion
-
-            #region Criação dos Usuários/Roles/Claims
-
-            builder.Entity<IdentityRole<int>>().HasData(new IdentityRole<int>
-            {
-                Id = 1,
-                Name = "Administrador",
-                NormalizedName = "ADMINISTRADOR"
-            });
-
-            builder.Entity<IdentityRole<int>>().HasData(new IdentityRole<int>
-            {
-                Id = 2,
-                Name = "usuario",
-                NormalizedName = "USUARIO"
-            });
-            builder.Entity<IdentityRole<int>>().HasData(new IdentityRole<int>
-            {
-                Id = 3,
-                Name = "suporte",
-                NormalizedName = "SUPORTE",
-            });
-
-
-            //INSERINDO UM ADMINISTRADOR PARA REGISTRAR NOVOS USUÁRIOS
-            var hasher = new PasswordHasher<TAB001_Usuarios>();
-            var ADMINISTRADOR = new TAB001_Usuarios
-            {
-                Id = 1,
-                UserName = "administrador",
-                NormalizedUserName = "ADMINISTRADOR",
-                Email = "admin@ldnsistemas.com",
-                NormalizedEmail = "ADMIN@LDNSISTEMAS.COM",
-                EmailConfirmed = true,
-                SecurityStamp = Guid.NewGuid().ToString()
-            };
-            ADMINISTRADOR.PasswordHash = hasher.HashPassword(ADMINISTRADOR, "LDN@admin2025");
-
-            builder.Entity<TAB001_Usuarios>().HasData(ADMINISTRADOR);
-
-            builder.Entity<IdentityUserRole<int>>().HasData(new IdentityUserRole<int>
-            {
-                RoleId = 1,
-                UserId = 1
-            });
-
-            base.OnModelCreating(builder);
             #endregion
         }
         #endregion

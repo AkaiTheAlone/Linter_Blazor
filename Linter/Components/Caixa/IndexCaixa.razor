@@ -38,7 +38,6 @@
                         </ColumnOptions>
                         tenho q descobrir como fazer um filtro combinado dps
                         *@
-
                     </PropertyColumn>
 
                     <PropertyColumn Property="@(p=> Linter.Utilidades.Uteis.PegaNomeDeExibicao((Enumeradores.TipoMovimentacao)p.Tipo))" Title="Tipo Movi." Align="Align.Start" />
@@ -66,7 +65,7 @@
 
             </FluentDataGrid>
 
-            Saldo Total = <strong class="@Cor">
+            Saldo Total = <strong style="color:@Cor">
                 @Saldo.ToString("C2")
             </strong>
             <FluentDivider />
@@ -83,7 +82,7 @@
 
 @code {
     #region Propriedades
-    public string Cor { get; set; } = "verde";
+    public string Cor { get; set; } = "green";
     public decimal Saldo { get; set; }
     [Parameter]
     public Enumeradores.TipoView tipoView { get; set; }
@@ -110,7 +109,7 @@
             else
                 Saldo -= mov.Valor;
         }
-        if (Saldo < 0) Cor = "vermelho";
+        if (Saldo < 0) Cor = "red";
 
         return queryMov;
     }

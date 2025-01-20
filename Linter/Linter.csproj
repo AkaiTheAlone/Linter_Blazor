@@ -62,9 +62,16 @@
 		<Content Include="wwwroot\recursos\fonts\Lora-SemiBoldItalic.ttf" />
 		<Content Include="wwwroot\recursos\Icones\sair.png" />
 		<Content Include="wwwroot\recursos\Icones\semregistros.jpg" />
+		<Content Include="wwwroot\recursos\Imagens\Empresas\adidas.jpeg" />
+		<Content Include="wwwroot\recursos\Imagens\Empresas\cocacola.png" />
+		<Content Include="wwwroot\recursos\Imagens\Empresas\gucci.jpg" />
+		<Content Include="wwwroot\recursos\Imagens\Empresas\lego.png" />
+		<Content Include="wwwroot\recursos\Imagens\Empresas\starbucks.png" />
 		<Content Include="wwwroot\recursos\Imagens\image_minimalist.png" />
 		<Content Include="wwwroot\recursos\Imagens\logotipoLDN.png" />
 		<Content Include="wwwroot\recursos\Imagens\marca sem tag-05.png" />
+		<Content Include="wwwroot\recursos\Imagens\negocios.jpg" />
+		<Content Include="wwwroot\recursos\Imagens\reuniao.jpg" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,0 +1,42 @@
+﻿@using System.Threading
+
+<div class="d-flex flex-column border-primary alert alert-info col-5">
+    <div class="d-flex justify-content-between align-items-center" style="height:400px;">
+        <img src="/recursos/imagens/empresas/adidas.jpeg" />
+        <div> @render(posicaoatual)</div>
+        <img src="/recursos/imagens/empresas/cocacola.png" />
+    </div>
+</div>
+
+@code {
+    CancellationTokenSource cts;
+    CancellationToken ct;
+
+    [Parameter]
+    public Type[] components { get; set; }
+    int posicaoatual;
+    protected override async Task OnInitializedAsync()
+    {
+        cts = new CancellationTokenSource();
+        ct = new CancellationToken();
+        await Continuar();
+
+    }
+
+    public async Task Continuar()
+    {
+        while (!ct.IsCancellationRequested)
+        {
+            await Task.Delay(2500, ct);
+            posicaoatual++;
+            await InvokeAsync(() => this.StateHasChanged());
+        }
+    }
+    public RenderFragment render(int position)
+    {
+        return rtb =>
+        {
+            rtb.OpenComponent(0, components[Math.Abs(position % components.Length)]);
+        };
+    }
+}

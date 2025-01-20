@@ -262,32 +262,13 @@ namespace Linter.Dados.Migrations
                         .HasName("pk_aspnetusers");
 
                     b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
+                        .HasDatabaseName("emailindex");
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasDatabaseName("UserNameIndex");
+                        .HasDatabaseName("usernameindex");
 
-                    b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "9408b12a-6638-445e-bc99-7421f5ed61ed",
-                            Email = "admin@ldnsistemas.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@LDNSISTEMAS.COM",
-                            NormalizedUserName = "ADMINISTRADOR",
-                            PasswordHash = "AQAAAAIAAYagAAAAEH0zNL02dMANiExBlNGzUMGDO73ly5vBTx6HOYd4MMcpB9N8zvrnWHwVYzrVVpIFpA==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "10024ccc-9296-44f5-b7ad-755cea259217",
-                            TipoUsuario = (byte)0,
-                            TwoFactorEnabled = false,
-                            UserName = "administrador"
-                        });
+                    b.ToTable("tab001_usuarios", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
@@ -319,9 +300,9 @@ namespace Linter.Dados.Migrations
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasDatabaseName("RoleNameIndex");
+                        .HasDatabaseName("rolenameindex");
 
-                    b.ToTable("AspNetRoles", (string)null);
+                    b.ToTable("tab002_cargos", (string)null);
 
                     b.HasData(
                         new
@@ -333,12 +314,14 @@ namespace Linter.Dados.Migrations
                         new
                         {
                             Id = 2,
+                            ConcurrencyStamp = "3ba3224d-190f-450b-9a3f-96ef73804c59",
                             Name = "usuario",
                             NormalizedName = "USUARIO"
                         },
                         new
                         {
                             Id = 3,
+                            ConcurrencyStamp = "7077d0dd-52cf-4099-9ae6-ef94661a8c6d",
                             Name = "suporte",
                             NormalizedName = "SUPORTE"
                         });
@@ -371,7 +354,7 @@ namespace Linter.Dados.Migrations
                     b.HasIndex("RoleId")
                         .HasDatabaseName("ix_aspnetroleclaims_roleid");
 
-                    b.ToTable("AspNetRoleClaims", (string)null);
+                    b.ToTable("tab006_cargosdeidentidade", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
@@ -401,7 +384,7 @@ namespace Linter.Dados.Migrations
                     b.HasIndex("UserId")
                         .HasDatabaseName("ix_aspnetuserclaims_userid");
 
-                    b.ToTable("AspNetUserClaims", (string)null);
+                    b.ToTable("tab007_solicitacoescargo", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
@@ -428,7 +411,7 @@ namespace Linter.Dados.Migrations
                     b.HasIndex("UserId")
                         .HasDatabaseName("ix_aspnetuserlogins_userid");
 
-                    b.ToTable("AspNetUserLogins", (string)null);
+                    b.ToTable("tab004_usuarioslogin", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
@@ -447,14 +430,7 @@ namespace Linter.Dados.Migrations
                     b.HasIndex("RoleId")
                         .HasDatabaseName("ix_aspnetuserroles_roleid");
 
-                    b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = 1,
-                            RoleId = 1
-                        });
+                    b.ToTable("tab003_usuarioscargos", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
@@ -478,7 +454,7 @@ namespace Linter.Dados.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name")
                         .HasName("pk_aspnetusertokens");
 
-                    b.ToTable("AspNetUserTokens", (string)null);
+                    b.ToTable("tab005_usuariostokens", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

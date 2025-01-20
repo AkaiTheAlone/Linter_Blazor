@@ -1,5 +1,6 @@
 ﻿@page "/usuarios"
 
+@inject UserManager<TAB001_Usuarios> manager
 @inject TAB001_UsuariosRepositorio repositorio
 @inject NavigationManager navigations
 
@@ -62,7 +63,7 @@
 @code {
     IQueryable<TAB001_Usuarios> queryUser { get; set; }
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         queryUser = repositorio.RetornaTodos();
     }
