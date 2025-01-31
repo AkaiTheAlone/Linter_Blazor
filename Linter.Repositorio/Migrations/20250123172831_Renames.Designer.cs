@@ -3,6 +3,7 @@ using System;
 using Linter.Dados.Contexto;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Linter.Dados.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250123172831_Renames")]
+    partial class Renames
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -268,7 +271,7 @@ namespace Linter.Dados.Migrations
                         .IsUnique()
                         .HasDatabaseName("usernameindex");
 
-                    b.ToTable("aspnetusers", (string)null);
+                    b.ToTable("tab001_usuarios", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
@@ -302,27 +305,26 @@ namespace Linter.Dados.Migrations
                         .IsUnique()
                         .HasDatabaseName("rolenameindex");
 
-                    b.ToTable("aspnetroles", (string)null);
+                    b.ToTable("tab002_cargos", (string)null);
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "6b62e097-e3cf-4e37-85cd-711a81e908ac",
                             Name = "Administrador",
                             NormalizedName = "ADMINISTRADOR"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "dbcdb37a-47db-48e7-822e-85c08c2320b0",
+                            ConcurrencyStamp = "af30f6f4-4639-458c-aee5-827a0913c16b",
                             Name = "usuario",
                             NormalizedName = "USUARIO"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "a4370684-8609-42c2-bcf5-1f2ba5dc10c7",
+                            ConcurrencyStamp = "9e254f83-9795-4a67-b129-df8cb968feaa",
                             Name = "suporte",
                             NormalizedName = "SUPORTE"
                         });
@@ -355,7 +357,7 @@ namespace Linter.Dados.Migrations
                     b.HasIndex("RoleId")
                         .HasDatabaseName("ix_aspnetroleclaims_roleid");
 
-                    b.ToTable("aspnetroleclaims", (string)null);
+                    b.ToTable("tab006_cargosdeidentidade", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
@@ -385,7 +387,7 @@ namespace Linter.Dados.Migrations
                     b.HasIndex("UserId")
                         .HasDatabaseName("ix_aspnetuserclaims_userid");
 
-                    b.ToTable("aspnetuserclaims", (string)null);
+                    b.ToTable("tab007_solicitacoescargo", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
@@ -412,7 +414,7 @@ namespace Linter.Dados.Migrations
                     b.HasIndex("UserId")
                         .HasDatabaseName("ix_aspnetuserlogins_userid");
 
-                    b.ToTable("aspnetuserlogins", (string)null);
+                    b.ToTable("tab004_usuarioslogin", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
@@ -431,7 +433,7 @@ namespace Linter.Dados.Migrations
                     b.HasIndex("RoleId")
                         .HasDatabaseName("ix_aspnetuserroles_roleid");
 
-                    b.ToTable("aspnetuserroles", (string)null);
+                    b.ToTable("tab003_usuarioscargos", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
@@ -455,7 +457,7 @@ namespace Linter.Dados.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name")
                         .HasName("pk_aspnetusertokens");
 
-                    b.ToTable("aspnetusertokens", (string)null);
+                    b.ToTable("tab005_usuariostokens", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

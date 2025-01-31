@@ -3,6 +3,7 @@ using System;
 using Linter.Dados.Contexto;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Linter.Dados.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250127125200_SPDOIHFG")]
+    partial class SPDOIHFG
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -285,6 +288,12 @@ namespace Linter.Dados.Migrations
                         .HasColumnType("text")
                         .HasColumnName("concurrencystamp");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(21)
+                        .HasColumnType("character varying(21)")
+                        .HasColumnName("discriminator");
+
                     b.Property<string>("Name")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
@@ -304,28 +313,9 @@ namespace Linter.Dados.Migrations
 
                     b.ToTable("aspnetroles", (string)null);
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ConcurrencyStamp = "6b62e097-e3cf-4e37-85cd-711a81e908ac",
-                            Name = "Administrador",
-                            NormalizedName = "ADMINISTRADOR"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ConcurrencyStamp = "dbcdb37a-47db-48e7-822e-85c08c2320b0",
-                            Name = "usuario",
-                            NormalizedName = "USUARIO"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ConcurrencyStamp = "a4370684-8609-42c2-bcf5-1f2ba5dc10c7",
-                            Name = "suporte",
-                            NormalizedName = "SUPORTE"
-                        });
+                    b.HasDiscriminator().HasValue("IdentityRole<int>");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -456,6 +446,15 @@ namespace Linter.Dados.Migrations
                         .HasName("pk_aspnetusertokens");
 
                     b.ToTable("aspnetusertokens", (string)null);
+                });
+
+            modelBuilder.Entity("Linter.Modelos.Modelos.TAB002_Cargos", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole<int>");
+
+                    b.ToTable("aspnetroles");
+
+                    b.HasDiscriminator().HasValue("TAB002_Cargos");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

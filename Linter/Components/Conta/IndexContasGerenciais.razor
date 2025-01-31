@@ -27,12 +27,16 @@
                             RowSize="DataGridRowSize.Medium">
                 <ChildContent>
                     <PropertyColumn Property="@(p=> p.idContaGerencial)" Sortable="true" Title="ID Conta" />
-                    <PropertyColumn Property="@(p=> p.Descricao)" Title="Descricao" Sortable="false" />
-                    <TemplateColumn Title="Ações" Align="@Align.End" Width="200px">
-                        <FluentButton aria-label="Editar" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => navigation.NavigateTo($"/contasgerenciais/{(int)Enumeradores.TipoView.Editar}/{context.idContaGerencial}"))" />
-                        <FluentButton aria-label="Deletar" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => navigation.NavigateTo($"/contasgerenciais/{(int)Enumeradores.TipoView.Apagar}/{context.idContaGerencial}"))" />
+                    <PropertyColumn Property="@(p=> p.Descricao)" Title="Descrição" Sortable="false" />
+                    <TemplateColumn Title="Ações" Align="@Align.End" Width="400px" Context="conta">
+                        <AuthorizeButton Action="@(() => navigation.NavigateTo($"/caixa/{(int)Enumeradores.TipoView.Consultar}/{conta.idContaGerencial}"))" Icone="@(new Icons.Regular.Size16.Edit())" Titulo="Editar"></AuthorizeButton>
+                        <AuthorizeButton Action="@(() => navigation.NavigateTo($"/caixa/{(int)Enumeradores.TipoView.Criar}/{conta.idContaGerencial}"))" Icone="@(new Icons.Regular.Size16.Delete())" Titulo="Excluir"></AuthorizeButton>
                     </TemplateColumn>
                 </ChildContent>
+
+                <EmptyContent>
+                    <FluentIcon Value="@(new Icons.Filled.Size16.CalendarEmpty())" Color="@Color.Accent" />&nbsp; Nenhum registro para ser exibido!
+                </EmptyContent>
 
                 <LoadingContent>
                     <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center">
@@ -43,7 +47,7 @@
             </FluentDataGrid>
         </FluentCard>
 
-        <LDN_Paginator Pagination="pagination" strTipo="usuários"> </LDN_Paginator>
+        <LDN_Paginator Pagination="pagination" strTipo="contas"> </LDN_Paginator>
 
     </Authorized>
     <NotAuthorized>

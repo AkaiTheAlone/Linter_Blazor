@@ -21,7 +21,7 @@ namespace Linter.Dados.Repositorios
         //private readonly SignInManager<TAB001_Usuarios> signInManager;
 
         #region Construtores
-        
+
         public TAB001_UsuariosRepositorio()
         {
             contexto = new ApplicationDbContext(new DbContextOptions<ApplicationDbContext>());
@@ -59,11 +59,20 @@ namespace Linter.Dados.Repositorios
 
         public async Task InserirUsuario(TAB001_Usuarios usuario, List<string> Role, List<Claim> CLAIMS)
         {
+            usuario.ConcurrencyStamp = Guid.NewGuid().ToString();
+            usuario.SecurityStamp = Guid.NewGuid().ToString();
             contexto.TAB001_Usuarios.Update(usuario);
+            usuario.Id = RetornaUltimoId();
 
-            await userManager.AddToRolesAsync(usuario, Role);
+            if (Role != null | Role?.Count == 0)
+            {
+                await userManager.AddToRolesAsync(usuario, Role);
+            }
+            if (CLAIMS != null || CLAIMS.Count > 0)
+            {
+                await userManager.AddClaimsAsync(usuario, CLAIMS);
+            }
 
-            await userManager.AddClaimsAsync(usuario, CLAIMS);
             //eu n faço a mínima ideia do q uma claim faça.
             // await userManager.AddClaimAsync(usuario, new Claim() { });
             await contexto.SaveChangesAsync();
@@ -79,13 +88,14 @@ namespace Linter.Dados.Repositorios
             await contexto.SaveChangesAsync();
         }
 
-        public async Task AtualizarUsuario(TAB001_Usuarios usuario, 
-                                           List<string>? rolesPart = null, 
+        public async Task AtualizarUsuario(TAB001_Usuarios usuario,
+                                           List<string>? rolesPart = null,
                                            List<Claim>? lstClaims = null) //Claim claim
         {
             if (contexto == null || contexto.TAB001_Usuarios == null)
                 throw new ApplicationException("Erro ao Atualizar Usuário.");
 
+            usuario.ConcurrencyStamp = Guid.NewGuid().ToString();
             //await userManager.RemoveFromRolesAsync()
             var roles = await userManager.GetRolesAsync(usuario);
             var claims = await userManager.GetClaimsAsync(usuario);
@@ -98,12 +108,12 @@ namespace Linter.Dados.Repositorios
                 await userManager.RemoveFromRolesAsync(usuario, roles);
                 await userManager.AddToRolesAsync(usuario, rolesPart);
             }
-            if(lstClaims != null)
+            if (lstClaims != null)
             {
                 await userManager.RemoveClaimsAsync(usuario, claims);
                 await userManager.AddClaimsAsync(usuario, lstClaims);
             }
-            
+
             //await userManager.RemoveClaimsAsync(usuario);
             //eu n faço a mínima ideia do q uma claim faça.
             //await userManager.AddClaimAsync(usuario, claim);
@@ -111,6 +121,23 @@ namespace Linter.Dados.Repositorios
             contexto.TAB001_Usuarios.Update(usuario);
             await contexto.SaveChangesAsync();
         }
+
+        public int RetornaUltimoId()
+        {
+            if (contexto == null || contexto.TAB001_Usuarios == null)
+                throw new ApplicationException("Erro ao retornar todas as movimentações.");
+            int retorno;
+            try
+            {
+                retorno = contexto.TAB001_Usuarios.OrderBy(x => x.Id).FirstOrDefault().Id + 1;
+            }
+            catch
+            {
+                retorno = 0;
+            }
+            return retorno + 1;
+        }
+
 
         #endregion
 

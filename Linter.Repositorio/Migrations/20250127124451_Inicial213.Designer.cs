@@ -3,6 +3,7 @@ using System;
 using Linter.Dados.Contexto;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Linter.Dados.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250127124451_Inicial213")]
+    partial class Inicial213
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -179,7 +182,7 @@ namespace Linter.Dados.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer")
-                        .HasColumnName("accessfailedcount");
+                        .HasColumnName("numeroacessosfalhos");
 
                     b.Property<string>("Bairro")
                         .HasColumnType("text")
@@ -196,7 +199,7 @@ namespace Linter.Dados.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("text")
-                        .HasColumnName("concurrencystamp");
+                        .HasColumnName("marcadeconcorrencia");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -205,37 +208,37 @@ namespace Linter.Dados.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean")
-                        .HasColumnName("emailconfirmed");
+                        .HasColumnName("confirmacaoemail");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean")
-                        .HasColumnName("lockoutenabled");
+                        .HasColumnName("statusdesbloqueio");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("lockoutend");
+                        .HasColumnName("datadesbloqueio");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
-                        .HasColumnName("normalizedemail");
+                        .HasColumnName("emailnormalizado");
 
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
-                        .HasColumnName("normalizedusername");
+                        .HasColumnName("nomenormalizado");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("text")
-                        .HasColumnName("passwordhash");
+                        .HasColumnName("senhahash");
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("text")
-                        .HasColumnName("phonenumber");
+                        .HasColumnName("numerotelefone");
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean")
-                        .HasColumnName("phonenumberconfirmed");
+                        .HasColumnName("confirmacaotelefone");
 
                     b.Property<string>("Rua")
                         .HasColumnType("text")
@@ -243,7 +246,7 @@ namespace Linter.Dados.Migrations
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text")
-                        .HasColumnName("securitystamp");
+                        .HasColumnName("marcadeseguranca");
 
                     b.Property<byte>("TipoUsuario")
                         .HasColumnType("smallint")
@@ -251,12 +254,12 @@ namespace Linter.Dados.Migrations
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("boolean")
-                        .HasColumnName("twofactorenabled");
+                        .HasColumnName("autentificacao2fa");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
-                        .HasColumnName("username");
+                        .HasColumnName("nomeusuario");
 
                     b.HasKey("Id")
                         .HasName("pk_aspnetusers");
@@ -268,7 +271,7 @@ namespace Linter.Dados.Migrations
                         .IsUnique()
                         .HasDatabaseName("usernameindex");
 
-                    b.ToTable("aspnetusers", (string)null);
+                    b.ToTable("tab001_usuarios", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
@@ -283,17 +286,23 @@ namespace Linter.Dados.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("text")
-                        .HasColumnName("concurrencystamp");
+                        .HasColumnName("marcadeconcorrencia");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(21)
+                        .HasColumnType("character varying(21)")
+                        .HasColumnName("discriminator");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
-                        .HasColumnName("name");
+                        .HasColumnName("nome");
 
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
-                        .HasColumnName("normalizedname");
+                        .HasColumnName("nomenormalizado");
 
                     b.HasKey("Id")
                         .HasName("pk_aspnetroles");
@@ -304,25 +313,29 @@ namespace Linter.Dados.Migrations
 
                     b.ToTable("aspnetroles", (string)null);
 
+                    b.HasDiscriminator().HasValue("IdentityRole<int>");
+
+                    b.UseTphMappingStrategy();
+
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "6b62e097-e3cf-4e37-85cd-711a81e908ac",
+                            ConcurrencyStamp = "f50390ab-5171-497a-8017-a2a0f583aa70",
                             Name = "Administrador",
                             NormalizedName = "ADMINISTRADOR"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "dbcdb37a-47db-48e7-822e-85c08c2320b0",
+                            ConcurrencyStamp = "67450f18-5c30-4ac9-b5fb-55d78a21c3ae",
                             Name = "usuario",
                             NormalizedName = "USUARIO"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "a4370684-8609-42c2-bcf5-1f2ba5dc10c7",
+                            ConcurrencyStamp = "84dc8e1b-2e82-4456-b685-9973c89ba5df",
                             Name = "suporte",
                             NormalizedName = "SUPORTE"
                         });
@@ -339,15 +352,15 @@ namespace Linter.Dados.Migrations
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("text")
-                        .HasColumnName("claimtype");
+                        .HasColumnName("tiposolicitacao");
 
                     b.Property<string>("ClaimValue")
                         .HasColumnType("text")
-                        .HasColumnName("claimvalue");
+                        .HasColumnName("valorsolicitacao");
 
                     b.Property<int>("RoleId")
                         .HasColumnType("integer")
-                        .HasColumnName("roleid");
+                        .HasColumnName("idcargo");
 
                     b.HasKey("Id")
                         .HasName("pk_aspnetroleclaims");
@@ -355,7 +368,7 @@ namespace Linter.Dados.Migrations
                     b.HasIndex("RoleId")
                         .HasDatabaseName("ix_aspnetroleclaims_roleid");
 
-                    b.ToTable("aspnetroleclaims", (string)null);
+                    b.ToTable("tab006_cargosdeidentidade", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
@@ -369,15 +382,15 @@ namespace Linter.Dados.Migrations
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("text")
-                        .HasColumnName("claimtype");
+                        .HasColumnName("tiposolicitacao");
 
                     b.Property<string>("ClaimValue")
                         .HasColumnType("text")
-                        .HasColumnName("claimvalue");
+                        .HasColumnName("valorsolicitacao");
 
                     b.Property<int>("UserId")
                         .HasColumnType("integer")
-                        .HasColumnName("userid");
+                        .HasColumnName("idusuario");
 
                     b.HasKey("Id")
                         .HasName("pk_aspnetuserclaims");
@@ -385,26 +398,26 @@ namespace Linter.Dados.Migrations
                     b.HasIndex("UserId")
                         .HasDatabaseName("ix_aspnetuserclaims_userid");
 
-                    b.ToTable("aspnetuserclaims", (string)null);
+                    b.ToTable("tab007_solicitacoescargo", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
                     b.Property<string>("LoginProvider")
                         .HasColumnType("text")
-                        .HasColumnName("loginprovider");
+                        .HasColumnName("provedordelogin");
 
                     b.Property<string>("ProviderKey")
                         .HasColumnType("text")
-                        .HasColumnName("providerkey");
+                        .HasColumnName("provedordachave");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("text")
-                        .HasColumnName("providerdisplayname");
+                        .HasColumnName("nomedeexibicao");
 
                     b.Property<int>("UserId")
                         .HasColumnType("integer")
-                        .HasColumnName("userid");
+                        .HasColumnName("idusuario");
 
                     b.HasKey("LoginProvider", "ProviderKey")
                         .HasName("pk_aspnetuserlogins");
@@ -412,18 +425,18 @@ namespace Linter.Dados.Migrations
                     b.HasIndex("UserId")
                         .HasDatabaseName("ix_aspnetuserlogins_userid");
 
-                    b.ToTable("aspnetuserlogins", (string)null);
+                    b.ToTable("tab004_usuarioslogin", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
                 {
                     b.Property<int>("UserId")
                         .HasColumnType("integer")
-                        .HasColumnName("userid");
+                        .HasColumnName("idusuario");
 
                     b.Property<int>("RoleId")
                         .HasColumnType("integer")
-                        .HasColumnName("roleid");
+                        .HasColumnName("idcargo");
 
                     b.HasKey("UserId", "RoleId")
                         .HasName("pk_aspnetuserroles");
@@ -431,31 +444,40 @@ namespace Linter.Dados.Migrations
                     b.HasIndex("RoleId")
                         .HasDatabaseName("ix_aspnetuserroles_roleid");
 
-                    b.ToTable("aspnetuserroles", (string)null);
+                    b.ToTable("tab003_usuarioscargos", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
                     b.Property<int>("UserId")
                         .HasColumnType("integer")
-                        .HasColumnName("userid");
+                        .HasColumnName("idusuario");
 
                     b.Property<string>("LoginProvider")
                         .HasColumnType("text")
-                        .HasColumnName("loginprovider");
+                        .HasColumnName("provedordologin");
 
                     b.Property<string>("Name")
                         .HasColumnType("text")
-                        .HasColumnName("name");
+                        .HasColumnName("nome");
 
                     b.Property<string>("Value")
                         .HasColumnType("text")
-                        .HasColumnName("value");
+                        .HasColumnName("valor");
 
                     b.HasKey("UserId", "LoginProvider", "Name")
                         .HasName("pk_aspnetusertokens");
 
-                    b.ToTable("aspnetusertokens", (string)null);
+                    b.ToTable("tab005_usuariostokens", (string)null);
+                });
+
+            modelBuilder.Entity("Linter.Modelos.Modelos.TAB002_Cargos", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole<int>");
+
+                    b.ToTable("aspnetroles");
+
+                    b.HasDiscriminator().HasValue("TAB002_Cargos");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

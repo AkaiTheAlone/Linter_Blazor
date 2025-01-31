@@ -2,38 +2,41 @@
 @using Linter.Components.ComponentesLDN
 @rendermode InteractiveServer
 @inject CAX001_MovimentacoesRepositorio repositorio
+@inject CAX002_MovimentacoesCanceladasRepositorio repCancelados
 @inject NavigationManager navigation
 
 
-<h3> @txtBotao </h3>
+<h3 class="centralizado"> @txtBotao </h3>
 
 <FluentMenuProvider />
+<FluentCard AreaRestricted="false" MinimalStyle="true" Height="300">
+    <FluentEditForm Model="@objMovi" FormName="submit" OnValidSubmit="@AcionarBotao">
+        <DataAnnotationsValidator />
+        <FluentGrid>
+            <FluentGridItem xs="3">
+                <FluentTextField Placeholder="Descrição..." Label="Descrição" Id="descritivo" Class="label-top" Name="objMovi.Descritivo" @bind-Value="objMovi.Descritivo" ReadOnly="@Disabled" />
+                <FluentValidationMessage For="@(() => objMovi.Descritivo)" />
+            </FluentGridItem>
+            <FluentGridItem xs="3">
+                <FluentNumberField Placeholder="Valor..." TValue="decimal" Label="Valor" Name="objMovi.Valor" @bind-Value="objMovi.Valor" ReadOnly="@Disabled" />
+                <FluentValidationMessage For="@(() => objMovi.Valor)" />
+            </FluentGridItem>
+            <FluentGridItem xs="3">
+                <FluentDatePicker Label="Data da movimentação" Name="datepicker" @bind-Value="objMovi.DataMovimentacao" ReadOnly="@Disabled" />
+                <FluentValidationMessage For="@(() => objMovi.DataMovimentacao)" />
+            </FluentGridItem>
+        </FluentGrid>
 
-<FluentEditForm Model="@objMovi" FormName="submit" OnValidSubmit="@AcionarBotao">
-    <DataAnnotationsValidator />
-    <FluentGrid>
-        <FluentGridItem xs="3">
-            <FluentTextField Placeholder="Descrição..." Label="Descrição" Id="descritivo" Class="label-top" Name="objMovi.Descritivo" @bind-Value="objMovi.Descritivo" ReadOnly="@Disabled" />
-            <FluentValidationMessage For="@(() => objMovi.Descritivo)" />
-        </FluentGridItem>
-        <FluentGridItem xs="3">
-            <FluentNumberField Placeholder="Valor..." TValue="decimal" Label="Valor" Name="objMovi.Valor" @bind-Value="objMovi.Valor" ReadOnly="@Disabled" />
-            <FluentValidationMessage For="@(() => objMovi.Valor)" />
-        </FluentGridItem>
-        <FluentGridItem xs="3">
-            <FluentDatePicker Label="Data da movimentação" Name="datepicker" @bind-Value="objMovi.DataMovimentacao" ReadOnly="@Disabled" />
-            <FluentValidationMessage For="@(() => objMovi.DataMovimentacao)" />
-        </FluentGridItem>
-    </FluentGrid>
+        <FluentRadioGroup Name="tipo" @bind-Value="objMovi.Tipo" Label="Tipo de Movimentação" Disabled="@Disabled">
+            <FluentRadio Value="0"> Entrada </FluentRadio>
+            <FluentRadio Value="1"> Saída </FluentRadio>
+        </FluentRadioGroup>
+        <br />
+        <FluentButton OnClick="@(()=> AcionarBotao(context))" Type="ButtonType.Submit" FormId="submit" Disabled="BotoesDisabled" IconStart="@IconeButton"> @txtBotao </FluentButton>
+        <FluentButton Type="ButtonType.Button" Disabled="false" OnClick="@(Redirect0)" IconStart="new Icons.Regular.Size20.ArrowCircleLeft()"> Retornar </FluentButton>
+    </FluentEditForm>
 
-    <FluentRadioGroup Name="tipo" @bind-Value="objMovi.Tipo" Label="Tipo de Movimentação">
-        <FluentRadio Value="0"> Entrada </FluentRadio>
-        <FluentRadio Value="1"> Saída </FluentRadio>
-    </FluentRadioGroup>
-    <br />
-    <FluentButton OnClick="@(()=> AcionarBotao(context))" Type="ButtonType.Submit" FormId="submit" Disabled="BotoesDisabled" IconStart="@IconeButton"> @txtBotao </FluentButton>
-    <FluentButton Type="ButtonType.Button" Disabled="false" OnClick="@(Redirect0)" IconStart="new Icons.Regular.Size20.ArrowCircleLeft()"> Retornar </FluentButton>
-</FluentEditForm>
+</FluentCard>
 
 
 @code {
@@ -79,7 +82,6 @@
                 Disabled = false;
                 BotoesDisabled = false;
                 IconeButton = new Icons.Regular.Size20.Edit();
-                //e aq colocar algum icone de lapis
                 txtBotao = "Editar movimentação";
                 break;
             case (int)Enumeradores.TipoView.Apagar:
@@ -113,6 +115,7 @@
                     var result = await resultado.Result;
                     if (!result.Cancelled)
                     {
+
                         repositorio.ExcluirMovimentacao(id);
                         Toast.ShowCustom("Exclusão confirmada com sucesso!", 10000, "100", null, (new Icons.Regular.Size24.Delete(), Color.Accent));
                     }

@@ -1,10 +1,11 @@
 ﻿@page "/caixa/cancelamentos"
 @inject CAX002_MovimentacoesCanceladasRepositorio rep
 @inject NavigationManager navigation
+@rendermode InteractiveServer
 
 <PageTitle> Cancelamentos </PageTitle>
 <h3>Movimentações Canceladas </h3>
-<AuthorizeView Context="contexto">
+<AuthorizeView Context="contexto1">
     <Authorized>
         <FluentMenuProvider>
             <div class="titulo">
@@ -18,16 +19,19 @@
                             HeaderCellAsButtonWithMenu="true"
                             ShowHover="true"
                             AutoFit="false"
-                            RowSize="DataGridRowSize.Medium">
-                @* fazer pagination pra essa pagina dps  *@
+                            RowSize="DataGridRowSize.Medium"
+                            Pagination="pagination">
+                <EmptyContent>
+                    <FluentIcon Value="@(new Icons.Filled.Size16.CalendarEmpty())" Color="@Color.Accent" />&nbsp; Nenhum registro para ser exibido!
+                </EmptyContent>
                 <ChildContent>
                     <PropertyColumn Width="70px" InitialSortDirection="SortDirection.Descending" Property="@(p=> p.idMovimentacao)" Sortable="true" Title="ID" />
                     <PropertyColumn Width="120px" Property="@(p=> Linter.Utilidades.Uteis.PegaNomeDeExibicao((Enumeradores.TipoUsuario)p.Tipo))" Title="Tipo Movi." />
                     <PropertyColumn Width="250px" Property="@(p=> p.Valor)" Sortable="true" Title="Nome de Usuário" />
                     <PropertyColumn Width="250px" Property="@(p=> p.Tipo)" Title="Email" Sortable="true" />
                     <PropertyColumn Width="250px" Property="@(p=> p.DataCancelamento)" Sortable="true" Title="Data de Cancelamento" />
-                    <TemplateColumn Width="200px" Title="Ações" Align="@Align.End">
-                        <FluentButton aria-label="Editar" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => ConsultarCancelamento(context.idMovimentacao))" />
+                    <TemplateColumn Width="200px" Title="Ações" Align="@Align.End" Context="mov">
+                        <FluentButton aria-label="Editar" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => ConsultarCancelamento(mov.idMovimentacao))" />
                     </TemplateColumn>
                     <FluentDataGridRow>
 
@@ -43,6 +47,10 @@
         </FluentCard>
 
         <LDN_Paginator Pagination="pagination" strTipo="usuários"> </LDN_Paginator>
+
+        <FluentButton OnClick="@(() => navigation.NavigateTo("/caixa"))" IconStart="@(new Icons.Regular.Size20.ArrowCircleLeft())">
+            Voltar
+        </FluentButton>
 
     </Authorized>
     <NotAuthorized>

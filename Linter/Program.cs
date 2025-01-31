@@ -1,4 +1,3 @@
-using FastReport.DataVisualization.Charting;
 using Linter.Components;
 using Linter.Components.Account;
 using Linter.Dados.Contexto;
@@ -9,9 +8,9 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.FluentUI.AspNetCore.Components;
-using FastReport.Data;
 using Npgsql;
 using Microsoft.FluentUI.AspNetCore.Components.Components.Tooltip;
+using Microsoft.JSInterop;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,9 +20,11 @@ builder.Services.AddRazorComponents()
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddFluentUIComponents();
 
+builder.Services.AddAuthorizationCore();
 builder.Services.AddCascadingAuthenticationState();
 
 
+builder.Services.AddCascadingAuthenticationState();
 
 builder.Services.AddAuthentication(options =>
     {
@@ -47,36 +48,52 @@ builder.Services.AddServerSideBlazor(option =>
 builder.Services.AddDbContext<ApplicationDbContext>(opt => opt.UseNpgsql(connectionString)
                                                               .EnableDetailedErrors());
 
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddAuthorizationCore();
-builder.Services.AddAuthentication();
-//isso aq ta crashando, descobrir o pq
-//builder.Services.AddIdentity<TAB001_Usuarios, IdentityRole>(opt =>
-//{
-//    //depois de terminar eu ativo td dnv
-//    opt.Password.RequireDigit = false;
-//    opt.Password.RequiredLength = 1;
-//    opt.Password.RequireLowercase = false;
-//    opt.Password.RequireUppercase = false;
-//    opt.Password.RequireNonAlphanumeric = false;
-//    opt.SignIn.RequireConfirmedEmail = false;
-//    opt.SignIn.RequireConfirmedPhoneNumber = false;
-//    opt.SignIn.RequireConfirmedAccount = false;
-//});
+builder.Services.AddAuthorization(options =>
+{
+    //em teoria isso aq serve pra usar as claims como autorização em alguma tela
+    options.AddPolicy("RequerAdmin",
+         policy => policy.RequireClaim("Administrator"));
+});
 
-builder.Services.AddIdentityCore<TAB001_Usuarios>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddAuthenticationCore();
+
+
+//builder.Services.AddIdentity<TAB001_Usuarios, IdentityRole<int>>()
+//    .AddEntityFrameworkStores<ApplicationDbContext>()
+//    .AddDefaultTokenProviders();
+
+
+//builder.Services.AddIdentity<TAB001_Usuarios, IdentityRole<int>>(options => options.SignIn.RequireConfirmedAccount = true)
+//    .AddEntityFrameworkStores<ApplicationDbContext>()  // Configura o contexto de DB
+//    .AddRoles<IdentityRole<int>>()  // Registra os papéis (roles)
+//    .AddSignInManager()  // Gerenciador de login
+//    .AddDefaultTokenProviders();  // Token de confirmação, etc.
+
+
+builder.Services.AddIdentityCore<TAB001_Usuarios>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddSignInManager()
                 .AddDefaultTokenProviders();
+//isso aq ta crashando td 
+//
 
-builder.Services.AddFastReport();
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequerAdmin",
+         policy => policy.RequireRole("Administrator"));
+});
+
 
 #region Injeções de dependência
 
 #region Singletons
 builder.Services.AddSingleton<ToastService>();
 builder.Services.AddSingleton<IEmailSender<TAB001_Usuarios>, IdentityNoOpEmailSender>();
+
 #endregion
 
 #region Transients
@@ -93,6 +110,9 @@ builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
 builder.Services.AddScoped<ITooltipService, TooltipService>();
+builder.Services.AddScoped<FastRelatorios>();
+builder.Services.AddScoped<SignInManager<TAB001_Usuarios>>();
+
 #endregion
 
 #endregion
@@ -100,8 +120,6 @@ builder.Services.AddScoped<ITooltipService, TooltipService>();
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 builder.Services.AddControllersWithViews();
-
-
 
 var app = builder.Build();
 
@@ -124,6 +142,7 @@ app.UseStaticFiles();
 app.UseAntiforgery();
 //app.MapControllers();
 //app.MapBlazorHub();
+//app.MapRazorPages();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 

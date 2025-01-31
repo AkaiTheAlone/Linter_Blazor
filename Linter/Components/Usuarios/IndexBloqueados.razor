@@ -3,7 +3,6 @@
 @page "/admin/bloqueados"
 @rendermode InteractiveServer
 
-
 <h3 class="centralizado">Usuários Bloqueados</h3>
 
 <FluentCard Height="100" MinimalStyle="true">
@@ -14,7 +13,12 @@
                     AutoFit="false"
                     RowSize="DataGridRowSize.Medium"
                     Pagination="@pagination">
+        <EmptyContent>
+            <FluentIcon Value="@(new Icons.Filled.Size16.CalendarEmpty())" Color="@Color.Accent" />&nbsp; Nenhum registro para ser exibido!
+        </EmptyContent>
+
         <ChildContent>
+
             <PropertyColumn Property="@(p=> p.Id)" Title="Descricao" Sortable="true" />
             <PropertyColumn Property="@(p=> p.UserName)" Title="Descricao" Sortable="true">
                 <ColumnOptions>
@@ -27,9 +31,13 @@
             <PropertyColumn Property="@(p=> p.AccessFailedCount)" Title="Falhas Acesso" Sortable="false" />
             <PropertyColumn Property="@(p=> p.Email)" Title="Email" Sortable="false" />
             <PropertyColumn Property="@(p=> p.PhoneNumber)" Title="Telefone" Sortable="false" />
-            <TemplateColumn Title="Ações" Align="@Align.End" Width="200px">
-                <FluentButton aria-label="Restaurar" IconEnd="@(new Icons.Light.Size32.Options())" />
-                <FluentButton aria-label="Consultar" IconEnd="@(new Icons.Light.Size32.ZoomIn())" OnClick="@(()=> navigation.NavigateTo($"/contasgerenciais/{(int)Enumeradores.TipoView.Consultar}/{id:int}"))" />
+            <TemplateColumn Title="Ações" Align="@Align.End" Width="200px" Context="conta">
+
+                <AuthorizeButton Action="@(() => navigation.NavigateTo($"/caixa/{(int)Enumeradores.TipoView.Consultar}/{conta.Id}"))" Icone="@(new Icons.Regular.Size16.Edit())" Titulo="Consultar"></AuthorizeButton>
+                <AuthorizeButton Action="@(() => navigation.NavigateTo($"/caixa/{(int)Enumeradores.TipoView.Criar}/{conta.Id}"))" Icone="@(new Icons.Regular.Size16.Delete())" Titulo="Restaurar"></AuthorizeButton>
+
+                @*                 <FluentButton aria-label="Restaurar" IconEnd="@(new Icons.Light.Size32.Options())" />
+                <FluentButton aria-label="Consultar" IconEnd="@(new Icons.Light.Size32.ZoomIn())" OnClick="@(()=> navigation.NavigateTo($"/contasgerenciais/{(int)Enumeradores.TipoView.Consultar}/{id:int}"))" /> *@
             </TemplateColumn>
         </ChildContent>
 
@@ -43,7 +51,8 @@
 </FluentCard>
 
 <LDN_Paginator Pagination="pagination" strTipo="usuários"> </LDN_Paginator>
-
+@*
+<FluentButton OnClick="@(()=> navigation.NavigateTo("/usuarios"))" IconStart="@(new Icons.Regular.Size16.ArrowStepBack())"> Voltar </FluentButton> *@
 
 @code {
     public IQueryable<TAB001_Usuarios> UsuariosBloqueados { get; set; }

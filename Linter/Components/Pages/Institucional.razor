@@ -6,7 +6,8 @@
 <PageTitle> Institucional </PageTitle>
 <style>
     .justificar {
-        text-align: justify
+        text-align: justify;
+        margin: auto;
     }
 
     .direita {
@@ -19,26 +20,34 @@
         width: 400px;
         float: right;
     }
+
+    .titulo {
+        font-family: 'Cambria Math';
+    }
+
 </style>
-
-
 
 <h1 class="centralizado">
     Introdução
 </h1>
+<FluentCard Height="10000" Style="background-color:aliceblue; background-repeat:no-repeat inherit;">
 
-<FluentCard Height="10000" Style="background-image:url('/recursos/imagens/reuniao.jpg'); background-repeat:no-repeat;">
-
-    <div class="justificar" style="color:white">
+    <div class="justificar" style="color:black">
         <br />
-        <h1> Bem vindo ao Linter </h1>
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        <h1 class="titulo"> Bem vindo ao Linter </h1>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
         Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
         Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
     </div>
+    <br />
     <FluentCard>
-        <h1> Clean, Cold. </h1>
+        <h3 class="titulo"> Clean, Cold. </h3>
         <div class="justificar" style="border-radius: 30px">
             Lorem Ipsum is simply dummy text of the printing and typesetting industry.
             Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
@@ -46,23 +55,107 @@
             It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
             It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop
             publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+            when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+            It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+            It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop
+            publishing software like Aldus PageMaker including versions of Lorem Ipsum.
         </div>
-
     </FluentCard>
-
     <br />
+    <FluentCard Width="1000px" Class="borda">
+        <div class="justificar">
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+            when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+            It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+            It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop
+            publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+        </div>
+    </FluentCard>
+</FluentCard>
 
-    <FluentCard Width="600px" Class="borda">
+<div style="color:darkred">
+    <h2 class="titulo"> Por que usar o Linter? </h2>
+    <div class="justificar">
         Lorem Ipsum is simply dummy text of the printing and typesetting industry.
         Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
         when an unknown printer took a galley of type and scrambled it to make a type specimen book.
         It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
         It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop
         publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-    </FluentCard>
 
-</FluentCard>
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+        when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+        It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+        It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop
+        publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+    </div>
+    <br />
 
+    isso aq n ta funcionando por mais q esteja igualzinho a documentacao
+    <FluentHorizontalScroll Speed=" 200" Easing=ScrollEasing.EaseInOut @rendermode="InteractiveServer">
+        <FluentCard>
+            <img src="/recursos/imagens/empresas/adidas.jpeg" width="150" height="100" />
+        </FluentCard>
+        <FluentCard>
+            <img src="/recursos/imagens/empresas/cocacola.png" width="140" height="100" />
+        </FluentCard>
+        <FluentCard>
+            <img src="/recursos/imagens/empresas/gucci.jpg" width="150" height="100" />
+        </FluentCard>
+        <FluentCard>
+            <img src="/recursos/imagens/empresas/lego.png" width="100" height="100" />
+        </FluentCard>
+        <FluentCard>
+            <img src="/recursos/imagens/empresas/starbucks.png" width="200" height="100" />
+        </FluentCard>
+        <FluentCard>
+            <img src="/recursos/imagens/empresas/pngwing.com.png" width="100" height="100" />
+        </FluentCard>
+
+        <FluentCard>
+            <img src="/recursos/imagens/empresas/pngwing.com.png" width="100" height="100" />
+        </FluentCard>
+        <FluentCard>
+            <img src="/recursos/imagens/empresas/pngwing.com.png" width="100" height="100" />
+        </FluentCard>
+        <FluentCard>
+            <img src="/recursos/imagens/empresas/pngwing.com.png" width="100" height="100" />
+        </FluentCard>
+        <FluentCard>
+            <img src="/recursos/imagens/empresas/pngwing.com.png" width="100" height="100" />
+        </FluentCard>
+    </FluentHorizontalScroll>
+
+</div>
+
+<h2> Sobre nós </h2>
+<div class="justificar">
+    Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+    when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+    It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+    It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop
+    publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+
+    Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+    when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+    It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+    It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop
+    publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+
+    Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+    when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+    It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+    It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop
+    publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+
+</div>
 @code {
-
-}
+     }

@@ -45,13 +45,12 @@
 
 	<ItemGroup>
 	  <Content Remove="Components\ComponentesLDN\LDN_CardGrid.razor" />
+	  <Content Remove="Components\SemRegistros.razor" />
+	  <Content Remove="wwwroot\favicon.ico" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="Relatorios\relatorioteste.frx" />
-	</ItemGroup>
-
-	<ItemGroup>
+		<Content Include="Relatorios\movimentacoes.frx" />
 		<Content Include="wwwroot\recursos\fonts\Lora-Bold.ttf" />
 		<Content Include="wwwroot\recursos\fonts\Lora-BoldItalic.ttf" />
 		<Content Include="wwwroot\recursos\fonts\Lora-Italic.ttf" />
@@ -66,6 +65,7 @@
 		<Content Include="wwwroot\recursos\Imagens\Empresas\cocacola.png" />
 		<Content Include="wwwroot\recursos\Imagens\Empresas\gucci.jpg" />
 		<Content Include="wwwroot\recursos\Imagens\Empresas\lego.png" />
+		<Content Include="wwwroot\recursos\Imagens\Empresas\pngwing.com.png" />
 		<Content Include="wwwroot\recursos\Imagens\Empresas\starbucks.png" />
 		<Content Include="wwwroot\recursos\Imagens\image_minimalist.png" />
 		<Content Include="wwwroot\recursos\Imagens\logotipoLDN.png" />
@@ -75,8 +75,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="FastReport.Core" Version="2025.1.11-demo" />
-		<PackageReference Include="FastReport.Web" Version="2025.1.11-demo" />
+		<PackageReference Include="FastReport.OpenSource" Version="2025.1.0" />
+		<PackageReference Include="FastReport.OpenSource.Export.PdfSimple" Version="2025.1.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.11" />
 		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.11" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.11" />
@@ -96,15 +96,5 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Linter.Modelos\Linter.Modelos.csproj" />
 		<ProjectReference Include="..\Linter.Repositorio\Linter.Dados.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Relatorios\DataSets\" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Resource Include="Relatorios\relatorioteste.frx">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Resource>
 	</ItemGroup>
 </Project>

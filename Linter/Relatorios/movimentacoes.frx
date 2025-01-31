@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="01/20/2025 16:36:14" ReportInfo.Modified="01/31/2025 14:33:06" ReportInfo.CreatorVersion="2025.1.0.0">
+  <Dictionary>
+    <BusinessObjectDataSource Name="CAX001_Movimentacoes" ReferenceName="CAX001_Movimentacoes" DataType="System.Int32" Enabled="true">
+      <Column Name="idMovimentacao" DataType="System.Int32"/>
+      <Column Name="DataMovimentacao" DataType="System.Int32"/>
+      <Column Name="Descritivo" DataType="System.String"/>
+      <Column Name="idContaGerencial" DataType="System.Int32"/>
+      <Column Name="Valor" DataType="System.Decimal"/>
+      <Column Name="Tipo" DataType="System.Byte"/>
+    </BusinessObjectDataSource>
+    <BusinessObjectDataSource Name="CAX001" ReferenceName="CAX001" DataType="System.Int32" Enabled="true">
+      <Column Name="idMovimentacao" DataType="System.Int32"/>
+      <Column Name="DataMovimentacao" DataType="System.Int32"/>
+      <Column Name="Descritivo" DataType="System.String"/>
+      <Column Name="idContaGerencial" DataType="System.Int32"/>
+      <Column Name="Valor" DataType="System.Decimal"/>
+      <Column Name="Tipo" DataType="System.Byte"/>
+    </BusinessObjectDataSource>
+    <BusinessObjectDataSource Name="lstMovi" ReferenceName="lstMovi" DataType="System.Collections.Generic.List`1[[Linter.Modelos.Modelos.CAX001_Movimentacoes, Linter.Modelos, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]" Enabled="true">
+      <Column Name="idMovimentacao" DataType="System.Int32"/>
+      <Column Name="DataMovimentacao" DataType="System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"/>
+      <Column Name="Descritivo" DataType="System.String"/>
+      <Column Name="idContaGerencial" DataType="System.Int32"/>
+      <Column Name="Valor" DataType="System.Decimal"/>
+      <Column Name="Tipo" DataType="System.Byte"/>
+    </BusinessObjectDataSource>
+    <Parameter Name="Parameter" DataType="System.String" AsString="">
+      <Parameter Name="Descritivo" DataType="System.String" AsString=""/>
+    </Parameter>
+  </Dictionary>
+  <ReportPage Name="Page1" Watermark.Font="Arial, 60pt">
+    <ReportTitleBand Name="ReportTitle1" Width="718.2" Height="37.8">
+      <TextObject Name="Text1" Top="9.45" Width="718.2" Height="28.35" Text="Relatório de Testes&#13;&#10;" HorzAlign="Center" Font="Arial, 16pt, style=Bold"/>
+      <PictureObject Name="Picture1" Left="642.6" Top="-18.9" Width="75.6" Height="56.7" ImageFormat="Png" Image="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"/>
+    </ReportTitleBand>
+    <PageHeaderBand Name="PageHeader1" Top="41.8" Width="718.2" Height="28.35">
+      <TextObject Name="Text3" Left="349.65" Top="9.45" Width="94.5" Height="18.9" Text="Descrição&#13;&#10;" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Text4" Left="510.3" Top="9.45" Width="94.5" Height="18.9" Text="Data &#13;&#10;&#13;&#10;" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Text5" Left="623.7" Top="9.45" Width="94.5" Height="18.9" Text="Valor&#13;&#10;&#13;&#10;" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Text11" Left="236.25" Top="9.45" Width="94.5" Height="18.9" Text="Tipo Mov.&#13;&#10;" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Text6" Left="122.85" Top="9.45" Width="94.5" Height="18.9" Text="Conta&#13;&#10;" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Text14" Top="9.45" Width="94.5" Height="18.9" Text="Mov.&#13;&#10;" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+    </PageHeaderBand>
+    <DataBand Name="Data1" Top="74.15" Width="718.2" Height="28.35" DataSource="CAX001_Movimentacoes">
+      <TextObject Name="Text15" Top="9.45" Width="94.5" Height="18.9" Text="[lstMovi.idMovimentacao]" Font="Arial, 10pt"/>
+      <TextObject Name="Text16" Left="510.3" Top="9.45" Width="94.5" Height="18.9" Text="[lstMovi.DataMovimentacao]" Font="Arial, 10pt"/>
+      <TextObject Name="Text17" Left="349.65" Top="9.45" Width="94.5" Height="18.9" Text="[lstMovi.Descritivo]" Font="Arial, 10pt"/>
+      <TextObject Name="Text18" Left="122.85" Top="9.45" Width="94.5" Height="18.9" Text="[lstMovi.idContaGerencial]" Font="Arial, 10pt"/>
+      <TextObject Name="Text19" Left="623.7" Top="9.45" Width="94.5" Height="18.9" Text="[lstMovi.Valor]" Format="Currency" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" WordWrap="false" Font="Arial, 10pt" Trimming="EllipsisCharacter"/>
+      <TextObject Name="Text20" Left="236.25" Top="9.45" Width="94.5" Height="18.9" Text="[lstMovi.Tipo]" Font="Arial, 10pt"/>
+    </DataBand>
+    <PageFooterBand Name="PageFooter1" Top="106.5" Width="718.2" Height="18.9">
+      <TextObject Name="Text2" Left="670.95" Width="47.25" Height="18.9" Text="[Page]" HorzAlign="Center" Font="Arial, 16pt, style=Bold"/>
+    </PageFooterBand>
+  </ReportPage>
+</Report>

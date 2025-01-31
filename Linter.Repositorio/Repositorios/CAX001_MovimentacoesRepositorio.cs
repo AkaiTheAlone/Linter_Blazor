@@ -49,12 +49,12 @@ namespace Linter.Dados.Repositorios
 
         #region Retornos 
 
-        public IEnumerable<CAX001_Movimentacoes> RetornaMovimentacoesParaRPT()
+        public async Task<IList<CAX001_Movimentacoes>> RetornaMovimentacoesParaRPT()
         {
             if (contexto == null || contexto.CAX001_MovimentacoesCaixa == null)
                 throw new ApplicationException("Erro ao retornar todas as movimentações.");
 
-            return contexto.CAX001_MovimentacoesCaixa.AsEnumerable();
+            return await contexto.CAX001_MovimentacoesCaixa.ToListAsync();
         }
 
         public IQueryable<CAX001_Movimentacoes> RetornaMovimentacoes()

@@ -21,10 +21,6 @@
     .linterTexto {
         font-family: 'Script MT', cursive
     }
-
-    .sair {
-        outline: 1px;
-    }
 </style>
 
 <FluentTooltipProvider @rendermode=InteractiveServer />
@@ -36,21 +32,55 @@
                      ShowCloseButton="true"
                      Timeout="500" />
 <FluentLayout>
-    <FluentHeader Height="70">
-        <h1 class="linterTexto">
+
+    <FluentHeader Height="70" style="display: flex; justify-content: space-between; align-items: center;">
+        <!-- Seção à esquerda: Título -->
+        <h1 class="linterTexto" style="margin-right: auto;">
             Linter
         </h1>
 
-        <LogoutBotao>
+        <!-- Seção à direita: Botão de logout e imagem -->
+        <div style="display: flex; align-items: center; justify-content: flex-end; flex-grow: 1;">
 
-        </LogoutBotao>
-        <div style="margin-left:auto">
+
+            <AuthorizeView>
+                <Authorized>
+                    <form action="Account/Logout" method="post" style="margin-right:10px">
+                        <AntiforgeryToken />
+                        <input type="hidden" name="ReturnUrl" value="@currentUrl" />
+                        <div style="justify-content:flex-start">
+                            <FluentButton Type="ButtonType.Submit" IconStart="@(new Icons.Regular.Size20.PersonArrowBack())" Style="width:auto%;"> Sair </FluentButton>
+                        </div>
+                    </form>
+                </Authorized>
+            </AuthorizeView>
+
             <img src="/recursos/imagens/marca sem tag-05.png" height="60" width="100" />
         </div>
-
-
     </FluentHeader>
 
+    @*     <FluentHeader Height="70" style="display: flex; justify-content: space-between; align-items: center;">
+    <h1 class="linterTexto">
+    Linter
+    </h1>
+
+    <div style="display: flex; align-items: center; justify-content: flex-end;">
+    <AuthorizeView>
+    <Authorized>
+    <form action="Account/Logout" method="post" style="margin-left:10px">
+    <AntiforgeryToken />
+    <input type="hidden" name="ReturnUrl" value="@currentUrl" />
+    <div style="justify-content:flex-end">
+    <FluentButton Type="ButtonType.Submit" IconStart="@(new Icons.Regular.Size16.PersonArrowBack())" Style="width:auto%;">Sair</FluentButton>
+    </div>
+    </form>
+    </Authorized>
+    </AuthorizeView>
+
+
+    <img src="/recursos/imagens/marca sem tag-05.png" height="60" width="100" />
+    </div>
+    </FluentHeader> *@
     <FluentStack Class="main" Orientation="Orientation.Horizontal" Width="100%">
 
         <NavMenu />
@@ -58,7 +88,6 @@
             <div class="content">
                 @Body
             </div>
-
         </FluentBodyContent>
     </FluentStack>
 

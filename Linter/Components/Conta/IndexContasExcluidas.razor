@@ -7,7 +7,7 @@
 <FluentMenuProvider />
 <FluentDialogProvider />
 
-<FluentCard Height="100" MinimalStyle="true" >
+<FluentCard Height="100" MinimalStyle="true">
     <FluentDataGrid Items="queryConta"
                     ResizableColumns=false
                     ResizeType="DataGridResizeType.Exact"
@@ -21,7 +21,7 @@
             <PropertyColumn Property="@(p=> p.DataExclusao)" Title="Descricao" Sortable="false" />
             <PropertyColumn Property="@(p=> p.MotivoCancelamento)" Title="Descricao" Sortable="false" />
             <PropertyColumn Property="@(p=> p.UsuarioExclusao)" Title="Descricao" Sortable="false" />
-            <TemplateColumn Title="Ações" Align="@Align.End" Width="200px">
+            <TemplateColumn Title="Ações" Align="@Align.End" Width="200px" Context="template">
                 <FluentButton aria-label="Restaurar" IconEnd="@(new Icons.Light.Size32.Options())" />
                 <FluentButton aria-label="Consultar" IconEnd="@(new Icons.Light.Size32.ZoomIn())" />
             </TemplateColumn>

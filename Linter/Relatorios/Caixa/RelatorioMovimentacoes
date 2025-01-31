@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="01/31/2025 14:40:39" ReportInfo.Modified="01/31/2025 14:40:47" ReportInfo.CreatorVersion="2025.1.0.0">
+  <Dictionary>
+    <BusinessObjectDataSource Name="lstMovi" ReferenceName="lstMovi" DataType="System.Collections.Generic.List`1[[Linter.Modelos.Modelos.CAX001_Movimentacoes, Linter.Modelos, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]" Enabled="true">
+      <Column Name="idMovimentacao" DataType="System.Int32"/>
+      <Column Name="DataMovimentacao" DataType="System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"/>
+      <Column Name="Descritivo" DataType="System.String"/>
+      <Column Name="idContaGerencial" DataType="System.Int32"/>
+      <Column Name="Valor" DataType="System.Decimal"/>
+      <Column Name="Tipo" DataType="System.Byte"/>
+    </BusinessObjectDataSource>
+  </Dictionary>
+</Report>

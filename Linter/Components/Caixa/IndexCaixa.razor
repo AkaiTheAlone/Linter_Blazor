@@ -4,12 +4,18 @@
 @inject ToastService Toast
 @inject IDialogService dialogservice
 
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@inject AuthenticationStateProvider authenticate
+@inject UserManager<TAB001_Usuarios> usermanager
+
+
+@* @attribute [Authorize(Roles = "Administrador")] *@
 <PageTitle> Controle de movimentações </PageTitle>
 
-<AuthorizeView Context="outronome">
+<AuthorizeView Context="usuario">
     <Authorized>
         <FluentMenuProvider />
-        <FluentDialogProvider />
         <div>
             <h2 class="centralizado"> Controle de Movimentações </h2>
         </div>
@@ -27,7 +33,7 @@
                             Pagination="pagination"
                             RowSize="DataGridRowSize.Medium">
                 <EmptyContent>
-                    <FluentIcon Value="@(new Icons.Filled.Size24.ChatEmpty())" Color="@Color.Accent" />&nbsp; Nenhum registro para ser exibido!
+                    <FluentIcon Value="@(new Icons.Filled.Size16.CalendarEmpty())" Color="@Color.Accent" />&nbsp; Nenhum registro para ser exibido!
                 </EmptyContent>
                 <ChildContent>
                     <PropertyColumn InitialSortDirection="SortDirection.Descending" Property="@(p=> p.idMovimentacao)" Sortable="true" Title="ID" IsDefaultSortColumn="true">
@@ -40,7 +46,7 @@
                         *@
                     </PropertyColumn>
 
-                    <PropertyColumn Property="@(p=> Linter.Utilidades.Uteis.PegaNomeDeExibicao((Enumeradores.TipoMovimentacao)p.Tipo))" Title="Tipo Movi." Align="Align.Start" />
+                    <PropertyColumn Width="50" Property="@(p=> Linter.Utilidades.Uteis.PegaNomeDeExibicao((Enumeradores.TipoMovimentacao)p.Tipo))" Title="Tipo Movi." Align="Align.Start" />
                     <PropertyColumn Property="@(p=> p.DataMovimentacao)" Format="dd/MM/yyyy" Sortable="true" Title="Data" Align="Align.Start" />
                     <PropertyColumn Property="@(p=> p.Valor.ToString("C2"))" Title="Valor" Sortable="false" /> @* sortable não funciona com conversoes, descobrir solucao*@
                     <PropertyColumn Property="@(p=> p.Descritivo)" Title="Descrição" Sortable="true">
@@ -50,9 +56,10 @@
                             </div>
                         </ColumnOptions>
                     </PropertyColumn>
-                    <TemplateColumn Title="Ações">
-                        <FluentButton aria-label="Editar" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() =>  navigation.NavigateTo($"/caixa/{(int)Enumeradores.TipoView.Editar}/{context.idMovimentacao}"))" />
-                        <FluentButton aria-label="Deletar" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => navigation.NavigateTo($"/caixa/{(int)Enumeradores.TipoView.Apagar}/{context.idMovimentacao}"))" />
+
+                    <TemplateColumn Title="Ações" Context="mov">
+                        <AuthorizeButton Action="@(() => navigation.NavigateTo($"/caixa/{(int)Enumeradores.TipoView.Editar}/{mov.idMovimentacao}"))" Icone="@(new Icons.Regular.Size16.Edit())" Titulo="Editar"></AuthorizeButton>
+                        <AuthorizeButton Action="@(() => navigation.NavigateTo($"/caixa/{(int)Enumeradores.TipoView.Apagar}/{mov.idMovimentacao}"))" Icone="@(new Icons.Regular.Size16.Delete())" Titulo="Excluir"></AuthorizeButton>
                     </TemplateColumn>
                 </ChildContent>
 
@@ -73,7 +80,6 @@
         </FluentCard>
 
         <LDN_Paginator Pagination="pagination" strTipo="movimentações" />
-
     </Authorized>
     <NotAuthorized>
         <NaoAutorizado />
@@ -90,11 +96,11 @@
     public Enumeradores.TipoMovimentacao? tipomov { get; set; }
     [SupplyParameterFromForm] public Modelos.Modelos.CAX001_Movimentacoes Caixa { get; set; } = new Modelos.Modelos.CAX001_Movimentacoes();
     public IQueryable<CAX001_Movimentacoes> queryMov;
-    //tenho q descobrir como fazer isso aq sem fazer 2 iqueryables, fica mta variavel solta
     IQueryable<CAX001_Movimentacoes>? lstFiltrada => queryMov?.Where(x => x.Descritivo.ToUpper().Contains(nomeFiltro.ToUpper()));
 
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
+    public bool Autorizado { get; set; }
     string nomeFiltro = "";
     #endregion
 
@@ -110,6 +116,11 @@
                 Saldo -= mov.Valor;
         }
         if (Saldo < 0) Cor = "red";
+
+
+        var authstate = await authenticate.GetAuthenticationStateAsync();
+        var user = authstate.User;
+        var name = user.Identity.Name;
 
         return queryMov;
     }
@@ -149,9 +160,35 @@
 
             return x.Length.CompareTo(y.Length);
         }
+
     }
-}
-@*ESSE ERRO ESTA APARECENDO AO TENTAR DAR UM SORT NA COLUNA DE VALORES (DECIMAL)
+    private async Task EstaAutorizado(AuthenticationState state)
+    {
+        try
+        {
+            var user = await usermanager.GetUserAsync(state.User);
+
+            var roles = usermanager.GetRolesAsync(user).Result;
+
+            //KKKKKKKKKKKKKKKKKKKK NADA FUNCIONA NESSE FRAMEWORK CARA
+            //essa funcao horrivel ta dando timeout de tao mal feito q é
+            await usermanager.IsInRoleAsync(user, "Administrador");
+
+            if (roles.Contains("Administrador"))
+                Autorizado = true;
+            else
+                Autorizado = false;
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+        navigation.Refresh();
+    }
+
+
+
+    @*ESSE ERRO ESTA APARECENDO AO TENTAR DAR UM SORT NA COLUNA DE VALORES (DECIMAL)
 
 [2024-12-20T12:30:06.891Z] Error: System.InvalidOperationException: The LINQ expression 'DbSet<CAX001_MovimentacaoCaixa>()
     .OrderBy(c => c.Valor.ToString("C2"))' could not be translated. Additional information: Translation of method 'decimal.ToString' failed. I
@@ -177,3 +214,4 @@
    at Microsoft.FluentUI.AspNetCore.Components.FluentMenuItem.OnClickHandlerAsync(MouseEventArgs ev) in /_/src/Core/Components/Menu/FluentMenuItem.razor.cs:line 92
    at Microsoft.AspNetCore.Components.ComponentBase.CallStateHasChangedOnAsyncCompletion(Task task)
    at Microsoft.AspNetCore.Components.RenderTree.Renderer.GetErrorHandledTask(Task taskToHandle, ComponentState owningComponentState) *@
+}

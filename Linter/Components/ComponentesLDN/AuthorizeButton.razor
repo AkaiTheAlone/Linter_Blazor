@@ -1,0 +1,20 @@
+﻿
+<AuthorizeView Roles="@Roles">
+
+    <FluentButton IconStart="Icone" OnClick="Action" Title="Icon">
+        @if (Titulo != null && Titulo.Length > 0)
+        {
+            @Titulo
+        }
+    </FluentButton>
+</AuthorizeView>
+
+@code {
+    [Parameter]
+    public string Titulo { get; set; }
+    [Parameter]
+    public Icon Icone { get; set; }
+    public string Roles { get; set; }
+    [Parameter]
+    public EventCallback Action { get; set; }
+}
