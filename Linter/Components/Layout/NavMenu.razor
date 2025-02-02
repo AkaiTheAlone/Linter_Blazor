@@ -26,13 +26,6 @@
                     <br />
                 </Authorized>
                 <NotAuthorized>
-                    @*a ideia correta eh mostrar o register apenas quando nao tem usuarios registrados
-                    imagina se o entity me deixa fazer isso
-                    isso aq deveria ser estudado pela nasa
-                    se o precisa registrar eh inicializado como false
-                    e ele nao entra no if do on Initialized
-                    ele mostra aquilo q tem no true e nao no false??????
-                    *@
                     @if (Principal.PrecisaRegistrar)
                     {
                         <FluentNavLink Href="/Account/75e11e1087ba6e396e2e2ec41d2f257781dbe39a9d78485bf9e9e91f42a012c46c9dc28720cdcdc15248b7447805deca6d211ddb077e150ed40efb4ba0f06943" Icon="@(new Icons.Regular.Size20.ContactCardRibbon())"> Registrar </FluentNavLink>

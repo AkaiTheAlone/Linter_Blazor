@@ -92,54 +92,5 @@ namespace Linter.Utilidades
                 throw;
             }
         }
-
-
-        #region Comentado
-        //public WebReport GerarRelatorioMovimentacoes(string relatorio, IEnumerable<CAX001_Movimentacoes> movimentacoes)
-        //{
-        //    var UserWebReport = new WebReport();
-        //    try
-        //    {
-        //        string caminhoRelatorio = Path.Combine(Directory.GetCurrentDirectory(), $@"Relatorios/{relatorio}.fpx");
-
-
-        //        if (System.IO.File.Exists(caminhoRelatorio))
-        //        {
-        //            UserWebReport.Report = Report.FromFile(caminhoRelatorio);
-        //            UserWebReport.Report.Load(relatorio);
-        //            if (UserWebReport.Report != null)
-        //            {
-        //                decimal soma = 0;
-        //                foreach (var mov in movimentacoes.ToList())
-        //                {
-        //                    if (mov.Tipo == (int)Enumeradores.TipoMovimentacao.Entrada)
-        //                        soma += mov.Valor;
-        //                    else
-        //                        soma -= mov.Valor;
-        //                }
-        //                UserWebReport.Report.SetParameterValue("ValorTotal", soma);
-        //                UserWebReport.Report.SetParameterValue("Data", DateTime.Now);
-
-        //                UserWebReport.Report.Prepare();
-        //                //report.Dictionary.RegisterBusinessObject(movimentacoes, "CAX001", 10, true);
-
-        //                using var pdfExport = new FastReport.Export.Pdf.PDFExport();
-        //                using var reportStream = new MemoryStream();
-        //                pdfExport.Export(UserWebReport.Report, reportStream);
-
-        //                reportStream.Position = 0;
-        //                UserWebReport.Report = UserWebReport.Report;
-        //            }
-        //        }
-        //    }
-        //    catch
-        //    {
-        //        UserWebReport.Report.Save("debug_report.frx");
-        //    }
-        //    return UserWebReport;
-        //}
-
-        #endregion
-
     }
 }

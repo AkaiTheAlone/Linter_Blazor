@@ -1,9 +1,8 @@
 ﻿@page "/"
 @using Linter.Dados.Contexto
 @using Microsoft.EntityFrameworkCore
-
-
 @rendermode InteractiveServer
+@inject AuthenticationStateProvider state
 <PageTitle> Institucional </PageTitle>
 
 <style>
@@ -52,14 +51,7 @@
         color: white;
     }
 
-    /*
-                                                                                                                                                                                                                                            aplicacoes blazor nao tem body
-                                                                                                                                                                                                                                                body {
-                                                                                                                                                                                                                                                    font-family: 'Segoe UI', sans-serif;
-                                                                                                                                                                                                                                                    margin: 0;
-                                                                                                                                                                                                                                                    padding: 0;
-                                                                                                                                                                                                                                                    background-color: #f3f3f3;
-                                                                                                                                                                                                                                                } */
+
 
     .header {
         background: #0078d4;
@@ -154,11 +146,6 @@
         height: 100vh;
         background-color: #f0f0f0; /* Cor do fundo da tela */
     }
-    /*
-                                                                                                                                                                        .left {
-                                                                                                                                                                            flex: 1;
-                                                                                                                                                                            background-color: transparent; /* Mantém a cor do fundo
-                                                                                                                                                                        } */
 
     .right {
         flex: 1;
@@ -184,7 +171,7 @@
     }
 
     .text-box {
-        max-width: 500px; /* Define um tamanho menor para o bloco de texto */
+        max-width: 500px;
         text-align: justify;
     }
 
@@ -207,7 +194,27 @@
         border-top-left-radius: 50px;
         border-bottom-left-radius: 50px;
         box-shadow: -5px 0px 10px rgba(0, 0, 0, 0.2);
+        position: relative;
+        opacity: 0;
+        transition: opacity 2s ease-in-out;
     }
+
+        .right::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-top-left-radius: 50px;
+            border-bottom-left-radius: 50px;
+        }
+
+    .fade-in {
+        animation: fadeIn 1s forwards;
+    }
+
 
     .image {
         max-width: 90%;
@@ -220,12 +227,22 @@
         text-align: center;
     }
 
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
 </style>
 
 <div class="hero">
     <h1>Gerencie suas movimentações com eficiência</h1>
     <p>Simplifique a gestão de transações e tenha controle total</p>
-    <button class="btn-animated"> Comece agora </button>
+    <button class="btn-animated" onclick="@(()=> Navegar())">  Comece agora </button>
 </div>
 
 <div class="section">
@@ -250,6 +267,7 @@
         </FluentCard>
     </div>
 </div>
+
 <br />
 
 <div class="container">
@@ -263,16 +281,47 @@
             </p>
         </div>
     </div>
-    <div class="right"></div>
+
+    <div class="right fade-in"></div>
 </div>
+
+<br />
+
+<div>
+    <FluentCard>
+        <h1> Conheça a nossa empresa </h1>
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <img src="/imagens/ldn_grande.png" />
+            <p style="text-align: justify;">
+                Criada em 2009 pela iniciativa empreendedora dos seus 3 sócios trazendo uma grande experiência na área de desenvolvimento e suporte à sistemas informatizados de gestão empresarial.
+                Hoje a LDN SOFTWARES atende a diversos mercados com seus diversos produtos, visando atingir a todos os ramos de negócios como Industrias, comércios, serviços e agronegócio.
+            </p>
+        </div>
+    </FluentCard>
+</div>
+<br />
+<br />
+<br />
 
 
 
 @code {
-    protected override Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-
-        return base.OnInitializedAsync();
+        // StateHasChanged();
+        //await runtime.InvokeVoidAsync("observeElement", "right");
+        //java script n ta funcionando legal n, mas ta com o efeito de fade in pelo menos
+    }
+    private async Task Navegar()
+    {
+        var user = await state.GetAuthenticationStateAsync();
+        if (user.User == null)
+        {
+            navigation.NavigateTo("/Account/Login");
+        }
+        else
+        {
+            navigation.NavigateTo("/caixa");
+        }
     }
 }
-

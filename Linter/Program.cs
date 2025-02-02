@@ -99,7 +99,7 @@ using (var scope = builder.Services.BuildServiceProvider().CreateScope())
 #region Singletons
 builder.Services.AddSingleton<ToastService>();
 builder.Services.AddSingleton<IEmailSender<TAB001_Usuarios>, IdentityNoOpEmailSender>();
-builder.Services.AddScoped<TAB001_UsuariosRepositorio>();
+
 
 #endregion
 
@@ -112,7 +112,7 @@ builder.Services.AddTransient<TAB002_CargosRepositorio>();
 #endregion
 
 #region Scopeds
-
+builder.Services.AddScoped<TAB001_UsuariosRepositorio>();
 builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
