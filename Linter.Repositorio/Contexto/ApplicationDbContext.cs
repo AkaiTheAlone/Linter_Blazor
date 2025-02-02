@@ -16,7 +16,7 @@ namespace Linter.Dados.Contexto
         #region Construtor
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
         #endregion
 

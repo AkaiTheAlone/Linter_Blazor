@@ -15,7 +15,6 @@
         <FluentCard Height="100" MinimalStyle="true">
             <FluentDataGrid Items="queryCanceladas"
                             ResizableColumns=false
-                            ResizeType="DataGridResizeType.Exact"
                             HeaderCellAsButtonWithMenu="true"
                             ShowHover="true"
                             AutoFit="false"
@@ -25,12 +24,12 @@
                     <FluentIcon Value="@(new Icons.Filled.Size16.CalendarEmpty())" Color="@Color.Accent" />&nbsp; Nenhum registro para ser exibido!
                 </EmptyContent>
                 <ChildContent>
-                    <PropertyColumn Width="70px" InitialSortDirection="SortDirection.Descending" Property="@(p=> p.idMovimentacao)" Sortable="true" Title="ID" />
-                    <PropertyColumn Width="120px" Property="@(p=> Linter.Utilidades.Uteis.PegaNomeDeExibicao((Enumeradores.TipoUsuario)p.Tipo))" Title="Tipo Movi." />
-                    <PropertyColumn Width="250px" Property="@(p=> p.Valor)" Sortable="true" Title="Nome de Usuário" />
-                    <PropertyColumn Width="250px" Property="@(p=> p.Tipo)" Title="Email" Sortable="true" />
-                    <PropertyColumn Width="250px" Property="@(p=> p.DataCancelamento)" Sortable="true" Title="Data de Cancelamento" />
-                    <TemplateColumn Width="200px" Title="Ações" Align="@Align.End" Context="mov">
+                    <PropertyColumn InitialSortDirection="SortDirection.Descending" Property="@(p=> p.idMovimentacao)" Sortable="true" Title="ID" />
+                    <PropertyColumn Property="@(p=> Linter.Utilidades.Uteis.PegaNomeDeExibicao((Enumeradores.TipoUsuario)p.Tipo))" Title="Tipo Movi." />
+                    <PropertyColumn Property="@(p=> p.Valor)" Sortable="true" Title="Nome de Usuário" />
+                    <PropertyColumn Property="@(p=> p.Tipo)" Title="Email" Sortable="true" />
+                    <PropertyColumn Property="@(p=> p.DataCancelamento)" Sortable="true" Title="Data de Cancelamento" />
+                    <TemplateColumn Title="Ações" Align="@Align.End" Context="mov">
                         <FluentButton aria-label="Editar" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => ConsultarCancelamento(mov.idMovimentacao))" />
                     </TemplateColumn>
                     <FluentDataGridRow>

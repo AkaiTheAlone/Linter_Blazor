@@ -26,7 +26,14 @@
                     <br />
                 </Authorized>
                 <NotAuthorized>
-                    @if (PrecisaRegistrar)
+                    @*a ideia correta eh mostrar o register apenas quando nao tem usuarios registrados
+                    imagina se o entity me deixa fazer isso
+                    isso aq deveria ser estudado pela nasa
+                    se o precisa registrar eh inicializado como false
+                    e ele nao entra no if do on Initialized
+                    ele mostra aquilo q tem no true e nao no false??????
+                    *@
+                    @if (Principal.PrecisaRegistrar)
                     {
                         <FluentNavLink Href="/Account/75e11e1087ba6e396e2e2ec41d2f257781dbe39a9d78485bf9e9e91f42a012c46c9dc28720cdcdc15248b7447805deca6d211ddb077e150ed40efb4ba0f06943" Icon="@(new Icons.Regular.Size20.ContactCardRibbon())"> Registrar </FluentNavLink>
                     }
@@ -34,6 +41,7 @@
                     {
                         <FluentNavLink Href="Account/Login" Icon="@(new Icons.Regular.Size20.ContactCardRibbon())"> Login </FluentNavLink>
                     }
+
                     <FluentTooltip Anchor="delay3" HideTooltipOnCursorLeave="true" Position=TooltipPosition.End Delay=500> Entre na sua conta</FluentTooltip>
                 </NotAuthorized>
             </AuthorizeView>
@@ -44,13 +52,12 @@
 @code {
     private bool expanded = true;
     private string? currentUrl;
-    private bool PrecisaRegistrar { get; set; }
     protected override void OnInitialized()
     {
-        var user = rep.RetornaUm(1);
-        if (rep.RetornaUm(1).Id == 0)
+        var lista = rep.RetornaTodos().ToList();
+        if (rep.RetornaTodos().ToList().Any() == false)
         {
-            PrecisaRegistrar = true;
+            Principal.PrecisaRegistrar = true;
         }
         currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
         NavigationManager.LocationChanged += OnLocationChanged;

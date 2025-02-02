@@ -16,7 +16,6 @@
         justify-content: center;
         align-items: center;
     }
-
 </style>
 
 
@@ -33,8 +32,8 @@
                     <hr />
                     <FluentValidationSummary class="text-danger" role="alert" />
                     <FluentStack Orientation="Orientation.Vertical">
-                        <FluentTextField Name="Input.Email" @bind-Value="Input.Email" AutoComplete="username" Required="true" Placeholder="email@exemplo.com" Label="Email..." Style="width: 100%" />
-                        <FluentValidationMessage For="() => Input.Email" class="text-danger" />
+                        <FluentTextField Name="Input.NomeDeUsuario" @bind-Value="Input.NomeDeUsuario" AutoComplete="username" Required="true" Placeholder="Nome de usuário..." Label="Nome de Usuário ou Email" Style="width: 100%" />
+                        <FluentValidationMessage For="() => Input.NomeDeUsuario" class="text-danger" />
                         <FluentTextField type="password" Name="Input.Password" @bind-Value="Input.Password" AutoComplete="current-password" Required="true" Placeholder="Senha..." Label="Password" Style="width: 100%" />
                         <FluentValidationMessage For="() => Input.Password" class="text-danger" />
                         <FluentCheckbox Name="Input.RememberMe" @bind-Value="Input.RememberMe" Label="Remember me" />
@@ -79,15 +78,28 @@
     {
         // This doesn't count login failures towards account lockout
         // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-        var result = await SignInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+
+        //seria legal tentar buscar por email mas essa função n existe no identity aparentemente
+        var result = await SignInManager.PasswordSignInAsync(Input.NomeDeUsuario,
+                                                             Input.Password,
+                                                             Input.RememberMe,
+                                                             lockoutOnFailure: false);
+
         if (result.Succeeded)
         {
             Logger.LogInformation("User logged in.");
-            var user = await UserManager.FindByEmailAsync(Input.Email);
+            // var user = await UserManager.FindByEmailAsync(Input.NomeDeUsuario);
+            var user = await UserManager.FindByNameAsync(Input.NomeDeUsuario);
+
+            // if (user == null)
+            // {
+            //     user = await UserManager.FindByEmailAsync(Input.NomeDeUsuario);
+            // }
 
             Principal.UsuarioAtual = user;
             //Principal.RolesAtuais = await UserManager.GetRolesAsync(user);
-
+            //essa toast n ta exibindo
+            Toast.ShowSuccess($"Seja bem vindo, {user.UserName}");
             RedirectManager.RedirectTo(ReturnUrl);
 
         }
@@ -104,15 +116,14 @@
         }
         else
         {
-            errorMessage = "Error: Invalid login attempt.";
+            errorMessage = "Erro: Dados inválidos.";
         }
     }
 
     private sealed class InputModel
     {
         [Required]
-        [EmailAddress]
-        public string Email { get; set; } = "";
+        public string NomeDeUsuario { get; set; } = "";
 
         [Required]
         [DataType(DataType.Password)]

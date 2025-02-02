@@ -1,5 +1,6 @@
 ﻿@page "/Account/75e11e1087ba6e396e2e2ec41d2f257781dbe39a9d78485bf9e9e91f42a012c46c9dc28720cdcdc15248b7447805deca6d211ddb077e150ed40efb4ba0f06943"
 
+@* @rendermode InteractiveServer pq sera q o rendermode interactive server crasha nisso aq?*@
 @using System.ComponentModel.DataAnnotations
 @using System.Text
 @using System.Text.Encodings.Web
@@ -16,7 +17,7 @@
 
 <PageTitle>Registrar</PageTitle>
 
-<h1>Registre o usuário Administrador</h1>
+<h1>Registre o seu usuário</h1>
 
 <FluentCard>
     <FluentGrid>
@@ -26,11 +27,11 @@
                 <DataAnnotationsValidator />
                 <hr />
                 <FluentStack Orientation="Orientation.Vertical">
-                    <FluentTextField Name="Input.Email" @bind-Value="username" AutoComplete="email" Required="true" Placeholder="Nome de usuário..." Label="Nome de Usuário" Style="width: 100%" />
+                    <FluentTextField Name="Input.NomeDeUsuario" @bind-Value="Input.NomeDeUsuario" AutoComplete="username" Required="true" Placeholder="Nome de usuário..." Label="Nome de Usuário" Style="width: 100%" />
                     <FluentValidationMessage For="() => Input.NomeDeUsuario" class="text-danger" />
                     <FluentTextField Name="Input.Email" @bind-Value="Input.Email" AutoComplete="email" Required="true" Placeholder="email@exemplo.com" Label="Email" Style="width: 100%" />
                     <FluentValidationMessage For="() => Input.Email" class="text-danger" />
-                    <FluentTextField type="password" Name="Input.Password" @bind-Value="Input.Senha" AutoComplete="new-password" Required="true" Placeholder="Senha..." Label="Senha" Style="width: 100%" />
+                    <FluentTextField type="password" Name="Input.Senha" @bind-Value="Input.Senha" AutoComplete="new-password" Required="true" Placeholder="Senha..." Label="Senha" Style="width: 100%" />
                     <FluentValidationMessage For="() => Input.Senha" class="text-danger" />
                     <FluentTextField type="password" Name="Input.ConfirmPassword" @bind-Value="Input.ConfirmPassword" AutoComplete="new-password" Required="true" Placeholder="Confirme a senha..." Label="Confirmar Senha" Style="width: 100%" />
                     <FluentValidationMessage For="() => Input.ConfirmPassword" class="text-danger" />
@@ -43,7 +44,6 @@
 </FluentCard>
 
 @code {
-    private string username { get; set; }
     private IEnumerable<IdentityError>? identityErrors;
 
     [SupplyParameterFromForm]
@@ -58,7 +58,7 @@
     {
         var user = CreateUser();
 
-        await UserStore.SetUserNameAsync(user, username, CancellationToken.None);
+        await UserStore.SetUserNameAsync(user, Input.NomeDeUsuario, CancellationToken.None);
         var emailStore = GetEmailStore();
         await emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
         var result = await UserManager.CreateAsync(user, Input.Senha);
@@ -88,6 +88,7 @@
         }
 
         await SignInManager.SignInAsync(user, isPersistent: false);
+        Principal.PrecisaRegistrar = false;
         RedirectManager.RedirectTo(ReturnUrl);
     }
 
@@ -115,8 +116,10 @@
 
     private sealed class InputModel
     {
+        [Required(ErrorMessage = "Necessário ter um nome de usuário válido")]
+        public string NomeDeUsuario { get; set; } = "";
         [Required]
-        [EmailAddress(ErrorMessage = "Defina um nome de usuário válido.")]
+        [EmailAddress(ErrorMessage = "Defina um email válido.")]
         [Display(Name = "Email")]
         public string Email { get; set; } = "";
 
@@ -130,8 +133,5 @@
         [Display(Name = "Confirm password")]
         [Compare("Senha", ErrorMessage = "As senhas não coincidem.")]
         public string ConfirmPassword { get; set; } = "";
-
-        [Required(ErrorMessage = "Necessário ter um nome de usuário válido")]
-        public string NomeDeUsuario { get; set; } = "";
     }
 }

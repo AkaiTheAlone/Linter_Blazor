@@ -23,7 +23,7 @@
         <FluentCard MinimalStyle="true" Height="100">
             <FluentAppBar Orientation="Orientation.Horizontal" Class="centralizado">
                 <FluentAppBarItem Text="Adicionar" IconRest="@(new Icons.Regular.Size24.AddCircle())" OnClick="@(()=> navigation.NavigateTo($"/caixa/{(int)Enumeradores.TipoView.Criar}/{0}"))" />
-                <FluentAppBarItem Text="Cancelamentos" IconRest="@(new Icons.Light.Size32.Delete())" OnClick="@(()=> navigation.NavigateTo("/caixa/cancelamentos"))" />
+                <FluentAppBarItem Text="Cancelamentos" IconRest="@(new Icons.Regular.Size32.Delete())" OnClick="@(()=> navigation.NavigateTo("/caixa/cancelamentos"))" />
             </FluentAppBar>
             <FluentDataGrid Items="lstFiltrada"
                             ResizableColumns=false

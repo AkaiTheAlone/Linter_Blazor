@@ -6,5 +6,6 @@ namespace Linter.Components.Account
     public static class Principal
     {
         public static TAB001_Usuarios UsuarioAtual { get; set; }
+        public static bool PrecisaRegistrar { get; set; } = false;
     }
 }

@@ -11,6 +11,7 @@ using Microsoft.FluentUI.AspNetCore.Components;
 using Npgsql;
 using Microsoft.FluentUI.AspNetCore.Components.Components.Tooltip;
 using Microsoft.JSInterop;
+using FastReport.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -77,9 +78,6 @@ builder.Services.AddIdentityCore<TAB001_Usuarios>(options => options.SignIn.Requ
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddSignInManager()
                 .AddDefaultTokenProviders();
-//isso aq ta crashando td 
-//
-
 
 builder.Services.AddAuthorization(options =>
 {
@@ -88,11 +86,20 @@ builder.Services.AddAuthorization(options =>
 });
 
 
+//garante que as migrations estejam aplicadas ao banco
+using (var scope = builder.Services.BuildServiceProvider().CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    dbContext.Database.Migrate(); // Aplica migrações pendentes
+}
+
+
 #region Injeções de dependência
 
 #region Singletons
 builder.Services.AddSingleton<ToastService>();
 builder.Services.AddSingleton<IEmailSender<TAB001_Usuarios>, IdentityNoOpEmailSender>();
+builder.Services.AddScoped<TAB001_UsuariosRepositorio>();
 
 #endregion
 
@@ -105,14 +112,13 @@ builder.Services.AddTransient<TAB002_CargosRepositorio>();
 #endregion
 
 #region Scopeds
-builder.Services.AddScoped<TAB001_UsuariosRepositorio>();
+
 builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
 builder.Services.AddScoped<ITooltipService, TooltipService>();
 builder.Services.AddScoped<FastRelatorios>();
 builder.Services.AddScoped<SignInManager<TAB001_Usuarios>>();
-
 #endregion
 
 #endregion

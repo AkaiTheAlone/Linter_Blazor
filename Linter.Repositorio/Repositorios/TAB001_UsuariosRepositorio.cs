@@ -50,7 +50,8 @@ namespace Linter.Dados.Repositorios
             if (contexto == null || contexto.TAB001_Usuarios == null)
                 throw new ApplicationException("Erro ao retornar todas as movimentações.");
 
-            return contexto.TAB001_Usuarios.Where(X => X.Id == id).FirstOrDefault() ?? new TAB001_Usuarios(); ;
+            return contexto.TAB001_Usuarios.Where(X => X.Id == id).FirstOrDefault() ?? new TAB001_Usuarios();
+
         }
 
         #endregion

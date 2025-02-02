@@ -19,6 +19,7 @@
 
     protected override void OnInitialized()
     {
+        //essa parada aq q ta fazendo o register crashar e impedindo q volte pra pagina inicial
         messageFromCookie = HttpContext.Request.Cookies[IdentityRedirectManager.StatusCookieName];
 
         if (messageFromCookie is not null)
