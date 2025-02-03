@@ -1,50 +1,147 @@
-﻿@inject Dados.Repositorios.CAX001_MovimentacoesRepositorio repCaixa
+﻿@inject CAX001_MovimentacoesRepositorio repCaixa
 @page "/relatorios"
 @rendermode InteractiveServer
-@inject IJSRuntime js
 @inject FastRelatorios repRelatorio
-
+@inject TAB001_UsuariosRepositorio repUsuario
 <h3 class="centralizado">Relatórios</h3>
 
+<style>
+    .btn_right {
+        width: 200px;
+        height: 100px;
+        border-radius: 10px;
+        /* offset-x | offset-y | blur-radius | spread-radius | color */
+        box-shadow: 12px 12px 4px 1px rgba(0, 0, 255, .2);
+        border-style: outset;
+        border: 0px;
+        transition: all 0.3s ease-in-out;
+    }
 
-<FluentAppBar Orientation="Orientation.Vertical">
-    <FluentAppBarItem IconRest="@(new Icons.Regular.Size24.ChartMultiple())" Text="Gerar Relatório de Movimentações" OnClick="GerarRelatorioMovimentacoes">  </FluentAppBarItem>
-    <FluentAppBarItem IconRest="@(new Icons.Regular.Size24.ChartPerson())" Text="Gerar Lista de Usuários" OnClick="ListarUsuarios">  </FluentAppBarItem>
-    <FluentAppBarItem IconRest="@(new Icons.Regular.Size24.ChartMultiple())" Text="Gerar Lista de Usuários">  </FluentAppBarItem>
-</FluentAppBar>
+        .btn_right:hover {
+            background: #dcffff;
+            box-shadow: 5px 5px 2px 1px rgba(0, 0, 255, .2);
+            font-style: unset;
+        }
 
+    .btn_mid {
+        width: 200px;
+        height: 100px;
+        border-radius: 10px;
+        box-shadow: 0px 12px 4px 0px rgba(0, 0, 255, .2);
+        border-style: outset;
+        border: 0px;
+        transition: all 0.3s ease-in-out;
+    }
+
+        .btn_mid:hover {
+            background: #dcffff;
+            box-shadow: 0px 5px 2px 0px rgba(0, 0, 255, .2);
+            font-style: unset;
+        }
+
+    .btn_left {
+        width: 200px;
+        height: 100px;
+        border-radius: 10px;
+        box-shadow: -12px 12px 4px 1px rgba(0, 0, 255, .2);
+        border-style: outset;
+        border: 0px;
+        transition: all 0.3s ease-in-out;
+    }
+
+        .btn_left:hover {
+            background: #dcffff;
+            box-shadow: -5px 5px 2px 1px rgba(0, 0, 255, .2);
+            font-style: unset;
+        }
+
+    .div-flex {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+    }
+</style>
+
+<div class="div-flex">
+    <button class="btn_left" onclick="@(()=> GerarRelatorioMovimentacoes())">
+        Gerar Relatório de Movimentações
+        <br />
+        <FluentIcon Value="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.ChartMultiple())" />
+    </button>
+
+    <button class="btn_mid" onclick="GerarRelatorioMovimentacoes()">
+        Gerar Movimentações por Contas Gerenciais
+        <br />
+        <FluentIcon Value="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.ChartPerson())" />
+    </button>
+
+    <button class="btn_right" onclick="@(()=> ListarUsuarios())">
+        Gerar Lista de Usuários
+        <br />
+        <FluentIcon Value="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.DocumentPerson())" />
+    </button>
+
+</div>
 
 @code {
 
     public Modelos.Modelos.CAX001_Movimentacoes Movimentacao { get; set; }
     public string pdfBase64 { get; set; }
 
-    public async void GerarRelatorioMovimentacoes()
+    public async Task GerarRelatorioMovimentacoes()
     {
         var movimentacoes = await repCaixa.RetornaMovimentacoesParaRPT();
 
-        var bytes = await repRelatorio.GerarRelatorio(movimentacoes, "movimentacoes");
+        var bytes = await repRelatorio.GerarRelatorioMovimentacoes(movimentacoes, "RelatorioMovimentacoes");
         pdfBase64 = Convert.ToBase64String(bytes);
         await Task.Delay(100);
-
-        await js.InvokeVoidAsync("eval", $@"
-        var newWindow = window.open('', '_blank');
-        newWindow.document.write('<html><head><title>PDF</title></head><body>');
-        newWindow.document.write('<embed src=""data:application/pdf;base64,{pdfBase64}"" width=""100%"" height=""100%"" />');
-        newWindow.document.write('</body></html>');");
+        StateHasChanged();
+        try
+        {
+            await runtime.InvokeVoidAsync("eval", $@"
+                var newWindow = window.open('', '_blank');
+                if (newWindow) {{
+                    newWindow.document.write('<html><head><title>PDF</title></head><body>');
+                    newWindow.document.write('<embed src=""data:application/pdf;base64,{pdfBase64}"" width=""100%"" height=""100%"" />');
+                    newWindow.document.write('</body></html>');
+                }} else {{
+                    console.error('Não foi possível abrir a janela');
+                }}
+            ");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao abrir o PDF: {ex.Message}");
+        }
     }
-    public async void ListarUsuarios()
-    {
-        var usuarios = await repCaixa.RetornaMovimentacoesParaRPT();
 
-        var bytes = await repRelatorio.GerarRelatorio2(usuarios, "usuarios");
+    public async Task ListarUsuarios()
+    {
+        var usuarios = await repUsuario.RetornaTodosRelatorio();
+
+        var bytes = repRelatorio.GerarListagemDeUsuarios(usuarios, "usuarios");
         pdfBase64 = Convert.ToBase64String(bytes);
 
-        await js.InvokeVoidAsync("eval", $@"
-        var newWindow = window.open('', '_blank');
-        newWindow.document.write('<html><head><title>PDF</title></head><body>');
-        newWindow.document.write('<embed src=""data:application/pdf;base64,{pdfBase64}"" width=""100%"" height=""100%"" />');
-        newWindow.document.write('</body></html>');");
+        try
+        {
+            await runtime.InvokeVoidAsync("eval", $@"
+                var newWindow = window.open('', '_blank');
+                if (newWindow) {{
+                    newWindow.document.write('<html><head><title>PDF</title></head><body>');
+                    newWindow.document.write('<embed src=""data:application/pdf;base64,{pdfBase64}"" width=""100%"" height=""100%"" />');
+                    newWindow.document.write('</body></html>');
+                }} else {{
+                    console.error('Não foi possível abrir a janela');
+                }}
+            ");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao abrir o PDF: {ex.Message}");
+        }
     }
+
+
 }
 

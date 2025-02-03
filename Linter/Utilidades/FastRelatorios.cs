@@ -8,15 +8,20 @@ using Linter.Components.Relatorios;
 using System.Runtime.CompilerServices;
 using FastReport.Export.PdfSimple;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.FluentUI.AspNetCore.Components.DesignTokens;
 
 namespace Linter.Utilidades
 {
     public class FastRelatorios
     {
-        public async Task<byte[]> GerarRelatorio(IEnumerable<CAX001_Movimentacoes> lstMovi, string NomeRelatorio)
+        //nessa classe teno algumas considerações a fazer
+        //todos os métodos que tem aqui sao assincronos mas nao tem nenhum awai
+        //pq usar async entt?
+        //fazer os testes sem
+        public async Task<byte[]> GerarRelatorioMovimentacoes(IEnumerable<CAX001_Movimentacoes> lstMovi, string nomeRelatorio)
         {
 
-            var filepath = Path.Combine(Directory.GetCurrentDirectory(), "Relatorios", "Caixa", "RelatorioMovimentacoes.frx");
+            var filepath = Path.Combine(Directory.GetCurrentDirectory(), "Relatorios", "Caixa", $"{nomeRelatorio}.frx");
             var diretorio = Path.GetDirectoryName(filepath);
 
             if (!Directory.Exists(diretorio))
@@ -45,52 +50,36 @@ namespace Linter.Utilidades
             }
         }
 
-        public async Task<byte[]> GerarRelatorio2(IEnumerable<CAX001_Movimentacoes> lstMovi, string NomeRelatorio)
+        public byte[] GerarListagemDeUsuarios(IEnumerable<TAB001_Usuarios> usuarios, string nomeRelatorio)
         {
-            decimal soma = 0;
-            foreach (var valor in lstMovi)
-            {
-                if (valor.Tipo == (int)Enumeradores.TipoMovimentacao.Saída)
-                    soma -= valor.Valor;
-                else
-                    soma += valor.Valor;
-            }
-            var filepath = Path.Combine(Directory.GetCurrentDirectory(), @"Relatorios/movimentacoes.frx");
-
-            // Verificar se o diretório existe, senão criar
+            var filepath = Path.Combine(Directory.GetCurrentDirectory(), "Relatorios", "Usuarios", $"{nomeRelatorio}.frx");
             var diretorio = Path.GetDirectoryName(filepath);
+
             if (!Directory.Exists(diretorio))
             {
                 Directory.CreateDirectory(diretorio);
             }
 
-            // Criação do objeto de relatório
-            Report report = new Report();
-            report.Load(filepath); // Carregar o modelo do relatório
+            var report = new Report();
 
-            // Registrar o objeto de dados (lstMovi)
-            report.Dictionary.RegisterBusinessObject(lstMovi, "lstMovi", 10, true);
-            report.SetParameterValue("ValorTotal", soma);
-
-            try
+            if (File.Exists(filepath))
             {
-                report.Prepare();
-
-                // Exportar o relatório para PDF
-                var pdfExport = new PDFSimpleExport();
-                using (var ms = new MemoryStream())
-                {
-                    pdfExport.Export(report, ms);
-                    ms.Flush();
-                    return ms.ToArray();  // Retornar o PDF gerado
-                }
+                report.Report.Load(filepath);
             }
-            catch (Exception ex)
+            report.Dictionary.RegisterBusinessObject(usuarios, "usuarios", 10, true);
+            //report.Report.SetParameterValue("ValorTotal", soma);
+            report.Prepare();
+
+            report.Report.Save(filepath);
+
+            var pdfExport = new PDFSimpleExport();
+            using (var ms = new MemoryStream())
             {
-                // Se ocorrer algum erro durante a preparação ou exportação, logue o erro
-                Console.WriteLine("Erro ao gerar relatório: " + ex.Message);
-                throw;
+                pdfExport.Export(report, ms);
+                ms.Flush();
+                return ms.ToArray();
             }
         }
     }
+
 }

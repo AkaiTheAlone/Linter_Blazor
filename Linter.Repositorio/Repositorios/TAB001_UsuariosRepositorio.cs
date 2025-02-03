@@ -45,13 +45,19 @@ namespace Linter.Dados.Repositorios
 
             return contexto.TAB001_Usuarios.AsQueryable();
         }
+        public async Task<IList<TAB001_Usuarios>> RetornaTodosRelatorio()
+        {
+            if (contexto == null || contexto.TAB001_Usuarios == null)
+                throw new ApplicationException("Erro ao retornar todas as movimentações.");
+
+            return await contexto.TAB001_Usuarios.ToListAsync();
+        }
         public TAB001_Usuarios RetornaUm(int id)
         {
             if (contexto == null || contexto.TAB001_Usuarios == null)
                 throw new ApplicationException("Erro ao retornar todas as movimentações.");
 
             return contexto.TAB001_Usuarios.Where(X => X.Id == id).FirstOrDefault() ?? new TAB001_Usuarios();
-
         }
 
         #endregion

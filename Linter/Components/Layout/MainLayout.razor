@@ -23,6 +23,94 @@
     .linterTexto {
         font-family: 'Script MT', cursive
     }
+
+    .teste {
+        background-color: #ADD8E6;
+        border: none;
+        color: #fff;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: transform 0.4s ease;
+        border: 1px;
+        border-color: #ADD8E6;
+        font-family: 'Script MT', cursive;
+    }
+
+        .teste:hover {
+            transform: rotate(360deg);
+            background-color: aliceblue;
+            color: black;
+        }
+
+    .teste2 {
+        border: 2px solid rgb(216, 2, 134);
+        border-radius: 0px;
+        padding: 18px 36px;
+        display: inline-block;
+        /* font-family: "Lucida Console", Monaco, monospace; */
+        font-size: 14px;
+        letter-spacing: 1px;
+        cursor: pointer;
+        box-shadow: inset 0 0 0 0 #b22222;
+        -webkit-transition: ease-out 0.4s;
+        -moz-transition: ease-out 0.4s;
+        transition: ease-out 0.4s;
+        height: 30px; /* altura */
+        width: 70px; /* Largura */
+        border-radius: 7px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 12px;
+        color: black;
+        font-family: 'Optima', serif
+    }
+
+        .teste2:hover {
+            box-shadow: inset 0 0 0 50px #b22222;
+            color: white;
+        }
+
+    /* esse aq ficou bem ruim
+            .botao-teste {
+                  background-color: #FFC107;
+                  border: none;
+                  color: #fff;
+                  padding: 15px 32px;
+                  text-align: center;
+                  text-decoration: none;
+                  display: inline-block;
+                  font-size: 16px;
+                  margin: 4px 2px;
+                  cursor: pointer;
+                  border-radius: 8px;
+                  animation: pulse 2s infinite;
+              }
+
+              @@keyframes pulse {
+                  0% {
+                      transform: scale(1);
+                  }
+
+                  50% {
+                      transform: scale(1.1);
+                  }
+
+                  100% {
+                      transform: scale(1);
+                  }
+              }
+
+              .botao:hover {
+                  animation: none;
+              }
+             */
 </style>
 
 <FluentTooltipProvider @rendermode=InteractiveServer />
@@ -49,9 +137,11 @@
                     <form action="Account/Logout" method="post" style="margin-right:10px">
                         <AntiforgeryToken />
                         <input type="hidden" name="ReturnUrl" value="@currentUrl" />
-                        <div style="justify-content:flex-start">
-                            <FluentButton Type="ButtonType.Submit" IconStart="@(new Icons.Regular.Size20.PersonArrowBack())" Style="width:auto%;"> Sair </FluentButton>
-                        </div>
+                        <button class="teste2" type="submit">
+                            Sair
+                            <FluentIcon Value="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Filled.Size20.PersonArrowBack().WithColor("#FF0000"))" />
+                        </button>
+
                     </form>
                 </Authorized>
             </AuthorizeView>

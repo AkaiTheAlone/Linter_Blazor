@@ -1,6 +1,5 @@
 ﻿@page "/Account/75e11e1087ba6e396e2e2ec41d2f257781dbe39a9d78485bf9e9e91f42a012c46c9dc28720cdcdc15248b7447805deca6d211ddb077e150ed40efb4ba0f06943"
 
-@* @rendermode InteractiveServer pq sera q o rendermode interactive server crasha nisso aq?*@
 @using System.ComponentModel.DataAnnotations
 @using System.Text
 @using System.Text.Encodings.Web
@@ -17,30 +16,25 @@
 
 <PageTitle>Registrar</PageTitle>
 
-<h1>Registre o seu usuário</h1>
+<h1 class="centralizado">Registre o seu usuário</h1>
 
 <FluentCard>
-    <FluentGrid>
-        <FluentGridItem xs="8" sm="4">
-            <StatusMessage Message="@Message" />
-            <EditForm Model="Input" asp-route-returnUrl="@ReturnUrl" method="post" OnValidSubmit="RegisterUser" FormName="register">
-                <DataAnnotationsValidator />
-                <hr />
-                <FluentStack Orientation="Orientation.Vertical">
-                    <FluentTextField Name="Input.NomeDeUsuario" @bind-Value="Input.NomeDeUsuario" AutoComplete="username" Required="true" Placeholder="Nome de usuário..." Label="Nome de Usuário" Style="width: 100%" />
-                    <FluentValidationMessage For="() => Input.NomeDeUsuario" class="text-danger" />
-                    <FluentTextField Name="Input.Email" @bind-Value="Input.Email" AutoComplete="email" Required="true" Placeholder="email@exemplo.com" Label="Email" Style="width: 100%" />
-                    <FluentValidationMessage For="() => Input.Email" class="text-danger" />
-                    <FluentTextField type="password" Name="Input.Senha" @bind-Value="Input.Senha" AutoComplete="new-password" Required="true" Placeholder="Senha..." Label="Senha" Style="width: 100%" />
-                    <FluentValidationMessage For="() => Input.Senha" class="text-danger" />
-                    <FluentTextField type="password" Name="Input.ConfirmPassword" @bind-Value="Input.ConfirmPassword" AutoComplete="new-password" Required="true" Placeholder="Confirme a senha..." Label="Confirmar Senha" Style="width: 100%" />
-                    <FluentValidationMessage For="() => Input.ConfirmPassword" class="text-danger" />
-                    <FluentButton Type="ButtonType.Submit" Appearance="Appearance.Accent" Style="width: 100%">Entrar</FluentButton>
-                </FluentStack>
-            </EditForm>
-        </FluentGridItem>
-
-    </FluentGrid>
+    <StatusMessage Message="@Message" />
+    <EditForm Model="Input" asp-route-returnUrl="@ReturnUrl" method="post" OnValidSubmit="RegisterUser" FormName="register">
+        <DataAnnotationsValidator />
+        <hr />
+        <FluentStack Orientation="Orientation.Vertical">
+            <FluentTextField Name="Input.NomeDeUsuario" @bind-Value="Input.NomeDeUsuario" AutoComplete="username" Required="true" Placeholder="Nome de usuário..." Label="Nome de Usuário" Style="width: 100%" />
+            <FluentValidationMessage For="() => Input.NomeDeUsuario" class="text-danger" />
+            <FluentTextField Name="Input.Email" @bind-Value="Input.Email" AutoComplete="email" Required="true" Placeholder="email@exemplo.com" Label="Email" Style="width: 100%" />
+            <FluentValidationMessage For="() => Input.Email" class="text-danger" />
+            <FluentTextField type="password" Name="Input.Senha" @bind-Value="Input.Senha" AutoComplete="new-password" Required="true" Placeholder="Senha..." Label="Senha" Style="width: 100%" />
+            <FluentValidationMessage For="() => Input.Senha" class="text-danger" />
+            <FluentTextField type="password" Name="Input.ConfirmPassword" @bind-Value="Input.ConfirmPassword" AutoComplete="new-password" Required="true" Placeholder="Confirme a senha..." Label="Confirmar Senha" Style="width: 100%" />
+            <FluentValidationMessage For="() => Input.ConfirmPassword" class="text-danger" />
+            <FluentButton Type="ButtonType.Submit" Appearance="Appearance.Accent" Style="width: 100%">Entrar</FluentButton>
+        </FluentStack>
+    </EditForm>
 </FluentCard>
 
 @code {
