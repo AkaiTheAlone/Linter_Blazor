@@ -59,6 +59,7 @@
 		<Content Include="wwwroot\recursos\fonts\Lora-Regular.ttf" />
 		<Content Include="wwwroot\recursos\fonts\Lora-SemiBold.ttf" />
 		<Content Include="wwwroot\recursos\fonts\Lora-SemiBoldItalic.ttf" />
+		<Content Include="wwwroot\recursos\fonts\script-mt-bold.ttf" />
 		<Content Include="wwwroot\recursos\Icones\profits.ico" />
 		<Content Include="wwwroot\recursos\Icones\sair.png" />
 		<Content Include="wwwroot\recursos\Icones\semregistros.jpg" />

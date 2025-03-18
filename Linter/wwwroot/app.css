@@ -1,5 +1,5 @@
 @import '/_content/Microsoft.FluentUI.AspNetCore.Components/css/reboot.css';
-
+@import 'numbers-animation.css';
 /*body {
     --body-font: "Segoe UI Variable", "Segoe UI", sans-serif;
     font-family: var(--body-font);
@@ -7,17 +7,16 @@
     line-height: var(--type-ramp-base-line-height);
     margin: 0;
 }*/
-
 /*@font-face {
     font-family: "Lora";
     src: url('recursos/fonts/Lora-Regular.ttf')
 }*/
 
+
 body {
     margin: 0;
     padding: 0;
     height: 100vh;
-    font-family: Arial, Helvetica, cursive, !important;
     font-size: var(--type-ramp-base-font-size);
     line-height: var(--type-ramp-base-line-height);
     font-weight: var(--font-weight);
@@ -206,5 +205,3 @@ code {
         right: unset;
     }
 }
-
-

@@ -14,10 +14,6 @@ namespace Linter.Utilidades
 {
     public class FastRelatorios
     {
-        //nessa classe teno algumas considerações a fazer
-        //todos os métodos que tem aqui sao assincronos mas nao tem nenhum awai
-        //pq usar async entt?
-        //fazer os testes sem
         public async Task<byte[]> GerarRelatorioMovimentacoes(IEnumerable<CAX001_Movimentacoes> lstMovi, string nomeRelatorio)
         {
 

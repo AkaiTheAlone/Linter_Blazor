@@ -1,9 +1,24 @@
 ﻿@inherits LayoutComponentBase
 @inject NavigationManager navigations
 
-
-<script src="js/scripts.js"></script>
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+</head>
+@* <script src="js/scripts.js"></script> *@
 <style>
+
+
+    @@font-face {
+        font-family: "Script MT Cursiva";
+        src: url('recursos/fonts/script-mt-bold.ttf') format('truetype');
+        font-weight: bold;
+    }
+
+    .linterTexto {
+        font-family: 'Script MT Cursiva' !important;
+        font-size: 3rem;
+    }
+
     .centralizado {
         display: flex;
         justify-content: center;
@@ -20,9 +35,6 @@
         height: 100vh;
     }
 
-    .linterTexto {
-        font-family: 'Script MT', cursive
-    }
 
     .teste {
         background-color: #ADD8E6;
@@ -77,40 +89,6 @@
             color: white;
         }
 
-    /* esse aq ficou bem ruim
-            .botao-teste {
-                  background-color: #FFC107;
-                  border: none;
-                  color: #fff;
-                  padding: 15px 32px;
-                  text-align: center;
-                  text-decoration: none;
-                  display: inline-block;
-                  font-size: 16px;
-                  margin: 4px 2px;
-                  cursor: pointer;
-                  border-radius: 8px;
-                  animation: pulse 2s infinite;
-              }
-
-              @@keyframes pulse {
-                  0% {
-                      transform: scale(1);
-                  }
-
-                  50% {
-                      transform: scale(1.1);
-                  }
-
-                  100% {
-                      transform: scale(1);
-                  }
-              }
-
-              .botao:hover {
-                  animation: none;
-              }
-             */
 </style>
 
 <FluentTooltipProvider @rendermode=InteractiveServer />
@@ -123,14 +101,12 @@
                      Timeout="500" />
 <FluentLayout>
 
-    <FluentHeader Height="70" style="display: flex; justify-content: space-between; align-items: center;">
-
-        <h1 class="linterTexto" style="margin-right: auto;">
+    <FluentHeader Height="100" style="display: flex; justify-content: space-between; align-items: center;">
+        <h1 class="linterTexto">
             Linter
         </h1>
 
         <div style="display: flex; align-items: center; justify-content: flex-end; flex-grow: 1;">
-
 
             <AuthorizeView>
                 <Authorized>

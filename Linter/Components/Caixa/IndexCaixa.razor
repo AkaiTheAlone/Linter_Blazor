@@ -13,6 +13,7 @@
 @* @attribute [Authorize(Roles = "Administrador")] *@
 <PageTitle> Controle de movimentações </PageTitle>
 
+
 <AuthorizeView Context="usuario">
     <Authorized>
         <FluentMenuProvider />
@@ -49,7 +50,7 @@
                     <PropertyColumn Width="50" Property="@(p=> Linter.Utilidades.Uteis.PegaNomeDeExibicao((Enumeradores.TipoMovimentacao)p.Tipo))" Title="Tipo Movi." Align="Align.Start" />
                     <PropertyColumn Property="@(p=> p.DataMovimentacao)" Format="dd/MM/yyyy" Sortable="true" Title="Data" Align="Align.Start" />
                     <PropertyColumn Property="@(p=> p.Valor.ToString("C2"))" Title="Valor" Sortable="false" /> @* sortable não funciona com conversoes, descobrir solucao*@
-                    <PropertyColumn Property="@(p=> p.Descritivo)" Title="Descrição" Sortable="true">
+                    <PropertyColumn Property="@(p=> p.Descritivo)" Title="Descrição" Sortable="@usuario.User.IsInRole("ADMINISTRADOR")">
                         <ColumnOptions>
                             <div class="search-box">
                                 <FluentSearch type="search" Autofocus=true Placeholder="ID..." @bind-Value=nomeFiltro @oninput="Filtrar" @bind-Value:after="Limpar" />

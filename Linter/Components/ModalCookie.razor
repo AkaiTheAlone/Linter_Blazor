@@ -1,0 +1,74 @@
+﻿<h3>ModalCookie</h3>
+<style>
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .cookie {
+        padding-right: 2rem;
+        transform: scale(0.6);
+    }
+
+    .cookie-container {
+        background: linear-gradient(260deg, #9b6c50 0%, #4f2626 100%);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        display: flex;
+        width: 20rem;
+        height: 10rem;
+        border-radius: 1.2rem;
+        padding: 1rem;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        align-items: center;
+    }
+
+    .cookie-titulo {
+        font-size: 1.2rem;
+        font-weight: lighter;
+    }
+
+    .cookie-subtitulo {
+        font-weight: 300;
+        font-size: 0.7rem;
+        /* isso aq adiciona pra cima e pra baixo,
+                    se colocar mais parametros deixa pras laterais tbm */
+        padding: 0.5rem 0rem;
+    }
+
+    .cookie-button {
+        border-style: none;
+        padding: 0.5rem 1rem;
+        color: #9b6c50;
+        font-size: 0.7rem;
+        font-weight: bold;
+        border-radius: 0.3rem;
+    }
+
+    .text {
+        width: 60%;
+    }
+</style>
+
+
+<div class="cookie-container">
+    <h2 class="cookie-titulo"> Política de Cookies</h2>
+
+    <p class="cookie-subtitulo">
+        Nós usamos Cookies Analíticos para facilitar e proteger a sua navegação. Não se preocupe, não armazenamos ou repassamos informações confidenciais sobre você!
+    </p>
+
+    @* passar uma imagem aqui *@
+    <button class="cookie-button"> Entendi! </button>
+
+</div>
+
+
+@code {
+
+}
