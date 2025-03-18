@@ -73,8 +73,8 @@
         -webkit-transition: ease-out 0.4s;
         -moz-transition: ease-out 0.4s;
         transition: ease-out 0.4s;
-        height: 30px; /* altura */
-        width: 70px; /* Largura */
+        height: 30px;
+        width: 70px;
         border-radius: 7px;
         display: flex;
         align-items: center;
@@ -89,6 +89,15 @@
             color: white;
         }
 
+
+    .cabecalho {
+        display: flex;
+        background-image: url('recursos\imagens\header.jpg') !important;
+        background: rgb(0,110,240);
+        background: linear-gradient(150deg, rgba(0,110,240,1) 9%, rgba(22,246,244,1) 48%, rgba(0,110,240,1) 82%);
+        justify-content: space-between;
+        align-items: center;
+    }
 </style>
 
 <FluentTooltipProvider @rendermode=InteractiveServer />
@@ -101,7 +110,7 @@
                      Timeout="500" />
 <FluentLayout>
 
-    <FluentHeader Height="100" style="display: flex; justify-content: space-between; align-items: center;">
+    <FluentHeader Height="100" Class="cabecalho">
         <h1 class="linterTexto">
             Linter
         </h1>
@@ -134,15 +143,6 @@
             </div>
         </FluentBodyContent>
     </FluentStack>
-
-    <AuthorizeView>
-        <NotAuthorized>
-
-        </NotAuthorized>
-        <Authorized>
-
-        </Authorized>
-    </AuthorizeView>
 </FluentLayout>
 
 

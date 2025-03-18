@@ -63,12 +63,14 @@
 		<Content Include="wwwroot\recursos\Icones\profits.ico" />
 		<Content Include="wwwroot\recursos\Icones\sair.png" />
 		<Content Include="wwwroot\recursos\Icones\semregistros.jpg" />
+		<Content Include="wwwroot\recursos\Imagens\2025-03-14_08-35.png" />
 		<Content Include="wwwroot\recursos\Imagens\Empresas\adidas.jpeg" />
 		<Content Include="wwwroot\recursos\Imagens\Empresas\cocacola.png" />
 		<Content Include="wwwroot\recursos\Imagens\Empresas\gucci.jpg" />
 		<Content Include="wwwroot\recursos\Imagens\Empresas\lego.png" />
 		<Content Include="wwwroot\recursos\Imagens\Empresas\pngwing.com.png" />
 		<Content Include="wwwroot\recursos\Imagens\Empresas\starbucks.png" />
+		<Content Include="wwwroot\recursos\Imagens\header.jpg" />
 		<Content Include="wwwroot\recursos\Imagens\image_minimalist.png" />
 		<Content Include="wwwroot\recursos\Imagens\logotipoLDN.png" />
 		<Content Include="wwwroot\recursos\Imagens\marca sem tag-05.png" />

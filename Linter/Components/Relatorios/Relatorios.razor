@@ -3,7 +3,7 @@
 @rendermode InteractiveServer
 @inject FastRelatorios repRelatorio
 @inject TAB001_UsuariosRepositorio repUsuario
-<h3 class="centralizado">Relatórios</h3>
+<h1 class="centralizado">Relatórios</h1>
 
 <style>
     .btn_right {
@@ -85,9 +85,13 @@
 </div>
 
 @code {
-
-    public Modelos.Modelos.CAX001_Movimentacoes Movimentacao { get; set; }
+    public bool estaAberto = false;
+    public string idConta { get; set; }
+    public CAX001_Movimentacoes Movimentacao { get; set; }
     public string pdfBase64 { get; set; }
+
+
+
 
     public async Task GerarRelatorioMovimentacoes()
     {

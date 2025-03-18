@@ -76,6 +76,39 @@ namespace Linter.Utilidades
                 return ms.ToArray();
             }
         }
+
+        public async Task<byte[]> GerarRelatorioMovimentacoesPorID(IEnumerable<CAX001_Movimentacoes> lstMovi, int id)
+        {
+
+            var filepath = Path.Combine(Directory.GetCurrentDirectory(), "Relatorios", "Caixa", $"RelatorioContasGerenciais.frx");
+            var diretorio = Path.GetDirectoryName(filepath);
+
+            if (!Directory.Exists(diretorio))
+            {
+                Directory.CreateDirectory(diretorio);
+            }
+
+            var report = new Report();
+
+            if (File.Exists(filepath))
+            {
+                report.Report.Load(filepath);
+            }
+            report.Dictionary.RegisterBusinessObject(lstMovi, "lstMovi", 10, true);
+            //report.Report.SetParameterValue("ValorTotal", soma);
+            report.Prepare();
+
+            report.Report.Save(filepath);
+
+            var pdfExport = new PDFSimpleExport();
+            using (var ms = new MemoryStream())
+            {
+                pdfExport.Export(report, ms);
+                ms.Flush();
+                return ms.ToArray();
+            }
+        }
+
     }
 
 }

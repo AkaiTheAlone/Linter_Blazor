@@ -130,15 +130,9 @@
         box-sizing: border-box;
     }
 
-    .TESTE {
-        display: flex;
-        height: 100vh;
-        background-color: #f0f0f0; /* Cor do fundo da tela */
-    }
-
     .right {
         flex: 1;
-        background-color: #ffffff; /* Cor do bloco */
+        background-color: #ffffff;
         border-top-left-radius: 50px;
         border-bottom-left-radius: 50px;
         box-shadow: -5px 0px 10px rgba(0, 0, 0, 0.2);
@@ -150,6 +144,7 @@
         width: 100vw;
         height: 100vh;
     }
+
 
     .left {
         flex: 1;
@@ -249,21 +244,20 @@
         transform: translateY(-100%);
     }
 
-    .counter {
+    .baixo {
+        opacity: 0;
+        transform: translateY(100px);
+        transition: opacity 0.5s ease, transform 0.5s ease;
     }
 
-    .square {
-    }
+        .baixo.visible {
+            opacity: 0.9;
+            transform: translateX(0);
+        }
 </style>
 
-@* daria pra fazer um svg com o logotipo do linter aqui
-
-a primeira parte pode vir da direita, a segunda da esquerda,
-a terceira, q vai ter os números, pode subir e crescer exponencialmente
-*@
-
 <div class="hero hidden">
-    <h1 class="linterTexto" style="font-size:100px; padding:3rem"> Linter </h1>
+    <h1 class="linterTexto baixo" id="Linter" style="font-size:100px; padding:3rem"> Linter </h1>
     <h1>Gerencie suas movimentações com eficiência</h1>
     <p>Simplifique a gestão de transações e tenha controle total</p>
     <button class="btn-animated" onclick="@(() => Navegar())"> Comece agora </button>
@@ -272,21 +266,21 @@ a terceira, q vai ter os números, pode subir e crescer exponencialmente
 <section style="padding-bottom:6rem;">
     <h2 style="color:black" class="hidden-left"> Principais Recursos </h2>
     <div class="atras">
-        <FluentCard class="feature hidden-left">
+        <FluentCard class="feature hidden-left numberDisplay">
             <i class="ms-Icon ms-Icon--Money" aria-hidden="true"></i>
-            <h3>Controle Financeiro</h3>
+            <h3 class="baixo">Controle Financeiro</h3>
             <p>Acompanhe suas receitas e despesas de forma clara.</p>
         </FluentCard>
 
-        <FluentCard class="feature hidden-left">
+        <FluentCard class="feature hidden-left numberDisplay">
             <i class="ms-Icon ms-Icon--Chart" aria-hidden="true"></i>
-            <h3>Relatórios Detalhados</h3>
+            <h3 class="baixo">Relatórios Detalhados</h3>
             <p>Gere relatórios completos para análise estratégica.</p>
         </FluentCard>
 
-        <FluentCard class="feature hidden-left">
+        <FluentCard class="feature hidden-left numberDisplay">
             <i class="ms-Icon ms-Icon--Shield" aria-hidden="true"></i>
-            <h3>Segurança Garantida</h3>
+            <h3 class="baixo">Segurança Garantida</h3>
             <p>Seus dados protegidos com criptografia avançada.</p>
         </FluentCard>
     </div>
@@ -305,35 +299,33 @@ a terceira, q vai ter os números, pode subir e crescer exponencialmente
             </div>
         </div>
     </div>
-    <div class="right fade-in hidden-left"></div>
+    <div class="right fade-in hidden"></div>
 </div>
 
 <br />
 
-@* dessa parte pra baixo pode vir td de baixo ja *@
-
 <section>
     <h2 style="color:black" class="hidden-left"> Principais Recursos </h2>
     <div class="atras">
-
-        @* aqui da pra colocar as estatisticas *@
-
-        <FluentCard class="feature hidden-left">
+        <FluentCard class="feature hidden-left numero">
+            <p> Desde </p>
             <i class="ms-Icon ms-Icon--Money" aria-hidden="true"></i>
-            <h3 class="counter" data-count="93">0</h3> %
-            <p>Acompanhe suas receitas e despesas de forma clara.</p>
+            <h2 class="counter" Id="numero">0</h2>
+            <p>no mercado de gestão empresarial</p>
         </FluentCard>
 
-        <FluentCard class="feature hidden-left">
+        <FluentCard class="feature hidden-left " id="numero">
+            <p> Mais de </p>
             <i class="ms-Icon ms-Icon--Chart" aria-hidden="true"></i>
-            <h3 class="counter" data-count="50">0</h3>
-            <p>Empresas parceiras que migraram para o Linter.</p>
+            <h2 id="empresas">0</h2>
+            <p>Empresas parceiras que migraram para o Linter</p>
         </FluentCard>
 
-        <FluentCard class="feature hidden-left">
+        <FluentCard class="feature hidden-left numero">
+            <p> Uma média de </p>
             <i class="ms-Icon ms-Icon--Shield" aria-hidden="true"></i>
-            <h3 class="73" data-count="50">0</h3> %
-            <p>de crescimento em média por empresa após o adoção do Linter.</p>
+            <h2 id="crescimento">0</h2> %
+            <p>de crescimento após o adoção do Linter</p>
         </FluentCard>
     </div>
 </section>
@@ -341,7 +333,7 @@ a terceira, q vai ter os números, pode subir e crescer exponencialmente
 <br />
 <div>
     <FluentCard>
-        <h1 class="hidden"> Conheça a nossa empresa </h1>
+        <h1 class="hidden baixo"> Conheça a nossa empresa </h1>
         <div style="display: flex; align-items: center; gap: 20px;">
             <img src="/imagens/ldn_grande.png" />
             <p style="text-align: justify;">
@@ -358,48 +350,13 @@ a terceira, q vai ter os números, pode subir e crescer exponencialmente
 @code {
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await runtime.InvokeVoidAsync("eval", @"
-                let contadorAnimado = false;
+        await runtime.InvokeVoidAsync("animarNumero", "numero", 2009, 2000);
+        await runtime.InvokeVoidAsync("animarNumero", "empresas", 50, 1950);
+        await runtime.InvokeVoidAsync("animarNumero", "crescimento", 83, 2000);
+        //await runtime.InvokeVoidAsync("MostraDivBaixo", "Linter");
+        await runtime.InvokeVoidAsync("MostraDivBaixoClasse", "baixo");
 
-                function animarContador() {
-                    const contadorElement = document.getElementById('contador');
-                    const position = contadorElement.getBoundingClientRect().top;
-                    const windowHeight = window.innerHeight;
-
-                    if (position < windowHeight && !contadorAnimado) {
-                        contadorAnimado = true;
-                        let start = 0;
-                        const end = 1000;
-                        const duration = 3;
-
-                        const step = (timestamp) => {
-                            if (!start) start = timestamp;
-                            const progress = timestamp - start;
-                            const value = Math.min(Math.floor(progress / (duration * 1000) * end), end);
-
-                            contadorElement.textContent = value;
-
-                            if (progress < duration * 1000) {
-                                window.requestAnimationFrame(step);
-                            }
-                        };
-
-                        window.requestAnimationFrame(step);
-                    }
-                }
-
-                window.addEventListener('scroll', animarContador);
-            ");
     }
-
-
-    // Passar o valor e o elemento de destino
-    //await runtime.InvokeVoidAsync("CreateOdometer", ".empresas", 50);
-    //await runtime.InvokeVoidAsync("CreateOdometer", ".anos-exp", 15);
-    // StateHasChanged();
-
-    //qnd a gnt invoca o interop do js, o primeiro parametro q é passado é o nome da funcao e o segundo é o parametro em si
-    //await runtime.InvokeVoidAsync("observeElement", "right");
 
     private async Task Navegar()
     {
