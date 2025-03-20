@@ -64,11 +64,11 @@ if (typeof observador === 'undefined') {
 }
 
 //o id se refere ao id do elemento html
-//esses dois outros valores sao passados por parametro na chamada da funcao e sao mais sobre execucao do 
+//esses dois outros valores sao passados por parametro na chamada da funcao e sao mais sobre tempo de execucao da funcao
 function animarNumero(id, valorFinal, duracao) {
     let elemento = document.getElementById(id);
-    let valorInicial = 0; // Começar sempre do 0
-    let comeco = null; // Aguardar até o elemento entrar na tela para iniciar a animação
+    let valorInicial = 0;
+    let comeco = null;
 
     function atualizar() {
         if (comeco === null) return; // Espera até que comeco seja definido
@@ -81,9 +81,8 @@ function animarNumero(id, valorFinal, duracao) {
             let easedProgress = 1 - Math.pow(1 - progresso, 3);  // Função ease-in cúbica
             let valorAtual = valorInicial + easedProgress * (valorFinal - valorInicial);
             elemento.innerText = Math.floor(valorAtual);
-            requestAnimationFrame(atualizar);  // Continuar a animação
+            requestAnimationFrame(atualizar);
         } else {
-            // Ao completar a animação, garante que o número não ultrapasse o valor final
             elemento.innerText = valorFinal;
         }
     }
@@ -135,5 +134,43 @@ function MostraDivBaixoClasse(classe) {
         observer.observe(elemento);
     });
 }
+//inicializando o sweeper
+function CreateSweeper(classe) {
 
+    const swiper = new Swiper(`.${classe}`, {
+        //deixa a rolagem infinita
+        loop: true,
+        //deixa que o usuario arraste o carrossel com o mouse apertando m1
+        grabCursos: true,
+        //adiciona os botoes de controle
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev"
+        },
+        //ativa a paginaçao
+        pagination: {
+            el: ".swipper-pagination",
+            clickable: true
+        },
+        //esses breakpoints aqui definem o quão grande vao ficar esses cards quando a tela for redimensionada
+        breakpoints: {
+            // when window width is >= 320px
+            640: {
+                slidesPerView: 1,
+                spaceBetween: 18
+            },
+            // when window width is >= 480px
+            768: {
+                slidesPerView: 2,
+                spaceBetween: 18
+            },
+            // when window width is >= 640px
+            1188: {
+                slidesPerView: 3,
+                spaceBetween: 24
+            }
+        }
 
+    });
+    console.log("chegou hein")
+}

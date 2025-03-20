@@ -1,0 +1,41 @@
+﻿@page "/numberbox"
+
+<FluentDialog IsOpen="@IsOpen" OnClosed="CloseDialog" Header="Digite um número">
+    <FluentTextField Label="Número" @bind-Value="numberValue" Type="number" Min="0" />
+    <FluentDialogFooter>
+        <FluentButton @onclick="OnSubmit">Confirmar</FluentButton>
+        <FluentButton @onclick="CloseDialog">Cancelar</FluentButton>
+    </FluentDialogFooter>
+</FluentDialog>
+
+@code {
+    [Parameter] public bool IsOpen { get; set; }
+    [Parameter] public EventCallback<bool> IsOpenChanged { get; set; }
+    [Parameter] public EventCallback<int?> OnSubmitCallback { get; set; }
+    private string numberValue = string.Empty;
+
+    private void OpenDialog()
+    {
+        IsOpen = true;
+    }
+
+    private void CloseDialog()
+    {
+        IsOpen = false;
+    }
+
+    private async Task OnSubmit()
+    {
+        // Tenta converter o valor inserido no campo para um número inteiro
+        if (int.TryParse(numberValue, out int number))
+        {
+            await OnSubmitCallback.InvokeAsync(number); // Envia o número convertido
+        }
+        else
+        {
+            await OnSubmitCallback.InvokeAsync(null); // Caso a conversão falhe, retorna null
+        }
+        IsOpen = false;
+        await IsOpenChanged.InvokeAsync(false);
+    }
+}

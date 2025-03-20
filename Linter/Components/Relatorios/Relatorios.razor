@@ -70,7 +70,7 @@
         <FluentIcon Value="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.ChartMultiple())" />
     </button>
 
-    <button class="btn_mid" onclick="GerarRelatorioMovimentacoes()">
+    <button class="btn_mid" onclick="@(()=> GerarRelatorioPorConta())">
         Gerar Movimentações por Contas Gerenciais
         <br />
         <FluentIcon Value="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.ChartPerson())" />
@@ -84,14 +84,36 @@
 
 </div>
 
+<ModalMensagem IsOpen="@Aberto"></ModalMensagem>
+
 @code {
-    public bool estaAberto = false;
+    public bool Aberto = false;
     public string idConta { get; set; }
     public CAX001_Movimentacoes Movimentacao { get; set; }
     public string pdfBase64 { get; set; }
+    public int? numeroRetornado = null;
 
+    // Abre o modal
+    private void OpenDialog()
+    {
+        Aberto = true;
+    }
 
+    // Atualiza o estado do modal
+    private void OnDialogClosed(bool isOpen)
+    {
+        Aberto = isOpen;
+    }
 
+    // Manipula o número retornado do modal
+    private void HandleSubmit(int? number)
+    {
+        if (number.HasValue)
+        {
+            numeroRetornado = number;  // Armazena o número retornado pelo componente
+            Console.WriteLine($"Número enviado: {number}");
+        }
+    }
 
     public async Task GerarRelatorioMovimentacoes()
     {
@@ -120,9 +142,13 @@
         }
     }
 
-    public async Task GerarRelatorioPorConta(int id)
+
+    public async Task GerarRelatorioPorConta()
     {
+        Aberto = true;
+
         var movimentacoes = await repCaixa.RetornaMovimentacoesParaRPT();
+        movimentacoes = movimentacoes.Where(x => x.idContaGerencial.Equals(numeroRetornado)).ToList();
         // movimentacoes = movimentacoes.Where(X=> X.idContaGerencial = )
 
         var bytes = await repRelatorio.GerarRelatorioMovimentacoes(movimentacoes, "RelatorioMovimentacoes");
@@ -173,7 +199,6 @@
             Console.WriteLine($"Erro ao abrir o PDF: {ex.Message}");
         }
     }
-
-
 }
 
+}
